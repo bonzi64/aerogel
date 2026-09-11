@@ -554,6 +554,17 @@ body::after {
 /* ==================================================================
  *  5. GUILD LIST (frame level: icons float on the matte background)
  * ================================================================== */
+/* The column runs to the top of the frame, where the window keeps its drag
+   region. A transparent drag region still swallows the pointer, which costs
+   the first tile in the column (Direct Messages) the part of its hit area
+   that sits under the bar: the tile paints normally but only its lower half
+   answers the cursor. Nothing in this column is window chrome, so all of it
+   opts out of dragging. */
+[class*="guilds_"],
+[class*="guilds_"] * {
+    -webkit-app-region: no-drag;
+}
+
 [class*="guilds_"] [class*="guildSeparator_"] {
     background-color: var(--gmd-border-strong) !important;
 }
@@ -848,10 +859,12 @@ body::after {
     font-weight: 600;
 }
 
-[class*="sidebarList_"] [class*="unread_"] {
-    background: var(--gmd-accent) !important;
-    box-shadow: 0 0 8px rgba(var(--gmd-accent-rgb), 0.6);
-}
+/* No accent fill for [class*="unread_"]: the fragment also appears on the
+   boost-goal row, the events row and a share of the channel rows, so any
+   background set here bleeds across whole rows instead of marking the small
+   unread indicator. Discord's own styling is left in place. The unread
+   markers that can be targeted safely are handled by the guild pill rule and
+   by [class*="unreadPill_"] below. */
 
 /* DM rows */
 [class*="sidebarList_"] [class*="interactive_"] {
@@ -882,16 +895,17 @@ body::after {
 /* ==================================================================
  *  7. USER PANEL (bottom-left) & VOICE PANEL
  * ================================================================== */
-/* Discord overlays the user panel on the bottom of the sidebar, i.e. on top
-   of the channel-list tile. Two glass edges 2px apart read as a doubled
-   frame, so the tile is shortened to end above the panel and the panel is
-   aligned with the tile's left edge (after the guild column). */
-[class*="sidebarList_"] {
-    margin-bottom: calc(var(--custom-app-panels-height, 58px) + var(--gmd-panel-gap) * 2) !important;
-}
+/* The user panel is a tile of its own below the channel list. Reserving
+   room for it here as well left an empty strip along the bottom of the list,
+   so the tile keeps the plain gap from the panel rule above and the panel
+   provides its own spacing. */
 
+/* The tile clips to an 18px radius, so a row that ends flush with the
+   bottom edge is cut by the corner. The scroller keeps a little run-out
+   below the last row instead. */
 [class*="sidebarList_"] [class*="scroller_"] {
     margin-bottom: 0 !important;
+    padding-bottom: 12px !important;
 }
 
 [class*="sidebar_"]:has([class*="sidebarList_"]) > [class*="guilds_"],
@@ -1171,6 +1185,30 @@ body::after {
     height: var(--custom-app-top-bar-height, 32px) !important;
     padding-inline: 10px 16px !important;
     -webkit-app-region: no-drag;
+}
+
+/* The bar is painted away, but it is still an element lying across the top
+   of the frame, above the server column. A transparent element keeps eating
+   the pointer, which costs the first tile in that column (Direct Messages)
+   every part of its hit area that falls inside the bar: the tile paints in
+   full and only the strip below the bar answers the cursor. The bar hands
+   the pointer back and its own children take it again, so the window
+   buttons keep working and the drag region, which is read from layout
+   rather than from hit-testing, still drags the window. */
+[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) {
+    pointer-events: none;
+}
+
+[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) > * {
+    pointer-events: auto;
+}
+
+[class*="typeWindows_"] {
+    pointer-events: none;
+}
+
+[class*="typeWindows_"] > * {
+    pointer-events: auto;
 }
 
 [class*="base_"] > [class*="bar_"] [class*="winButtonsWithDivider_"]::before {
