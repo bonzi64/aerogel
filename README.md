@@ -163,7 +163,7 @@ The script parses each output with `css-tree` and refuses to report success if a
 - The theme forces its own palette regardless of the light or dark setting in Discord. That is deliberate: pick the build, not the setting.
 - Animated nameplates are video. The Flat builds hide them to save a decode loop; set `--gmd-nameplate: 1` if you want them back.
 
-## Known limits
+## Support my work!
 
 You can support my work here: https://tipply.pl/@bonzi64
 
