@@ -1,0 +1,935 @@
+<title>Aerogel for Discord</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+/* Aerogel preview.
+   The page wears the build you pick: every token here is lifted from the
+   theme files, so the mock below is what actually lands in Discord. */
+
+:root, [data-build="dark"] {
+    --frame: radial-gradient(circle at 50% -10%, #1a1d2b 0%, #0f1017 48%, #08090d 100%);
+    --solid: #0f1017;
+    --glass: linear-gradient(160deg, rgba(255,255,255,.085) 0%, rgba(255,255,255,.04) 45%, rgba(255,255,255,.055) 100%);
+    --nested: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.025));
+    --tint: 255,255,255;
+    --line: rgba(255,255,255,.13);
+    --line-soft: rgba(255,255,255,.08);
+    --accent: #8b9dff;
+    --accent-rgb: 139,157,255;
+    --ink: #e4e6ee;
+    --ink-hi: #f6f7fb;
+    --ink-2: #a9aebd;
+    --ink-3: #8d92a2;
+    --blur: 26px;
+    --aurora: .9;
+    --a1: rgba(112,131,255,.34); --a2: rgba(72,208,190,.24); --a3: rgba(196,96,255,.22);
+    --grain: .045;
+    --r: 18px;
+    --lift: 0 14px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.11);
+    --lift-2: 0 8px 24px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
+    --banner: linear-gradient(150deg, #2a2036, #161520);
+}
+[data-build="light"] {
+    --frame: radial-gradient(circle at 50% -10%, #f7f9ff 0%, #e9edf7 48%, #dde2ee 100%);
+    --solid: #e9edf7;
+    --glass: linear-gradient(160deg, rgba(255,255,255,.78) 0%, rgba(255,255,255,.62) 45%, rgba(255,255,255,.72) 100%);
+    --nested: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.46));
+    --tint: 26,29,44;
+    --line: rgba(26,29,44,.1);
+    --line-soft: rgba(26,29,44,.07);
+    --accent: #4c5ae0;
+    --accent-rgb: 76,90,224;
+    --ink: #2b2f3d;
+    --ink-hi: #11141d;
+    --ink-2: #4b5062;
+    --ink-3: #6d7284;
+    --blur: 26px;
+    --aurora: .75;
+    --a1: rgba(120,138,255,.3); --a2: rgba(72,200,190,.22); --a3: rgba(196,130,255,.22);
+    --grain: .05;
+    --r: 18px;
+    --lift: 0 14px 40px rgba(26,29,44,.1), inset 0 1px 0 rgba(255,255,255,.9);
+    --lift-2: 0 8px 24px rgba(26,29,44,.07), inset 0 1px 0 rgba(255,255,255,.8);
+    --banner: linear-gradient(150deg, #cdd4ea, #e6eaf5);
+}
+[data-build="violet"] {
+    --frame: radial-gradient(circle at 50% -10%, #241536 0%, #150c22 46%, #07060c 100%);
+    --solid: #150c22;
+    --glass: linear-gradient(160deg, rgba(226,206,255,.09) 0%, rgba(226,206,255,.04) 45%, rgba(226,206,255,.06) 100%);
+    --nested: linear-gradient(180deg, rgba(226,206,255,.05), rgba(226,206,255,.025));
+    --tint: 226,206,255;
+    --line: rgba(214,180,255,.14);
+    --line-soft: rgba(214,180,255,.09);
+    --accent: #a855f7;
+    --accent-rgb: 168,85,247;
+    --ink: #e7e0f2;
+    --ink-hi: #f8f4ff;
+    --ink-2: #b0a6c6;
+    --ink-3: #948aa8;
+    --blur: 26px;
+    --aurora: 1;
+    --a1: rgba(168,85,247,.36); --a2: rgba(109,58,210,.28); --a3: rgba(226,78,178,.2);
+    --grain: .05;
+    --r: 18px;
+    --lift: 0 14px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(226,206,255,.12);
+    --lift-2: 0 8px 24px rgba(0,0,0,.34), inset 0 1px 0 rgba(226,206,255,.09);
+    --banner: linear-gradient(150deg, #3a1f5c, #1b0f2c);
+}
+[data-build="dark-flat"] {
+    --frame: linear-gradient(180deg, #15171f 0%, #0c0d12 100%);
+    --solid: #15171f;
+    --glass: #181a23;
+    --nested: #1c1f29;
+    --tint: 255,255,255;
+    --line: rgba(255,255,255,.1);
+    --line-soft: rgba(255,255,255,.06);
+    --accent: #8b9dff;
+    --accent-rgb: 139,157,255;
+    --ink: #e4e6ee;
+    --ink-hi: #f6f7fb;
+    --ink-2: #a9aebd;
+    --ink-3: #8d92a2;
+    --blur: 0px;
+    --aurora: 0;
+    --a1: transparent; --a2: transparent; --a3: transparent;
+    --grain: 0;
+    --r: 16px;
+    --lift: inset 0 1px 0 rgba(255,255,255,.05);
+    --lift-2: inset 0 1px 0 rgba(255,255,255,.04);
+    --banner: #232734;
+}
+[data-build="light-flat"] {
+    --frame: linear-gradient(180deg, #f4f7fd 0%, #e4e8f2 100%);
+    --solid: #f4f7fd;
+    --glass: #fafbff;
+    --nested: #f2f5fc;
+    --tint: 26,29,44;
+    --line: rgba(26,29,44,.1);
+    --line-soft: rgba(26,29,44,.07);
+    --accent: #4c5ae0;
+    --accent-rgb: 76,90,224;
+    --ink: #2b2f3d;
+    --ink-hi: #11141d;
+    --ink-2: #4b5062;
+    --ink-3: #6d7284;
+    --blur: 0px;
+    --aurora: 0;
+    --a1: transparent; --a2: transparent; --a3: transparent;
+    --grain: 0;
+    --r: 16px;
+    --lift: inset 0 1px 0 #fff;
+    --lift-2: inset 0 1px 0 #fff;
+    --banner: #dfe5f2;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--solid); transition: background .35s ease; }
+
+body {
+    margin: 0;
+    padding-block: 0 60px;
+    padding-inline: 18px;
+    background: var(--frame);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Inter", "gg sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: color .35s ease;
+}
+
+body::before {
+    content: "";
+    position: fixed; inset: -10vmax; z-index: -2; pointer-events: none;
+    opacity: var(--aurora);
+    background:
+        radial-gradient(38% 42% at 18% 22%, var(--a1) 0%, transparent 70%),
+        radial-gradient(34% 36% at 82% 18%, var(--a3) 0%, transparent 70%),
+        radial-gradient(40% 40% at 70% 86%, var(--a2) 0%, transparent 70%);
+    filter: blur(30px) saturate(120%);
+    animation: drift 64s ease-in-out infinite alternate;
+    transition: opacity .35s ease;
+}
+
+body::after {
+    content: "";
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    opacity: var(--grain);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size: 180px 180px;
+    mix-blend-mode: overlay;
+}
+
+@keyframes drift {
+    0%   { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+    50%  { transform: translate3d(4vw,-3vh,0) rotate(6deg) scale(1.08); }
+    100% { transform: translate3d(-3vw,4vh,0) rotate(-5deg) scale(1.03); }
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; }
+
+svg { display: block; }
+
+/* ---------- top strip ---------- */
+
+.top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 16px;
+    padding-block: 40px 8px;
+}
+
+.top h1 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    color: var(--ink-hi);
+}
+
+.top p { margin: 0; color: var(--ink-3); font-size: 14.5px; flex: 1 1 340px; }
+.top p b { color: var(--ink-2); font-weight: 500; }
+
+.top a {
+    color: var(--ink-2);
+    font-size: 13.5px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1px;
+}
+.top a:hover { color: var(--accent); border-color: rgba(var(--accent-rgb), .5); }
+
+/* ---------- build picker ---------- */
+
+.picker { display: flex; flex-wrap: wrap; gap: 6px; padding-block: 14px 16px; }
+
+.pick {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 7px 13px 7px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--nested);
+    color: var(--ink-2);
+    font: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+}
+.pick:hover { color: var(--ink-hi); }
+.pick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pick[aria-pressed="true"] {
+    color: var(--ink-hi);
+    border-color: rgba(var(--accent-rgb), .55);
+    background: rgba(var(--accent-rgb), .14);
+}
+.pick i { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--line); position: relative; overflow: hidden; }
+.pick i::after { content: ""; position: absolute; inset: 46% 0 0 0; }
+.s1 { background: #14161f; } .s1::after { background: #8b9dff; }
+.s2 { background: #e9edf7; } .s2::after { background: #4c5ae0; }
+.s3 { background: #150c22; } .s3::after { background: #a855f7; }
+.s4 { background: #181a23; } .s4::after { background: #6f7fd8; }
+.s5 { background: #fafbff; } .s5::after { background: #4c5ae0; }
+
+/* ---------- window ---------- */
+
+.win {
+    border-radius: calc(var(--r) + 6px);
+    border: 1px solid var(--line);
+    background: var(--frame);
+    box-shadow: var(--lift);
+    overflow: hidden;
+    transition: background .35s ease, border-color .35s ease;
+}
+
+.bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 34px;
+    padding-inline: 12px;
+    position: relative;
+}
+.bar::after {
+    content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-soft) 20%, var(--line-soft) 80%, transparent);
+}
+.nav { display: flex; gap: 4px; color: var(--ink-3); }
+.nav svg { width: 15px; height: 15px; }
+.bar .title {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 13px; font-weight: 600; color: var(--ink-2); white-space: nowrap;
+}
+.bar .title svg { width: 15px; height: 15px; }
+.bar .right { display: flex; align-items: center; justify-content: flex-end; gap: 12px; color: var(--ink-3); }
+.bar .right svg { width: 15px; height: 15px; }
+
+.lights { display: flex; gap: 8px; }
+.lt { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(0,0,0,.28); box-shadow: inset 0 1px 0 rgba(255,255,255,.28); position: relative; }
+.lt::before {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background-repeat: no-repeat; background-position: center; background-size: 8px 8px;
+    opacity: 0; transition: opacity .14s;
+}
+.lights:hover .lt::before { opacity: 1; }
+.lt-a { background: #ffbd2e; }
+.lt-a::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 5h6' stroke='%23995700' stroke-width='1.6' stroke-linecap='round'/></svg>"); }
+.lt-b { background: #27c93f; }
+.lt-b::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 2v6M2 5h6' stroke='%23006500' stroke-width='1.6' stroke-linecap='round'/></svg>"); }
+.lt-c { background: #ff5f56; }
+.lt-c::before { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 2l6 6M8 2l-6 6' stroke='%234d0000' stroke-width='1.6' stroke-linecap='round'/></svg>"); }
+
+.app {
+    display: grid;
+    grid-template-columns: 14px 236px 1fr 260px;
+    gap: 6px;
+    padding: 4px 6px 6px;
+    min-height: 560px;
+}
+
+/* ---------- server rail: parks at 14px, opens on hover ---------- */
+
+.rail { position: relative; z-index: 5; }
+
+.rail-tab {
+    position: absolute; inset-block: 0; inset-inline-start: 0; width: 14px;
+    border-radius: 0 12px 12px 0;
+    border: 1px solid var(--line); border-inline-start: none;
+    background: var(--glass);
+    box-shadow: var(--lift-2);
+    transition: opacity .18s ease .26s;
+}
+.rail-tab::after {
+    content: ""; position: absolute; top: 50%; inset-inline-start: 5px;
+    width: 3px; height: 32px; margin-top: -16px; border-radius: 3px;
+    background: rgba(var(--tint), .34);
+}
+.rail-open {
+    position: absolute; inset-block: 0; inset-inline-start: 0; width: 72px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 10px 0;
+    border-radius: var(--r);
+    border: 1px solid var(--line);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(170%);
+    backdrop-filter: blur(var(--blur)) saturate(170%);
+    box-shadow: var(--lift);
+    clip-path: inset(0 100% 0 0 round var(--r));
+    transition: clip-path .32s cubic-bezier(.2,.8,.2,1) .26s;
+}
+.rail:hover .rail-tab, .rail:focus-within .rail-tab { opacity: 0; transition-delay: 0s; }
+.rail:hover .rail-open, .rail:focus-within .rail-open { clip-path: inset(0 0 0 0 round var(--r)); transition-delay: 0s; }
+
+.srv {
+    width: 40px; height: 40px; border-radius: 14px;
+    display: grid; place-items: center;
+    font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+    background: rgba(var(--tint), .07);
+    border: 1px solid var(--line-soft);
+    flex: 0 0 auto;
+}
+.srv.home { background: linear-gradient(160deg, rgba(var(--tint),.13), rgba(var(--tint),.05)); border-color: rgba(var(--tint),.16); color: var(--ink-hi); }
+.srv.home svg { width: 20px; height: 20px; }
+.srv.live { background: linear-gradient(160deg, rgba(var(--accent-rgb),.55), rgba(var(--accent-rgb),.28)); border-color: rgba(var(--accent-rgb),.65); color: #fff; }
+.srv-line { width: 32px; height: 1px; background: var(--line); flex: 0 0 auto; }
+
+/* ---------- panels ---------- */
+
+.pane {
+    border-radius: var(--r);
+    border: 1px solid var(--line);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(170%);
+    backdrop-filter: blur(var(--blur)) saturate(170%);
+    box-shadow: var(--lift);
+    overflow: hidden;
+    min-width: 0;
+    transition: background .35s ease, border-color .35s ease;
+}
+
+/* left column */
+.col-left { display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+
+.dms { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+.finder {
+    margin: 10px; padding: 6px 10px;
+    border-radius: 9px;
+    background: rgba(var(--tint), .06);
+    border: 1px solid var(--line-soft);
+    color: var(--ink-3);
+    font-size: 12.5px; font-weight: 500; text-align: center;
+}
+
+.nav-list { padding: 0 8px; display: flex; flex-direction: column; gap: 1px; }
+
+.nav-row {
+    display: flex; align-items: center; gap: 11px;
+    padding: 7px 9px; border-radius: 9px;
+    color: var(--ink-2); font-size: 14px; font-weight: 500;
+}
+.nav-row svg { width: 17px; height: 17px; flex: 0 0 auto; opacity: .85; }
+.nav-row .new {
+    margin-inline-start: auto;
+    font-size: 9.5px; font-weight: 700; letter-spacing: .04em;
+    padding: 2px 6px; border-radius: 5px;
+    background: var(--accent); color: var(--solid);
+}
+
+.dm-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 14px 6px;
+    font-size: 11.5px; font-weight: 600; letter-spacing: .04em;
+    color: var(--ink-3);
+}
+.dm-head svg { width: 13px; height: 13px; }
+
+.dm-list { padding: 0 8px 8px; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+
+.dm {
+    display: flex; align-items: center; gap: 10px;
+    padding: 5px 8px; border-radius: 9px;
+    color: var(--ink-3); font-size: 14px; font-weight: 500;
+    min-width: 0;
+}
+.dm.on { background: rgba(var(--accent-rgb), .14); box-shadow: inset 2px 0 0 var(--accent); color: var(--ink-hi); }
+.dm.hov { background: rgba(var(--tint), .06); color: var(--ink); }
+.dm .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.dm .sub { display: block; font-size: 11px; color: var(--ink-3); font-weight: 400; }
+.dm .x { margin-inline-start: auto; opacity: .55; }
+.dm .x svg { width: 11px; height: 11px; }
+
+.pfp {
+    width: 30px; height: 30px; border-radius: 50%; flex: 0 0 auto; position: relative;
+    background: linear-gradient(140deg, rgba(var(--tint),.22), rgba(var(--tint),.08));
+}
+.pfp.a { background: linear-gradient(140deg, #6b7ae8, #2b3a6b); }
+.pfp.b { background: linear-gradient(140deg, #c86b9a, #4a2440); }
+.pfp.c { background: linear-gradient(140deg, #5fae8e, #234437); }
+.pfp.d { background: linear-gradient(140deg, #d0a15e, #4a3620); }
+.pfp.e { background: linear-gradient(140deg, #8f7ad8, #332a55); }
+.pfp::after {
+    content: ""; position: absolute; right: -1px; bottom: -1px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #3ba55d; border: 2px solid var(--solid);
+}
+.pfp.idle::after { background: #d9a13b; }
+.pfp.off::after { background: #7a7f8c; }
+
+.tag {
+    font-size: 9.5px; font-weight: 700; letter-spacing: .03em;
+    padding: 1px 5px; border-radius: 4px;
+    background: rgba(var(--tint), .12); color: var(--ink-2);
+    flex: 0 0 auto;
+}
+
+/* user panel is its own tile under the list */
+.me {
+    display: flex; align-items: center; gap: 9px;
+    padding: 8px; border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--nested);
+    box-shadow: var(--lift-2);
+}
+.me .who { min-width: 0; flex: 1; }
+.me .who b { display: block; font-size: 13px; font-weight: 600; color: var(--ink-hi); }
+.me .who span { display: block; font-size: 11px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.me .keys { display: flex; gap: 4px; }
+.key {
+    width: 26px; height: 26px; border-radius: 9px;
+    display: grid; place-items: center;
+    background: rgba(var(--tint), .05);
+    border: 1px solid var(--line-soft);
+    color: var(--ink-2);
+}
+.key svg { width: 13px; height: 13px; }
+
+/* chat column */
+.chat { display: flex; flex-direction: column; min-width: 0; }
+
+.chat-top {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--line-soft);
+}
+.chat-top .name { font-size: 14.5px; font-weight: 600; color: var(--ink-hi); }
+.chat-top .tools { margin-inline-start: auto; display: flex; align-items: center; gap: 13px; color: var(--ink-3); }
+.chat-top .tools svg { width: 17px; height: 17px; }
+.chat-top .find {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 9px; border-radius: 9px;
+    background: rgba(var(--tint), .06);
+    border: 1px solid var(--line-soft);
+    color: var(--ink-3); font-size: 12px;
+}
+.chat-top .find svg { width: 12px; height: 12px; }
+
+.feed { flex: 1; padding: 12px 6px 4px; display: flex; flex-direction: column; gap: 1px; min-height: 0; }
+
+.line {
+    display: grid; grid-template-columns: 40px 1fr; gap: 13px;
+    padding: 6px 12px; border-radius: 10px;
+    transition: background .14s, transform .14s;
+}
+.line:hover { background: rgba(var(--tint), .035); transform: translateY(-1px); }
+.line .av { width: 40px; height: 40px; border-radius: 50%; }
+.line .hd { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.line .hd b { font-size: 14.5px; font-weight: 600; color: var(--ink-hi); }
+.line .hd .when { font-size: 11.5px; color: var(--ink-3); }
+.line .txt { display: block; font-size: 14.5px; color: var(--ink); margin-top: 1px; word-break: break-word; }
+.line .txt em { font-style: normal; color: var(--accent); background: rgba(var(--accent-rgb), .18); border-radius: 5px; padding: 0 3px; }
+
+.ping { background: rgba(255,200,120,.09); position: relative; }
+.ping::before {
+    content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; width: 2px;
+    border-radius: 0 2px 2px 0; background: #ffbd2e; box-shadow: 0 0 10px rgba(255,189,46,.6);
+}
+
+.react { display: inline-flex; align-items: center; gap: 5px; margin-top: 6px; }
+.react span {
+    font-size: 12px; padding: 2px 8px; border-radius: 999px;
+    background: rgba(var(--tint), .05); border: 1px solid var(--line-soft); color: var(--ink-2);
+}
+.react span.mine { background: rgba(var(--accent-rgb), .18); border-color: rgba(var(--accent-rgb), .6); color: var(--ink-hi); }
+
+.shot {
+    display: block;
+    margin-top: 8px; max-width: 420px;
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--line-soft);
+    background: rgba(var(--tint), .04);
+}
+.shot .strip { display: block; height: 7px; background: linear-gradient(90deg, rgba(var(--accent-rgb),.7), rgba(var(--tint),.15)); }
+.shot .meta { display: block; padding: 9px 12px; }
+.shot .meta b { display: block; font-size: 13px; color: var(--ink-hi); font-weight: 600; }
+.shot .meta span { display: block; font-size: 12px; color: var(--ink-3); }
+
+.day { display: flex; align-items: center; gap: 12px; padding: 14px 14px 8px; }
+.day .rule { flex: 1; height: 1px; background: var(--line-soft); }
+.day .lbl {
+    font-size: 11px; font-weight: 600; color: var(--ink-3);
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(var(--tint), .05); border: 1px solid var(--line-soft);
+}
+
+.composer {
+    display: flex; align-items: center; gap: 12px;
+    margin: 4px 14px 12px; padding: 11px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--nested);
+    box-shadow: var(--lift-2);
+    color: var(--ink-3); font-size: 14px;
+}
+.composer .ph { flex: 1; }
+.composer .icons { display: flex; gap: 11px; color: var(--ink-3); }
+.composer svg { width: 16px; height: 16px; }
+
+/* right: profile */
+.profile { display: flex; flex-direction: column; }
+.pf-banner { height: 96px; background: var(--banner); position: relative; }
+.pf-banner .acts { position: absolute; top: 10px; right: 10px; display: flex; gap: 8px; color: var(--ink-2); }
+.pf-banner .acts svg { width: 15px; height: 15px; }
+.pf-body { padding: 0 16px 16px; margin-top: -34px; }
+.pf-av {
+    width: 68px; height: 68px; border-radius: 50%;
+    border: 5px solid var(--solid);
+    background: linear-gradient(140deg, #7f8aa0, #2c3140);
+    position: relative;
+}
+.pf-av::after {
+    content: ""; position: absolute; right: 1px; bottom: 1px;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: #3ba55d; border: 4px solid var(--solid);
+}
+.pf-name { font-size: 19px; font-weight: 700; color: var(--ink-hi); margin-top: 10px; letter-spacing: -.01em; }
+.pf-handle { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.pf-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-3); }
+.pf-mutual { font-size: 12px; color: var(--ink-3); margin-top: 12px; }
+.pf-label { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: var(--ink-3); margin-top: 16px; }
+.pf-value { font-size: 13.5px; color: var(--ink); margin-top: 3px; }
+.pf-note {
+    margin-top: 14px; padding: 9px 11px;
+    border-radius: 10px;
+    background: rgba(var(--tint), .045);
+    border: 1px solid var(--line-soft);
+    font-size: 12.5px; color: var(--ink-3);
+}
+.pf-btn {
+    margin-top: auto;
+    padding: 10px; margin-inline: 16px; margin-bottom: 16px;
+    border-radius: 10px;
+    background: rgba(var(--tint), .06);
+    border: 1px solid var(--line);
+    text-align: center; font-size: 13.5px; font-weight: 500; color: var(--ink);
+}
+
+/* ---------- spec rows under the window ---------- */
+
+.spec { margin-top: 56px; border-top: 1px solid var(--line); }
+
+.row {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 8px 28px;
+    padding-block: 20px;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+}
+
+.row > h2 {
+    margin: 0;
+    font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    color: var(--ink-3);
+    padding-top: 2px;
+}
+
+.row > div { min-width: 0; }
+.row p { margin: 0 0 10px; color: var(--ink-2); font-size: 14.5px; max-width: 68ch; }
+.row p:last-child { margin-bottom: 0; }
+.row b { color: var(--ink-hi); font-weight: 600; }
+
+.path {
+    display: inline-block;
+    padding: 1px 7px; border-radius: 7px;
+    background: rgba(var(--tint), .06);
+    border: 1px solid var(--line-soft);
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.files { display: flex; flex-direction: column; gap: 7px; }
+.file { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.file .fn { color: var(--ink-hi); font-size: 13.5px; font-weight: 600; min-width: 214px; }
+.file .fd { color: var(--ink-3); font-size: 13.5px; }
+
+.knobs { display: flex; flex-direction: column; gap: 9px; }
+.knob { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.knob .kn { min-width: 214px; }
+.knob .kd { color: var(--ink-3); font-size: 13.5px; }
+
+footer {
+    display: flex; flex-wrap: wrap; gap: 6px 22px; justify-content: space-between;
+    padding-top: 22px;
+    font-size: 12.5px; color: var(--ink-3);
+}
+footer a { color: var(--ink-2); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+@media (max-width: 1040px) {
+    .app { grid-template-columns: 14px 214px 1fr; min-height: 520px; }
+    .profile { display: none; }
+}
+@media (max-width: 720px) {
+    .app { grid-template-columns: 14px 1fr; min-height: 460px; }
+    .col-left { display: none; }
+    .row { grid-template-columns: 1fr; gap: 6px; }
+    .file .fn, .knob .kn { min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; }
+    .line, .pick, .rail-open, .rail-tab { transition: none; }
+}
+</style>
+
+<div class="wrap">
+
+<div class="top">
+    <h1>Aerogel</h1>
+    <p>The lightest solid ever made is almost all air, and the people who make it call it <b>frozen smoke</b>. A Discord theme built the same way: a matte frame, and everything you read floating on frosted glass above it.</p>
+    <a href="https://github.com/bonzi64/aerogel">github.com/bonzi64/aerogel</a>
+</div>
+
+<div class="picker" role="group" aria-label="Choose a build">
+    <button class="pick" type="button" data-set="dark" aria-pressed="true"><i class="s1"></i>Dark</button>
+    <button class="pick" type="button" data-set="light" aria-pressed="false"><i class="s2"></i>Light</button>
+    <button class="pick" type="button" data-set="violet" aria-pressed="false"><i class="s3"></i>Violet</button>
+    <button class="pick" type="button" data-set="dark-flat" aria-pressed="false"><i class="s4"></i>Dark Flat</button>
+    <button class="pick" type="button" data-set="light-flat" aria-pressed="false"><i class="s5"></i>Light Flat</button>
+</div>
+
+<div class="win">
+    <div class="bar">
+        <div class="nav" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
+        </div>
+        <div class="title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 1 1-3.2-6.4L21 4v8h-8"/></svg>
+            Direct Messages
+        </div>
+        <div class="right">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v9h-5l-3 3-3-3H4z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.2a2.5 2.5 0 1 1 2.9 3.3v1.2" stroke-linecap="round"/><circle cx="12.2" cy="17" r=".9" fill="currentColor" stroke="none"/></svg>
+            <span class="lights" aria-hidden="true"><span class="lt lt-a"></span><span class="lt lt-b"></span><span class="lt lt-c"></span></span>
+        </div>
+    </div>
+
+    <div class="app">
+        <div class="rail" tabindex="0" aria-label="Server list, hover to open">
+            <div class="rail-tab"></div>
+            <div class="rail-open">
+                <div class="srv home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 1 1-3.2-6.4L21 4v8h-8"/></svg></div>
+                <div class="srv-line"></div>
+                <div class="srv live">AG</div>
+                <div class="srv">WW</div>
+                <div class="srv">MT</div>
+                <div class="srv">LZ</div>
+            </div>
+        </div>
+
+        <div class="col-left">
+            <div class="pane dms">
+                <div class="finder">Find or start a conversation</div>
+                <div class="nav-list">
+                    <div class="nav-row">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M16 6.2a3 3 0 0 1 0 5.6M18 19c0-2.2-.8-3.8-2-4.7"/></svg>
+                        Friends
+                    </div>
+                    <div class="nav-row">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 8.5v7M9 12h3"/></svg>
+                        Nitro
+                    </div>
+                    <div class="nav-row">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h16l-1.2 11H5.2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+                        Shop
+                        <span class="new">NEW</span>
+                    </div>
+                    <div class="nav-row">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5l1.4 2.9 3.1.4-2.3 2.2.6 3.1-2.8-1.5-2.8 1.5.6-3.1L7.5 10.8l3.1-.4z"/></svg>
+                        Quests
+                    </div>
+                </div>
+
+                <div class="dm-head">
+                    Direct Messages
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                </div>
+
+                <div class="dm-list">
+                    <div class="dm on">
+                        <span class="pfp a"></span>
+                        <span class="nm">505h</span>
+                        <span class="tag">WW</span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp b idle"></span>
+                        <span class="nm">plytki</span>
+                    </div>
+                    <div class="dm hov">
+                        <span class="pfp c"></span>
+                        <span class="nm">Lea</span>
+                        <span class="x" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp d"></span>
+                        <span class="nm">Tobix</span>
+                        <span class="tag">MTA</span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp e off"></span>
+                        <span class="nm">Wedelek</span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp c idle"></span>
+                        <span class="nm">Suuchy</span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp a"></span>
+                        <span class="nm">BonziBOT</span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp d off"></span>
+                        <span class="nm">
+                            Theme testers
+                            <span class="sub">8 members</span>
+                        </span>
+                    </div>
+                    <div class="dm">
+                        <span class="pfp b"></span>
+                        <span class="nm">Welcomer</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="me">
+                <span class="pfp a"></span>
+                <span class="who"><b>bonzi</b><span>bonzidev.pl</span></span>
+                <span class="keys" aria-hidden="true">
+                    <span class="key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></span>
+                    <span class="key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="14" width="5" height="7" rx="2"/><rect x="17" y="14" width="5" height="7" rx="2"/></svg></span>
+                    <span class="key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="pane chat">
+            <div class="chat-top">
+                <span class="pfp a" style="width:22px;height:22px"></span>
+                <span class="name">505h</span>
+                <span class="tools" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3.5l2.5 4-2 2a12 12 0 0 0 6 6l2-2 4 2.5v3a2 2 0 0 1-2.2 2C9.4 20.3 3.7 14.6 3 6.7A2 2 0 0 1 5 4.5z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="12" height="12" rx="3"/><path d="M15 11l6-3.5v9L15 13z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M14 3l7 7-3 1-1 5-6-6-5 8 1-9-4-1z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M18 8v6M15 11h6" stroke-linecap="round"/></svg>
+                    <span class="find"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5" stroke-linecap="round"/></svg>Search</span>
+                </span>
+            </div>
+
+            <div class="feed">
+                <div class="line">
+                    <span class="pfp a av"></span>
+                    <span>
+                        <span class="hd"><b>505h</b><span class="when">Yesterday at 23:04</span></span>
+                        <span class="txt">the server list is just gone, what did you do</span>
+                    </span>
+                </div>
+
+                <div class="line">
+                    <span class="pfp e av"></span>
+                    <span>
+                        <span class="hd"><b>bonzi</b><span class="when">Yesterday at 23:05</span></span>
+                        <span class="txt">it parks at 14 pixels. hover the strip on the left edge of this window and it slides back out</span>
+                        <span class="react"><span class="mine">ok 2</span><span>glass 1</span></span>
+                    </span>
+                </div>
+
+                <div class="day"><span class="rule"></span><span class="lbl">September 11, 2026</span><span class="rule"></span></div>
+
+                <div class="line">
+                    <span class="pfp a av"></span>
+                    <span>
+                        <span class="hd"><b>505h</b><span class="when">12:38</span></span>
+                        <span class="txt">violet one, matte black, no neon</span>
+                    </span>
+                </div>
+
+                <div class="line ping">
+                    <span class="pfp e av"></span>
+                    <span>
+                        <span class="hd"><b>bonzi</b><span class="when">12:42</span></span>
+                        <span class="txt"><em>@505h</em> built it. same rules, different palette</span>
+                        <span class="shot">
+                            <span class="strip"></span>
+                            <span class="meta"><b>AerogelViolet.theme.css</b><span>85 KB, 236 rules</span></span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="composer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+                <span class="ph">Message @505h</span>
+                <span class="icons" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M14 6l3 3"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M12 8V5M8 5h8" stroke-linecap="round"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 14c1 1.4 2.2 2 3.5 2s2.5-.6 3.5-2" stroke-linecap="round"/><circle cx="9.3" cy="10" r=".9" fill="currentColor" stroke="none"/><circle cx="14.7" cy="10" r=".9" fill="currentColor" stroke="none"/></svg>
+                </span>
+            </div>
+        </div>
+
+        <div class="pane profile">
+            <div class="pf-banner">
+                <span class="acts" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5"/><path d="M18 8v6M15 11h6" stroke-linecap="round"/></svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+                </span>
+            </div>
+            <div class="pf-body">
+                <div class="pf-av"></div>
+                <div class="pf-name">505h</div>
+                <div class="pf-handle">_505h_ <span class="pf-dot"></span> White/Widow</div>
+                <div class="pf-mutual">11 mutual friends &nbsp;&middot;&nbsp; 9 mutual servers</div>
+                <div class="pf-label">MEMBER SINCE</div>
+                <div class="pf-value">Dec 10, 2023</div>
+                <div class="pf-note">Running Aerogel Violet since the day it built.</div>
+            </div>
+            <div class="pf-btn">View Full Profile</div>
+        </div>
+    </div>
+</div>
+
+<div class="spec">
+
+    <div class="row">
+        <h2>THE MOCK</h2>
+        <div>
+            <p>Everything above is the theme, not a screenshot. The panels, the hairlines, the traffic lights and the sliding server rail are drawn with the same tokens the CSS files ship with, so switching a build up there is switching it in Discord.</p>
+            <p><b>Hover the strip on the far left</b> to open the server rail, and hover the window controls to see their glyphs.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>INSTALL</h2>
+        <div>
+            <p>Settings, then Themes, then Open Themes Folder. Drop one file in and tick it. On Windows the folder is <span class="path">%APPDATA%\Vencord\themes</span>, or <span class="path">%APPDATA%\BetterDiscord\themes</span>.</p>
+            <p>Enable one build at a time. Two of them loaded together fight over the same elements. Vencord rereads the file whenever it changes on disk, so you can keep it open in an editor while you tune it.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>BUILDS</h2>
+        <div class="files">
+            <div class="file"><span class="fn">AerogelDark.theme.css</span><span class="fd">The reference build. Matte black, frosted panels, slow aurora.</span></div>
+            <div class="file"><span class="fn">AerogelLight.theme.css</span><span class="fd">Material inverted: white glass, depth from dark ink instead of white film.</span></div>
+            <div class="file"><span class="fn">AerogelViolet.theme.css</span><span class="fd">Matte black with an amethyst cast. Built for 505h.</span></div>
+            <div class="file"><span class="fn">AerogelDarkFlat.theme.css</span><span class="fd">No blur, no animation, opaque panels. For weak GPUs and remote desktops.</span></div>
+            <div class="file"><span class="fn">AerogelLightFlat.theme.css</span><span class="fd">The same treatment on the light build.</span></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>KNOBS</h2>
+        <div>
+            <p>Each file opens with a <span class="path">:root</span> block. Edit a value, save, done.</p>
+            <div class="knobs">
+                <div class="knob"><span class="kn path">--gmd-accent</span><span class="kd">Pills, selected channel, links. Change <span class="path">--gmd-accent-rgb</span> with it or the translucent states will not follow.</span></div>
+                <div class="knob"><span class="kn path">--gmd-guildbar-autohide</span><span class="kd">1 slides the server rail, 0 pins it open.</span></div>
+                <div class="knob"><span class="kn path">--gmd-aurora</span><span class="kd">Strength of the drifting glow. 0 removes it, and so does <span class="path">--gmd-grain</span>.</span></div>
+                <div class="knob"><span class="kn path">--gmd-bg</span><span class="kd">The frame behind the glass. Any gradient, colour or image URL.</span></div>
+                <div class="knob"><span class="kn path">--gmd-panel-gap</span><span class="kd">Space between the floating tiles. Radius and blur sit next to it.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>UPDATES</h2>
+        <div>
+            <p>Discord ships class names with a rotating hash, like <span class="path">sidebarList__5e434</span>. Aerogel never matches a full hashed name, only the stable fragment, so a hash change costs nothing.</p>
+            <p>If Discord renames a component outright, one section goes plain while the rest keeps working. Find the new fragment in DevTools, replace the old one in <span class="path">src/</span> and rebuild.</p>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <span>Aerogel 1.1.0 &nbsp;&middot;&nbsp; MIT</span>
+    <a href="https://github.com/bonzi64/aerogel">github.com/bonzi64/aerogel</a>
+</footer>
+
+</div>
+
+<script>
+(function () {
+    var root = document.documentElement;
+    var picks = document.querySelectorAll(".pick");
+
+    function select(build) {
+        root.setAttribute("data-build", build);
+        picks.forEach(function (p) { p.setAttribute("aria-pressed", String(p.dataset.set === build)); });
+        try { localStorage.setItem("aerogel-build", build); } catch (e) {}
+    }
+
+    picks.forEach(function (p) {
+        p.addEventListener("click", function () { select(p.dataset.set); });
+    });
+
+    var saved = null;
+    try { saved = localStorage.getItem("aerogel-build"); } catch (e) {}
+    select(saved && document.querySelector('.pick[data-set="' + saved + '"]') ? saved : "dark");
+})();
+</script>
