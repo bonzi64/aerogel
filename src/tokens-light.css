@@ -1,0 +1,331 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ==================================================================
+ *  1. THEME TOKENS
+ * ================================================================== */
+:root {
+    /* --- Frame background (soft matte daylight) --- */
+    --gmd-bg: radial-gradient(circle at 50% -10%, #f7f9ff 0%, #e9edf7 48%, #dde2ee 100%);
+
+    /* --- Depth tint. On light glass, depth is a dark film, not a white one.
+       Every surface tint in this build is derived from it. --- */
+    --gmd-tint-rgb: 26, 29, 44;
+
+    /* --- Ambient aurora glow behind the glass (0 = off, 1 = on) --- */
+    --gmd-aurora: 0.75;
+    --gmd-aurora-a: rgba(120, 138, 255, 0.3);
+    --gmd-aurora-b: rgba(72, 200, 190, 0.22);
+    --gmd-aurora-c: rgba(196, 130, 255, 0.22);
+    --gmd-aurora-speed: 64s;
+
+    /* --- Matte film grain over the frame (0 = off) --- */
+    --gmd-grain: 0.05;
+
+    /* --- Accent (darkened so it stays readable on white) --- */
+    --gmd-accent: #4c5ae0;
+    --gmd-accent-rgb: 76, 90, 224;
+    --gmd-accent-hover: #5b68e8;
+    --gmd-accent-active: #3f4cc9;
+    --gmd-accent-text: #ffffff;
+
+    /* --- Floating glass panels (sidebar / chat / members) ---
+       White frosted film over the coloured frame, hairline in the tint
+       colour, bright specular highlight along the top edge. */
+    --gmd-panel-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.62) 45%, rgba(255, 255, 255, 0.72) 100%);
+    --gmd-panel-bg-flat: rgba(255, 255, 255, 0.88);
+    --gmd-panel-nested-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.46));
+    --gmd-panel-border: rgba(26, 29, 44, 0.1);
+    --gmd-panel-radius: 18px;
+    --gmd-panel-gap: 6px;
+    --gmd-panel-blur: 26px;
+    --gmd-panel-saturate: 170%;
+    --gmd-panel-shadow: 0 14px 40px rgba(26, 29, 44, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    --gmd-panel-shadow-nested: 0 8px 24px rgba(26, 29, 44, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    /* --- Popouts, pickers, menus, modals --- */
+    --gmd-popout-bg: linear-gradient(170deg, rgba(255, 255, 255, 0.94) 0%, rgba(250, 251, 255, 0.9) 100%);
+    --gmd-popout-bg-solid: #fbfcff;
+    --gmd-popout-border: rgba(26, 29, 44, 0.12);
+    --gmd-popout-radius: 16px;
+    --gmd-popout-blur: 28px;
+    --gmd-popout-shadow: 0 20px 56px rgba(26, 29, 44, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    /* --- Cards / fields inside profiles, modals, embeds --- */
+    --gmd-card-bg: rgba(26, 29, 44, 0.045);
+    --gmd-card-bg-hover: rgba(26, 29, 44, 0.07);
+    --gmd-card-border: rgba(26, 29, 44, 0.08);
+    --gmd-field-bg: rgba(255, 255, 255, 0.75);
+    --gmd-field-bg-hover: rgba(255, 255, 255, 0.9);
+
+    /* --- Chat bar --- */
+    --gmd-chatbar-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.7));
+    --gmd-chatbar-border: rgba(26, 29, 44, 0.12);
+    --gmd-chatbar-radius: 14px;
+
+    /* --- Surfaces --- */
+    --gmd-hover: rgba(26, 29, 44, 0.05);
+    --gmd-active: rgba(26, 29, 44, 0.08);
+    --gmd-selected: rgba(26, 29, 44, 0.09);
+    --gmd-border: rgba(26, 29, 44, 0.09);
+    --gmd-border-strong: rgba(26, 29, 44, 0.16);
+
+    /* --- Text --- */
+    --gmd-text: #2b2f3d;
+    --gmd-text-strong: #11141d;
+    --gmd-text-muted: #6d7284;
+    --gmd-text-subtle: #4b5062;
+
+    /* --- Auto-hiding server drawer (1 = on, 0 = classic fixed column) --- */
+    --gmd-guildbar-autohide: 1;
+    --gmd-guildbar-peek: 14px;      /* visible handle width when hidden */
+    --gmd-guildbar-speed: 320ms;    /* slide duration */
+    --gmd-guildbar-delay: 260ms;    /* grace period before it hides again */
+
+    /* --- Nameplate artwork in the user panel (1 = shown without its plate
+       gradient, 0 = hidden entirely) --- */
+    --gmd-nameplate: 1;
+
+    /* --- macOS traffic lights --- */
+    --gmd-mac-red: #ff5f56;
+    --gmd-mac-yellow: #ffbd2e;
+    --gmd-mac-green: #27c93f;
+
+    /* --- Motion --- */
+    --gmd-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --gmd-fast: 140ms;
+    --gmd-med: 220ms;
+
+    /* --- Typography --- */
+    --gmd-font: "Inter", "gg sans", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --gmd-font-code: "gg mono", "JetBrains Mono", "SF Mono", Consolas, "Source Code Pro", monospace;
+}
+
+/* ==================================================================
+ *  2. DISCORD VARIABLE REMAP (applied to every colour theme)
+ * ================================================================== */
+.theme-dark,
+.theme-darker,
+.theme-midnight,
+.theme-light,
+.visual-refresh.theme-dark,
+.visual-refresh.theme-light {
+    color-scheme: light;
+
+    /* App frame */
+    --app-frame-background: transparent;
+    --app-frame-border: var(--gmd-border);
+    --background-base-lowest: rgba(255, 255, 255, 0.55);
+    --background-base-lower: rgba(255, 255, 255, 0.5);
+    --background-base-low: rgba(255, 255, 255, 0.44);
+    --background-surface-high: rgba(255, 255, 255, 0.92);
+    --background-surface-higher: rgba(255, 255, 255, 0.95);
+    --background-surface-highest: #ffffff;
+    --background-mod-faint: rgba(26, 29, 44, 0.03);
+    --background-mod-subtle: rgba(26, 29, 44, 0.05);
+    --background-mod-muted: rgba(26, 29, 44, 0.06);
+    --background-mod-normal: rgba(26, 29, 44, 0.08);
+    --background-mod-strong: rgba(26, 29, 44, 0.12);
+    --background-scrim: rgba(26, 29, 44, 0.35);
+    --background-scrim-lightbox: rgba(26, 29, 44, 0.6);
+    --chat-background-default: transparent;
+    --chat-background: transparent;
+    --custom-channel-members-bg: transparent;
+    --home-background: transparent;
+    --panel-bg: var(--gmd-card-bg);
+    --context-menu-backdrop-background: transparent;
+
+    /* Legacy variables (kept for Vencord / BetterDiscord plugin UIs) */
+    --background-primary: rgba(255, 255, 255, 0.6);
+    --background-secondary: rgba(255, 255, 255, 0.5);
+    --background-secondary-alt: rgba(255, 255, 255, 0.72);
+    --background-tertiary: rgba(255, 255, 255, 0.44);
+    --background-accent: rgba(26, 29, 44, 0.08);
+    --background-floating: rgba(255, 255, 255, 0.96);
+    --background-nested-floating: rgba(255, 255, 255, 0.98);
+    --background-mobile-primary: rgba(255, 255, 255, 0.6);
+    --background-mobile-secondary: rgba(255, 255, 255, 0.5);
+    --background-modifier-hover: var(--gmd-hover);
+    --background-modifier-active: var(--gmd-active);
+    --background-modifier-selected: var(--gmd-selected);
+    --background-modifier-accent: rgba(26, 29, 44, 0.08);
+    --background-message-hover: rgba(26, 29, 44, 0.035);
+    --background-mentioned: rgba(235, 150, 20, 0.12);
+    --background-mentioned-hover: rgba(235, 150, 20, 0.18);
+    --channeltextarea-background: var(--gmd-chatbar-bg);
+    --deprecated-card-bg: var(--gmd-card-bg);
+    --deprecated-card-editable-bg: var(--gmd-card-bg);
+    --deprecated-store-bg: rgba(255, 255, 255, 0.6);
+    --deprecated-quickswitcher-input-background: var(--gmd-field-bg);
+    --deprecated-text-input-bg: var(--gmd-field-bg);
+    --deprecated-text-input-border: var(--gmd-border);
+    --deprecated-text-input-border-hover: var(--gmd-border-strong);
+    --activity-card-background: var(--gmd-card-bg);
+
+    /* Borders */
+    --border-faint: rgba(26, 29, 44, 0.04);
+    --border-muted: rgba(26, 29, 44, 0.06);
+    --border-subtle: var(--gmd-border);
+    --border-normal: rgba(26, 29, 44, 0.12);
+    --border-strong: rgba(26, 29, 44, 0.2);
+    --border-focus: var(--gmd-accent);
+    --focus-primary: var(--gmd-accent);
+
+    /* Interactive surfaces */
+    --interactive-background-default: transparent;
+    --interactive-background-hover: var(--gmd-hover);
+    --interactive-background-active: var(--gmd-active);
+    --interactive-background-selected: var(--gmd-selected);
+    --control-secondary-background-default: rgba(26, 29, 44, 0.06);
+    --control-secondary-background-hover: rgba(26, 29, 44, 0.1);
+    --control-secondary-background-active: rgba(26, 29, 44, 0.08);
+    --control-secondary-border-default: transparent;
+    --redesign-button-tertiary-background: rgba(26, 29, 44, 0.06);
+    --redesign-button-tertiary-pressed-background: rgba(26, 29, 44, 0.1);
+    --button-secondary-background: rgba(26, 29, 44, 0.07);
+    --button-secondary-background-hover: rgba(26, 29, 44, 0.11);
+    --button-secondary-background-active: rgba(26, 29, 44, 0.09);
+
+    /* Inputs */
+    --input-background-default: var(--gmd-field-bg);
+    --input-border-default: var(--gmd-border);
+    --input-border-hover: var(--gmd-border-strong);
+    --input-border-active: var(--gmd-accent);
+    --input-placeholder-text-default: var(--gmd-text-muted);
+    --input-text-default: var(--gmd-text);
+    --input-background: var(--gmd-field-bg);
+    --search-popout-option-fade: transparent;
+
+    /* Modals / cards */
+    --modal-background: var(--gmd-popout-bg);
+    --modal-footer-background: rgba(26, 29, 44, 0.035);
+    --card-background-default: var(--gmd-card-bg);
+    --card-border-default: var(--gmd-card-border);
+    --embed-background: rgba(255, 255, 255, 0.72);
+    --embed-background-alternate: rgba(255, 255, 255, 0.6);
+    --background-code: rgba(26, 29, 44, 0.05);
+    --spoiler-hidden-background: rgba(26, 29, 44, 0.14);
+    --spoiler-hidden-background-hover: rgba(26, 29, 44, 0.2);
+    --spoiler-revealed-background: rgba(26, 29, 44, 0.05);
+
+    /* Messages */
+    --message-background-hover: rgba(26, 29, 44, 0.035);
+    --message-mentioned-background-default: rgba(235, 150, 20, 0.12);
+    --message-mentioned-background-hover: rgba(235, 150, 20, 0.18);
+    --message-highlight-background-default: rgba(var(--gmd-accent-rgb), 0.12);
+    --message-highlight-background-hover: rgba(var(--gmd-accent-rgb), 0.18);
+    --message-automod-background-default: rgba(220, 60, 60, 0.1);
+    --message-automod-background-hover: rgba(220, 60, 60, 0.15);
+    --mention-background: rgba(var(--gmd-accent-rgb), 0.16);
+    --mention-foreground: #2f3bb5;
+    --reaction-background-default: rgba(26, 29, 44, 0.05);
+    --reaction-background-hover: rgba(26, 29, 44, 0.09);
+    --reaction-background-active: rgba(26, 29, 44, 0.07);
+    --reaction-border-default: transparent;
+    --reaction-border-hover: var(--gmd-border-strong);
+    --reaction-border-active: var(--gmd-border-strong);
+    --reaction-background-reacted-default: rgba(var(--gmd-accent-rgb), 0.14);
+    --reaction-background-reacted-hover: rgba(var(--gmd-accent-rgb), 0.2);
+    --reaction-border-reacted-default: rgba(var(--gmd-accent-rgb), 0.55);
+    --keyword-highlight-background: rgba(var(--gmd-accent-rgb), 0.2);
+
+    /* Brand / accent */
+    --brand-500: var(--gmd-accent);
+    --brand-560: var(--gmd-accent-hover);
+    --brand-600: var(--gmd-accent-active);
+    --brand-experiment: var(--gmd-accent);
+    --brand-experiment-560: var(--gmd-accent-hover);
+    --brand-experiment-600: var(--gmd-accent-active);
+    --background-brand: var(--gmd-accent);
+    --bg-brand: var(--gmd-accent);
+    --text-brand: var(--gmd-accent);
+    --text-link: #3644cf;
+    --icon-brand: var(--gmd-accent);
+    --control-brand-foreground: var(--gmd-accent);
+    --control-brand-foreground-new: var(--gmd-accent);
+    --button-filled-brand-background: var(--gmd-accent);
+    --button-filled-brand-background-hover: var(--gmd-accent-hover);
+    --button-filled-brand-background-active: var(--gmd-accent-active);
+    --button-filled-brand-text: var(--gmd-accent-text);
+    --button-outline-brand-border: rgba(var(--gmd-accent-rgb), 0.5);
+    --button-outline-brand-text: var(--gmd-accent);
+    --switch-background-selected-default: var(--gmd-accent);
+    --switch-background-selected-hover: var(--gmd-accent-hover);
+    --checkbox-background-selected-default: var(--gmd-accent);
+    --radio-background-selected-default: var(--gmd-accent);
+    --progressbar-indicator-background: var(--gmd-accent);
+    --progressbar-track-background: rgba(26, 29, 44, 0.1);
+    --interactive-accent-background-default: rgba(var(--gmd-accent-rgb), 0.12);
+    --interactive-accent-background-hover: rgba(var(--gmd-accent-rgb), 0.18);
+    --interactive-accent-background-active: rgba(var(--gmd-accent-rgb), 0.24);
+    --interactive-accent-background-selected: rgba(var(--gmd-accent-rgb), 0.2);
+
+    /* Text */
+    --text-default: var(--gmd-text);
+    --text-normal: var(--gmd-text);
+    --text-strong: var(--gmd-text-strong);
+    --header-primary: var(--gmd-text-strong);
+    --header-secondary: var(--gmd-text-subtle);
+    --text-muted: var(--gmd-text-muted);
+    --text-subtle: var(--gmd-text-subtle);
+    --channels-default: var(--gmd-text-subtle);
+    --channel-icon: var(--gmd-text-muted);
+    --interactive-normal: var(--gmd-text-subtle);
+    --interactive-hover: var(--gmd-text);
+    --interactive-active: var(--gmd-text-strong);
+    --interactive-muted: #a2a7b6;
+    --interactive-text-default: var(--gmd-text-subtle);
+    --interactive-text-hover: var(--gmd-text);
+    --interactive-text-active: var(--gmd-text-strong);
+    --icon-default: var(--gmd-text-subtle);
+    --icon-muted: var(--gmd-text-muted);
+    --icon-subtle: var(--gmd-text-subtle);
+    --icon-strong: var(--gmd-text-strong);
+    --white: #ffffff;
+    --black: #11141d;
+
+    /* Scrollbars */
+    --scrollbar-thin-thumb: rgba(26, 29, 44, 0.16);
+    --scrollbar-thin-track: transparent;
+    --scrollbar-auto-thumb: rgba(26, 29, 44, 0.18);
+    --scrollbar-auto-track: transparent;
+    --scrollbar-auto-scrollbar-color-thumb: rgba(26, 29, 44, 0.18);
+    --scrollbar-auto-scrollbar-color-track: transparent;
+
+    /* Shadows */
+    --shadow-low: 0 4px 16px rgba(26, 29, 44, 0.08);
+    --shadow-medium: 0 8px 24px rgba(26, 29, 44, 0.1);
+    --shadow-high: 0 12px 40px rgba(26, 29, 44, 0.14);
+    --shadow-border: 0 0 0 1px var(--gmd-popout-border);
+    --shadow-ledge: none;
+    --elevation-low: 0 4px 16px rgba(26, 29, 44, 0.08);
+    --elevation-medium: 0 8px 24px rgba(26, 29, 44, 0.1);
+    --elevation-high: 0 12px 40px rgba(26, 29, 44, 0.14);
+    --elevation-stroke: 0 0 0 1px var(--gmd-popout-border);
+    --legacy-elevation-low: 0 4px 16px rgba(26, 29, 44, 0.08);
+    --legacy-elevation-high: 0 12px 40px rgba(26, 29, 44, 0.14);
+    --legacy-elevation-border: 0 0 0 1px var(--gmd-popout-border);
+
+    /* Profiles */
+    --profile-gradient-section-box: var(--gmd-card-bg);
+    --profile-gradient-note-background: var(--gmd-card-bg);
+    --profile-gradient-role-pill-background: rgba(26, 29, 44, 0.06);
+    --profile-gradient-role-pill-border: var(--gmd-card-border);
+    --user-profile-overlay-background: var(--gmd-card-bg);
+    --user-profile-overlay-background-hover: var(--gmd-card-bg-hover);
+    --user-profile-toolbar-background: rgba(26, 29, 44, 0.05);
+    --user-profile-toolbar-border: var(--gmd-card-border);
+    --user-profile-border: var(--gmd-card-border);
+    --user-profile-note-background-focus: var(--gmd-field-bg-hover);
+    --user-profile-activity-toolbar-background: rgba(26, 29, 44, 0.05);
+    --profile-body-background-color: var(--gmd-card-bg);
+    --profile-body-background-hover: var(--gmd-card-bg-hover);
+    --profile-body-divider-color: var(--gmd-card-border);
+    --profile-message-input-background-color: var(--gmd-field-bg);
+    --profile-message-input-border-color: var(--gmd-card-border);
+
+    /* Fonts */
+    --font-primary: var(--gmd-font);
+    --font-display: var(--gmd-font);
+    --font-headline: var(--gmd-font);
+    --font-code: var(--gmd-font-code);
+}

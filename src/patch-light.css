@@ -1,0 +1,96 @@
+
+/* ==================================================================
+ *  19. LIGHT-BUILD CORRECTIONS
+ *  The body above is the shared one with its surface tints inverted to a
+ *  dark film. These few surfaces are panels rather than tints, so they
+ *  stay bright.
+ * ================================================================== */
+
+/* Film grain: the shared noise is white, which is invisible on a light
+   frame. Light builds use a dark noise instead. */
+body::after {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.09  0 0 0 0 0.14  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>") !important;
+}
+
+/* User panel: a white glass tile like the other panels */
+[class*="sidebar_"] [class*="panels_"] {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.66)) !important;
+}
+
+/* Home / Direct Messages tile */
+[class*="guilds_"] [class*="childWrapper_"] {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72)) !important;
+    border-color: rgba(26, 29, 44, 0.1) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(26, 29, 44, 0.1) !important;
+    color: var(--gmd-accent) !important;
+}
+
+[class*="guilds_"] [class*="wrapper_"][class*="selected_"] [class*="childWrapper_"],
+[class*="guilds_"] [class*="wrapper_"]:hover [class*="childWrapper_"] {
+    color: #ffffff !important;
+}
+
+/* The chat header sheen reads as a smudge on white glass */
+[class*="chat_"] > [class*="title_"] {
+    background: transparent !important;
+}
+
+/* Traffic lights keep their bright top highlight on a light frame */
+[class*="winButton_"] {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 1px 2px rgba(26, 29, 44, 0.25) !important;
+}
+
+/* Code, embeds and quotes need a touch more contrast against white glass */
+[class*="markup_"] code,
+[class*="markup_"] pre,
+[class*="markup_"] code.inline,
+[class*="inlineCode_"] {
+    background: rgba(26, 29, 44, 0.05) !important;
+    border-color: rgba(26, 29, 44, 0.09) !important;
+}
+
+[class*="embedFull_"] {
+    background: rgba(255, 255, 255, 0.72) !important;
+}
+
+[class*="embedFull_"]:hover {
+    background: rgba(255, 255, 255, 0.86) !important;
+}
+
+/* Chat input stays the brightest surface in the column */
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:focus-within {
+    background: rgba(255, 255, 255, 0.96) !important;
+}
+
+/* Mentions: warm amber, readable on white */
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
+    background: rgba(235, 150, 20, 0.12) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]:hover {
+    background: rgba(235, 150, 20, 0.18) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]::before {
+    background: #e08c14 !important;
+    box-shadow: 0 0 10px rgba(224, 140, 20, 0.45) !important;
+}
+
+/* Unread divider */
+[class*="isUnread_"] > [class*="content_"] {
+    color: #d13b3b !important;
+    border-color: rgba(209, 59, 59, 0.35) !important;
+}
+
+/* Message hover: a soft dark film, not a white one */
+[class*="messageListItem_"] > [class*="message_"]:hover {
+    background: rgba(26, 29, 44, 0.035) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="selected_"] {
+    background: rgba(26, 29, 44, 0.05) !important;
+}

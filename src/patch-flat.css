@@ -1,0 +1,70 @@
+
+/* ==================================================================
+ *  19. FLAT-BUILD CORRECTIONS
+ *  The build step already stripped every backdrop-filter, transition,
+ *  animation, blur filter and large shadow. What is left are the
+ *  whole-page effects, removed outright.
+ * ================================================================== */
+
+/* Ambient aurora and film grain: not rendered at all (no fixed full-screen
+   layer, no blur filter, no animation loop). */
+body::before,
+body::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+}
+
+/* The frame is a flat paint, so the app shell can stay fully opaque */
+html,
+body {
+    background: var(--gmd-bg) !important;
+    background-attachment: scroll !important;
+}
+
+/* No layer promotion anywhere: fewer composited layers, less VRAM */
+#app-mount * {
+    will-change: auto !important;
+}
+
+/* Panels are opaque; drop the inner specular pass on the big ones */
+[class*="sidebarList_"],
+[class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
+[class*="membersWrap_"],
+[class*="page_"] [class*="page_"] {
+    background: var(--gmd-panel-bg) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] {
+    background: var(--gmd-panel-nested-bg) !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"] {
+    background: var(--gmd-chatbar-bg) !important;
+}
+
+/* Popouts, menus, tooltips and pickers: opaque, hairline border */
+[class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
+[class*="layerContainer_"] [class*="tooltip_"],
+[class*="drawerSizingWrapper_"] [class*="contentWrapper_"],
+.user-profile-popout,
+.user-profile-modal,
+.user-profile-modal-v2 {
+    background: var(--gmd-popout-bg) !important;
+    background-color: var(--gmd-popout-bg) !important;
+}
+
+/* Modal backdrop: a flat scrim instead of a blurred one */
+[class*="layerContainer_"] > * > [class*="backdrop_"],
+[class*="layerContainer_"] > [class*="backdrop_"] {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Hover micro-motion stays instant; these two were the only effects that
+   forced a repaint of the element underneath */
+[class*="messageListItem_"] > [class*="message_"]:hover,
+[class*="embedFull_"]:hover {
+    transform: none !important;
+}
