@@ -6,7 +6,7 @@ This is a Discord theme built on that idea. The app becomes a deep matte frame, 
 
 Five builds ship from one shared rule set, so they all behave the same and break the same way when Discord changes something.
 
-![Aerogel Dark](docs/preview-dark.png)
+**[Open the live preview](https://b0nzi64.github.io/aerogel/)** to switch between all five builds and try the sliding server rail before you install anything. The preview page wears whichever build you select, so it is the theme rendering itself.
 
 ## Builds
 
@@ -141,6 +141,8 @@ cd src
 npm install
 npm run build
 ```
+
+`docs/index.html` is the preview page. GitHub Pages serves it if you set **Settings → Pages → Source** to `main` and the folder to `/docs`.
 
 The passes are:
 
