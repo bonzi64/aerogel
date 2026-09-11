@@ -6,7 +6,7 @@ This is a Discord theme built on that idea. The app becomes a deep matte frame, 
 
 Five builds ship from one shared rule set, so they all behave the same and break the same way when Discord changes something.
 
-**[Open the live preview](https://b0nzi64.github.io/aerogel/)** to switch between all five builds and try the sliding server rail before you install anything. The preview page wears whichever build you select, so it is the theme rendering itself.
+**[Open the live preview](https://bonzi64.github.io/aerogel/)** to switch between all five builds and try the sliding server rail before you install anything. The preview page wears whichever build you select, so it is the theme rendering itself.
 
 ## Builds
 
