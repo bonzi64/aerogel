@@ -8,43 +8,25 @@
  * @source https://github.com/bonzi64/aerogel/raw/main/AerogelLightPinkFlat.theme.css
  */
 
-/* Aerogel Light Pink Flat
- * Selectors match on class fragments ([class*="sidebarList_"]) so they keep
- * working when Discord rotates its class hashes. Layout containers are
- * repainted, never repositioned. Every knob is in the :root block below.
- */
-
-/* ==================================================================
- *  1. THEME TOKENS
- * ================================================================== */
 :root {
-    /* --- Frame background (soft matte blush daylight) --- */
     --gmd-bg: linear-gradient(180deg, #fdf2f7 0%, #f5dfe9 100%);
 
-    /* --- Depth tint. On light glass, depth is a dark film, not a white one.
-       Plum rather than navy, so the shading stays in the pink family. --- */
     --gmd-tint-rgb: 74, 30, 52;
 
-    /* --- Ambient aurora glow behind the glass (0 = off, 1 = on) --- */
     --gmd-aurora: 0;
     --gmd-aurora-a: rgba(255, 133, 189, 0.32);
     --gmd-aurora-b: rgba(255, 176, 208, 0.24);
     --gmd-aurora-c: rgba(206, 128, 255, 0.2);
     --gmd-aurora-speed: 64s;
 
-    /* --- Matte film grain over the frame (0 = off) --- */
     --gmd-grain: 0;
 
-    /* --- Accent (a rose deep enough to stay readable on white) --- */
     --gmd-accent: #d6337a;
     --gmd-accent-rgb: 214, 51, 122;
     --gmd-accent-hover: #e24a8b;
     --gmd-accent-active: #bc2a69;
     --gmd-accent-text: #ffffff;
 
-    /* --- Floating glass panels (sidebar / chat / members) ---
-       White frosted film over the coloured frame, hairline in the tint
-       colour, bright specular highlight along the top edge. */
     --gmd-panel-bg: #fffafc;
     --gmd-panel-bg-flat: #fffafc;
     --gmd-panel-nested-bg: #fdf3f7;
@@ -56,7 +38,6 @@
     --gmd-panel-shadow: inset 0 1px 0 #ffffff;
     --gmd-panel-shadow-nested: inset 0 1px 0 #ffffff;
 
-    /* --- Popouts, pickers, menus, modals --- */
     --gmd-popout-bg: #ffffff;
     --gmd-popout-bg-solid: #ffffff;
     --gmd-popout-border: rgba(74, 30, 52, 0.12);
@@ -64,59 +45,46 @@
     --gmd-popout-blur: 0px;
     --gmd-popout-shadow: 0 0 0 1px rgba(74, 30, 52, 0.14);
 
-    /* --- Cards / fields inside profiles, modals, embeds --- */
     --gmd-card-bg: rgba(74, 30, 52, 0.045);
     --gmd-card-bg-hover: rgba(74, 30, 52, 0.07);
     --gmd-card-border: rgba(74, 30, 52, 0.08);
     --gmd-field-bg: #ffffff;
     --gmd-field-bg-hover: #fdf3f7;
 
-    /* --- Chat bar --- */
     --gmd-chatbar-bg: #ffffff;
     --gmd-chatbar-border: rgba(74, 30, 52, 0.12);
     --gmd-chatbar-radius: 14px;
 
-    /* --- Surfaces --- */
     --gmd-hover: rgba(74, 30, 52, 0.05);
     --gmd-active: rgba(74, 30, 52, 0.08);
     --gmd-selected: rgba(74, 30, 52, 0.09);
     --gmd-border: rgba(74, 30, 52, 0.09);
     --gmd-border-strong: rgba(74, 30, 52, 0.16);
 
-    /* --- Text --- */
     --gmd-text: #3f2c36;
     --gmd-text-strong: #1f1219;
     --gmd-text-muted: #8a7079;
     --gmd-text-subtle: #614a55;
 
-    /* --- Auto-hiding server drawer (1 = on, 0 = classic fixed column) --- */
     --gmd-guildbar-autohide: 0;
-    --gmd-guildbar-peek: 14px;      /* visible handle width when hidden */
-    --gmd-guildbar-speed: 0ms;    /* slide duration */
-    --gmd-guildbar-delay: 0ms;    /* grace period before it hides again */
+    --gmd-guildbar-peek: 14px;
+    --gmd-guildbar-speed: 0ms;
+    --gmd-guildbar-delay: 0ms;
 
-    /* --- Nameplate artwork in the user panel (1 = shown without its plate
-       gradient, 0 = hidden entirely) --- */
     --gmd-nameplate: 0;
 
-    /* --- macOS traffic lights --- */
     --gmd-mac-red: #ff5f56;
     --gmd-mac-yellow: #ffbd2e;
     --gmd-mac-green: #27c93f;
 
-    /* --- Motion --- */
     --gmd-ease: linear;
     --gmd-fast: 0ms;
     --gmd-med: 0ms;
 
-    /* --- Typography --- */
     --gmd-font: "gg sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     --gmd-font-code: "gg mono", Consolas, "Courier New", monospace;
 }
 
-/* ==================================================================
- *  2. DISCORD VARIABLE REMAP (applied to every colour theme)
- * ================================================================== */
 .theme-dark,
 .theme-darker,
 .theme-midnight,
@@ -125,7 +93,6 @@
 .visual-refresh.theme-light {
     color-scheme: light;
 
-    /* App frame */
     --app-frame-background: transparent;
     --app-frame-border: var(--gmd-border);
     --background-base-lowest: #fffbfd;
@@ -148,7 +115,6 @@
     --panel-bg: var(--gmd-card-bg);
     --context-menu-backdrop-background: transparent;
 
-    /* Legacy variables (kept for Vencord / BetterDiscord plugin UIs) */
     --background-primary: #fffafc;
     --background-secondary: #fdf2f7;
     --background-secondary-alt: #ffffff;
@@ -175,7 +141,6 @@
     --deprecated-text-input-border-hover: var(--gmd-border-strong);
     --activity-card-background: var(--gmd-card-bg);
 
-    /* Borders */
     --border-faint: rgba(74, 30, 52, 0.04);
     --border-muted: rgba(74, 30, 52, 0.06);
     --border-subtle: var(--gmd-border);
@@ -184,7 +149,6 @@
     --border-focus: var(--gmd-accent);
     --focus-primary: var(--gmd-accent);
 
-    /* Interactive surfaces */
     --interactive-background-default: transparent;
     --interactive-background-hover: var(--gmd-hover);
     --interactive-background-active: var(--gmd-active);
@@ -199,7 +163,6 @@
     --button-secondary-background-hover: rgba(74, 30, 52, 0.11);
     --button-secondary-background-active: rgba(74, 30, 52, 0.09);
 
-    /* Inputs */
     --input-background-default: var(--gmd-field-bg);
     --input-border-default: var(--gmd-border);
     --input-border-hover: var(--gmd-border-strong);
@@ -209,7 +172,6 @@
     --input-background: var(--gmd-field-bg);
     --search-popout-option-fade: transparent;
 
-    /* Modals / cards */
     --modal-background: var(--gmd-popout-bg);
     --modal-footer-background: rgba(74, 30, 52, 0.035);
     --card-background-default: var(--gmd-card-bg);
@@ -221,7 +183,6 @@
     --spoiler-hidden-background-hover: rgba(74, 30, 52, 0.2);
     --spoiler-revealed-background: rgba(74, 30, 52, 0.05);
 
-    /* Messages */
     --message-background-hover: rgba(74, 30, 52, 0.035);
     --message-mentioned-background-default: rgba(235, 150, 20, 0.12);
     --message-mentioned-background-hover: rgba(235, 150, 20, 0.18);
@@ -242,7 +203,6 @@
     --reaction-border-reacted-default: rgba(var(--gmd-accent-rgb), 0.55);
     --keyword-highlight-background: rgba(var(--gmd-accent-rgb), 0.2);
 
-    /* Brand / accent */
     --brand-500: var(--gmd-accent);
     --brand-560: var(--gmd-accent-hover);
     --brand-600: var(--gmd-accent-active);
@@ -273,7 +233,6 @@
     --interactive-accent-background-active: rgba(var(--gmd-accent-rgb), 0.24);
     --interactive-accent-background-selected: rgba(var(--gmd-accent-rgb), 0.2);
 
-    /* Text */
     --text-default: var(--gmd-text);
     --text-normal: var(--gmd-text);
     --text-strong: var(--gmd-text-strong);
@@ -297,7 +256,6 @@
     --white: #ffffff;
     --black: #1f1219;
 
-    /* Scrollbars */
     --scrollbar-thin-thumb: rgba(74, 30, 52, 0.16);
     --scrollbar-thin-track: transparent;
     --scrollbar-auto-thumb: rgba(74, 30, 52, 0.18);
@@ -305,7 +263,6 @@
     --scrollbar-auto-scrollbar-color-thumb: rgba(74, 30, 52, 0.18);
     --scrollbar-auto-scrollbar-color-track: transparent;
 
-    /* Shadows */
     --shadow-low: 0 0 0 1px rgba(74, 30, 52, 0.1);
     --shadow-medium: 0 0 0 1px rgba(74, 30, 52, 0.12);
     --shadow-high: 0 0 0 1px rgba(74, 30, 52, 0.14);
@@ -319,7 +276,6 @@
     --legacy-elevation-high: 0 0 0 1px rgba(74, 30, 52, 0.14);
     --legacy-elevation-border: 0 0 0 1px var(--gmd-popout-border);
 
-    /* Profiles */
     --profile-gradient-section-box: var(--gmd-card-bg);
     --profile-gradient-note-background: var(--gmd-card-bg);
     --profile-gradient-role-pill-background: rgba(74, 30, 52, 0.06);
@@ -337,16 +293,12 @@
     --profile-message-input-background-color: var(--gmd-field-bg);
     --profile-message-input-border-color: var(--gmd-card-border);
 
-    /* Fonts */
     --font-primary: var(--gmd-font);
     --font-display: var(--gmd-font);
     --font-headline: var(--gmd-font);
     --font-code: var(--gmd-font-code);
 }
 
-/* ==================================================================
- *  3. BASE SHELLS: transparent. Paint only, no repositioning.
- * ================================================================== */
 html,
 body {
     background: var(--gmd-bg) !important;
@@ -382,17 +334,14 @@ body {
     color: var(--gmd-text);
 }
 
-/* The 8px strip Discord paints at the bottom of the sidebar column */
 [class*="sidebar_"]:has([class*="sidebarList_"])::after {
     display: none !important;
 }
 
-/* Settings / guild-settings layers must stay opaque (base layer sits below) */
 [class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) {
     background: var(--gmd-bg) !important;
 }
 
-/* Aurora: transform-only animation, between frame and app */
 body::before {
     content: "";
     position: fixed;
@@ -414,7 +363,6 @@ body::before {
     100% { transform: translate3d(-3vw, 4vh, 0) rotate(-5deg) scale(1.03); }
 }
 
-/* Film grain: static SVG noise over the aurora, under the app */
 body::after {
     content: "";
     position: fixed;
@@ -426,11 +374,6 @@ body::after {
     background-size: 180px 180px;
 }
 
-/* ==================================================================
- *  4. FLOATING GLASS PANELS
- * ================================================================== */
-
-/* --- Channel list (grid area "channelsList") --- */
 [class*="sidebarList_"] {
     margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) var(--gmd-panel-gap) !important;
     border-radius: var(--gmd-panel-radius) !important;
@@ -450,9 +393,6 @@ body::after {
     backdrop-filter: none !important;
 }
 
-/* --- Chat column (contains header, messages, input and members) ---
-   Matches the innermost "chat_" ancestor of the message area, whatever the
-   nesting depth, so DMs, guild channels, threads and forums all get the tile. */
 [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])) {
     margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
     border-radius: var(--gmd-panel-radius) !important;
@@ -464,13 +404,11 @@ body::after {
     overflow: hidden !important;
 }
 
-/* When the channel list is collapsed the chat gets the full left margin back */
 [class*="sidebar_"][data-collapsed="true"] ~ [class*="page_"] [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
 [class*="sidebar_"][class*="hidden_"] ~ [class*="page_"] [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])) {
     margin-left: var(--gmd-panel-gap) !important;
 }
 
-/* --- Member list: nested glass card inside the chat panel --- */
 [class*="chat_"] [class*="container_"]:has(> [class*="membersWrap_"]) {
     background: transparent !important;
     border: none !important;
@@ -493,7 +431,6 @@ body::after {
     padding-top: 6px !important;
 }
 
-/* DM user-profile side card (same nested-glass treatment as the member list) */
 [class*="chat_"] .user-profile-sidebar,
 [class*="chat_"] .user-profile-sidebar-redesign {
     margin: var(--gmd-panel-gap) var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
@@ -509,7 +446,6 @@ body::after {
     border-radius: 0 !important;
 }
 
-/* --- Thread / forum side panel and search results --- */
 [class*="chatLayerWrapper_"] > [class*="container_"],
 [class*="searchResultsWrap_"] {
     margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
@@ -522,7 +458,6 @@ body::after {
     overflow: hidden !important;
 }
 
-/* --- Home / Friends / Shop pages (a page nested inside the grid page) --- */
 [class*="page_"] [class*="page_"] {
     margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
     border-radius: var(--gmd-panel-radius) !important;
@@ -548,15 +483,6 @@ body::after {
     border-bottom: 1px solid var(--gmd-border) !important;
 }
 
-/* ==================================================================
- *  5. GUILD LIST (frame level: icons float on the matte background)
- * ================================================================== */
-/* The column runs to the top of the frame, where the window keeps its drag
-   region. A transparent drag region still swallows the pointer, which costs
-   the first tile in the column (Direct Messages) the part of its hit area
-   that sits under the bar: the tile paints normally but only its lower half
-   answers the cursor. Nothing in this column is window chrome, so all of it
-   opts out of dragging. */
 [class*="guilds_"],
 [class*="guilds_"] * {
     -webkit-app-region: no-drag;
@@ -595,7 +521,6 @@ body::after {
     border-color: rgba(var(--gmd-accent-rgb), 0.45);
 }
 
-/* Home (Direct Messages) tile: frosted glass instead of a solid blurple square */
 [class*="guilds_"] [class*="childWrapper_"] {
     background: linear-gradient(160deg, rgba(var(--gmd-tint-rgb), 0.13), rgba(var(--gmd-tint-rgb), 0.05)) !important;
     background-color: transparent !important;
@@ -624,7 +549,6 @@ body::after {
     border-radius: 18px !important;
 }
 
-/* Selected / unread pill */
 [class*="guilds_"] [class*="pill_"] span,
 [class*="guilds_"] [class*="pill_"] > div {
     background: var(--gmd-accent) !important;
@@ -639,22 +563,11 @@ body::after {
     box-shadow: none;
 }
 
-/* ==================================================================
- *  5b. AUTO-HIDING SERVER DRAWER
- *  The column shrinks to a handle; the list slides over the channel list
- *  on hover or keyboard focus. The hover target is the real <nav>, so no
- *  JS and no extra elements are needed.
- * ================================================================== */
 @container style(--gmd-guildbar-autohide: 1) {
-    /* The channel list is sized from this variable, so shrinking it here
-       gives the freed width to the channels. The nav restores the real
-       value for its own children (icons, folders, badges). */
     [class*="sidebar_"]:has([class*="sidebarList_"]) {
         --custom-guild-list-width: var(--gmd-guildbar-peek);
     }
 
-    /* Discord clips this column with overflow:hidden AND a CSS mask (bottom
-       fade). Both would swallow the drawer, so they go. */
     [class*="guilds_"],
     [class*="sidebar_"] [class*="wrapper_"]:has(> [class*="guilds_"]) {
         --custom-guild-list-width: calc(var(--guildbar-avatar-size, 40px) + var(--custom-guild-list-padding, 16px) * 2);
@@ -668,7 +581,6 @@ body::after {
         z-index: 60 !important;
     }
 
-    /* Parked chrome: a frosted tab hugging the left edge, with a grip pill */
     [class*="guilds_"]::before {
         content: "";
         position: absolute;
@@ -710,10 +622,6 @@ body::after {
         transition-delay: 0s;
     }
 
-    /* The drawer is the list itself: the scroller when "guilds_" sits on the
-       tree (current DOM), or the tree when "guilds_" sits on the nav. Never
-       the absolutely positioned unread-mention indicators. Fully hidden while
-       parked (visibility), so nothing can peek through the handle. */
     [class*="guilds_"] > [class*="scroller_"],
     [class*="guilds_"] > [class*="tree_"] {
         box-sizing: border-box;
@@ -731,15 +639,11 @@ body::after {
         box-shadow: var(--gmd-panel-shadow);
         position: relative;
         z-index: 3;
-        /* Parked: fully clipped away (also removes it from hit-testing), so
-           only the 14px nav strip can start the hover. No transform and no
-           visibility toggles touch Discord's scroller. */
+
         clip-path: inset(0 100% 0 0 round var(--gmd-panel-radius));
         transition: none;
     }
 
-    /* Discord's own scroller inside the drawer keeps scrolling; it must not
-       show the theme's 10px scrollbar track inside a 72px column */
     [class*="guilds_"] [class*="scroller_"] {
         scrollbar-width: none !important;
     }
@@ -760,7 +664,6 @@ body::after {
         transition-delay: 0s, 0s;
     }
 
-    /* Contents fade in slightly after the glass reveals */
     [class*="guilds_"] > [class*="tree_"] > *,
     [class*="guilds_"] > [class*="scroller_"] > * {
         opacity: 0;
@@ -775,7 +678,6 @@ body::after {
         transition-delay: 80ms;
     }
 
-    /* Unread-mention arrows outside the tree follow the drawer */
     [class*="guilds_"] > :not([class*="scroller_"]):not([class*="tree_"]) {
         opacity: 0;
         pointer-events: none;
@@ -795,17 +697,12 @@ body::after {
         inset-inline-start: var(--gmd-panel-gap) !important;
     }
 
-    /* The sidebar's own collapsed states follow the new column width, and
-       must not clip the drawer when it slides out over the chat */
     [class*="sidebar_"][data-collapsed="true"] {
         width: calc(var(--gmd-guildbar-peek) + 4px) !important;
         overflow: visible !important;
     }
 }
 
-/* ==================================================================
- *  6. CHANNEL LIST / DM LIST
- * ================================================================== */
 [class*="sidebarList_"] [class*="header_"] {
     border-bottom: 1px solid var(--gmd-border) !important;
 }
@@ -826,7 +723,6 @@ body::after {
     background: var(--gmd-field-bg-hover) !important;
 }
 
-/* Text channels */
 [class*="sidebarList_"] [class*="link_"] {
     border-radius: 9px !important;
     transition: none;
@@ -854,14 +750,6 @@ body::after {
     font-weight: 600;
 }
 
-/* No accent fill for [class*="unread_"]: the fragment also appears on the
-   boost-goal row, the events row and a share of the channel rows, so any
-   background set here bleeds across whole rows instead of marking the small
-   unread indicator. Discord's own styling is left in place. The unread
-   markers that can be targeted safely are handled by the guild pill rule and
-   by [class*="unreadPill_"] below. */
-
-/* DM rows */
 [class*="sidebarList_"] [class*="interactive_"] {
     border-radius: 9px !important;
     transition: none;
@@ -882,22 +770,10 @@ body::after {
     background-color: var(--gmd-border) !important;
 }
 
-/* Guild banner header */
 [class*="sidebarList_"] [class*="animatedContainer_"] {
     border-radius: 12px !important;
 }
 
-/* ==================================================================
- *  7. USER PANEL (bottom-left) & VOICE PANEL
- * ================================================================== */
-/* The user panel is a tile of its own below the channel list. Reserving
-   room for it here as well left an empty strip along the bottom of the list,
-   so the tile keeps the plain gap from the panel rule above and the panel
-   provides its own spacing. */
-
-/* The tile clips to an 18px radius, so a row that ends flush with the
-   bottom edge is cut by the corner. The scroller keeps a little run-out
-   below the last row instead. */
 [class*="sidebarList_"] [class*="scroller_"] {
     margin-bottom: 0 !important;
     padding-bottom: 12px !important;
@@ -910,8 +786,6 @@ body::after {
 }
 
 [class*="sidebar_"] [class*="panels_"] {
-    /* Discord paints the mic/headset/settings plates with these when a
-       nameplate is active; keep them frosted instead of black */
     --custom-nameplate-neutral: rgba(var(--gmd-tint-rgb), 0.08);
     --custom-nameplate-neutral-hovered: rgba(var(--gmd-tint-rgb), 0.14);
     --custom-panels-spacing: var(--gmd-panel-gap);
@@ -926,7 +800,6 @@ body::after {
     backdrop-filter: none !important;
 }
 
-/* With the channel list collapsed the panel would have no room; hide it */
 [class*="sidebar_"][data-collapsed="true"] [class*="panels_"] {
     display: none !important;
 }
@@ -935,9 +808,6 @@ body::after {
     background: transparent !important;
 }
 
-/* One frame only: every wrapper inside the panel drops its own border,
-   outline, shadow and fill. background-image is left alone so nameplate
-   artwork still renders; buttons keep their tiles. */
 [class*="sidebar_"] [class*="panels_"] > *,
 [class*="sidebar_"] [class*="panels_"] > * > *,
 [class*="sidebar_"] [class*="panels_"] > * > * > :not(button):not([class*="button_"]):not([class*="avatar"]):not(img):not(video):not(svg),
@@ -957,16 +827,11 @@ body::after {
     background: transparent !important;
 }
 
-/* Keep a soft hover on the name/avatar area so it still feels clickable */
 [class*="sidebar_"] [class*="panels_"] [class*="accountPopoutButtonWrapper_"]:hover {
     background-color: rgba(var(--gmd-tint-rgb), 0.06) !important;
     border-radius: 9px !important;
 }
 
-/* --- Control buttons row: mic + chevron, headset + chevron, settings ---
-   Every node in the row is zeroed first (that is what kills the black
-   nameplate plates), then one tile is painted per control. Split buttons
-   share a tile, divided by a hairline. */
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"],
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"] *:not(svg):not(path):not(circle):not(rect) {
     background: transparent !important;
@@ -1010,7 +875,6 @@ body::after {
     width: 16px !important;
 }
 
-/* Muted / deafened: warm red tint on the whole tile instead of Discord's plate */
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="audioButtonParent_"]:has([class*="redGlow_"]),
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="redGlow_"] {
     background: linear-gradient(180deg, rgba(255, 96, 96, 0.22), rgba(255, 96, 96, 0.14)) !important;
@@ -1022,10 +886,6 @@ body::after {
     color: #ff7a7a !important;
 }
 
-/* --- Nameplate (0 = hidden, 1 = artwork only) ---
-   Discord renders it as <div aria-hidden="true" style="background: linear-
-   gradient(...)"> inside the account container. That inline gradient is the
-   second frame you see; it is removed in both modes. */
 [class*="sidebar_"] [class*="panels_"] [class*="container_"] div[aria-hidden="true"][style*="background"],
 [class*="sidebar_"] [class*="panels_"] [class*="plated_"] div[aria-hidden="true"][style*="background"] {
     background: none !important;
@@ -1037,7 +897,6 @@ body::after {
     border-radius: 12px !important;
 }
 
-/* Device-picker chevrons: never a plate of their own */
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"],
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"] *,
 [class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [style*="background"] {
@@ -1063,10 +922,6 @@ body::after {
         display: none !important;
     }
 
-    /* Match the asset only. It lives under /collectibles/nameplates/ as
-   <video><source> or <img>. The account container carries
-   --custom-nameplate in its inline style, so no [style*=...] selectors
-   here: they would hide the whole panel. */
     [class*="sidebar_"] [class*="panels_"] img[src*="nameplate"],
     [class*="sidebar_"] [class*="panels_"] video[src*="nameplate"],
     [class*="sidebar_"] [class*="panels_"] video:has(> source[src*="nameplate"]),
@@ -1115,9 +970,6 @@ body::after {
     border-bottom: 1px solid var(--gmd-border) !important;
 }
 
-/* ==================================================================
- *  8. CHAT HEADER
- * ================================================================== */
 [class*="chat_"] > [class*="title_"] {
     padding-top: 4px !important;
     background: linear-gradient(180deg, rgba(var(--gmd-tint-rgb), 0.035), rgba(var(--gmd-tint-rgb), 0)) !important;
@@ -1157,16 +1009,6 @@ body::after {
     transition: none;
 }
 
-/* ==================================================================
- *  9. TITLE BAR: macOS TRAFFIC LIGHTS
- *  Discord's own window buttons are repainted as dots, so close, minimise
- *  and zoom keep working. They stay top-right where Windows puts them, and
- *  reveal their glyphs when the group is hovered.
- * ================================================================== */
-
-/* Current Discord: <div class="bar_xxx"> inside the base grid. The window
-   buttons stay where Windows users expect them (top-right); only the paint
-   changes. */
 [class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) {
     background: transparent !important;
     border: none !important;
@@ -1182,14 +1024,6 @@ body::after {
     -webkit-app-region: no-drag;
 }
 
-/* The bar is painted away, but it is still an element lying across the top
-   of the frame, above the server column. A transparent element keeps eating
-   the pointer, which costs the first tile in that column (Direct Messages)
-   every part of its hit area that falls inside the bar: the tile paints in
-   full and only the strip below the bar answers the cursor. The bar hands
-   the pointer back and its own children take it again, so the window
-   buttons keep working and the drag region, which is read from layout
-   rather than from hit-testing, still drags the window. */
 [class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) {
     pointer-events: none;
 }
@@ -1210,7 +1044,6 @@ body::after {
     display: none !important;
 }
 
-/* Legacy title bar (typeWindows) - same treatment for older layouts */
 [class*="typeWindows_"] {
     display: flex !important;
     align-items: center !important;
@@ -1232,7 +1065,6 @@ body::after {
     -webkit-app-region: no-drag;
 }
 
-/* The dots themselves */
 [class*="winButton_"] {
     width: 12px !important;
     height: 12px !important;
@@ -1258,7 +1090,6 @@ body::after {
     display: none !important;
 }
 
-/* Glyph layer (drawn as inline SVG, shows on group hover) */
 [class*="winButton_"]::before {
     content: "";
     position: absolute;
@@ -1286,8 +1117,6 @@ body::after {
     transform: scale(0.94);
 }
 
-/* Order (left to right): minimise (yellow) -> zoom (green) -> close (red)
-   so the close dot sits in the corner, where Windows muscle memory expects it. */
 [class*="winButton_"][class*="winButtonClose"] {
     background-color: var(--gmd-mac-red) !important;
 }
@@ -1312,7 +1141,6 @@ body::after {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 2v6M2 5h6' stroke='%23006500' stroke-width='1.6' stroke-linecap='round'/></svg>");
 }
 
-/* Top-bar icon buttons (inbox, help, back/forward) */
 [class*="base_"] > [class*="bar_"] [class*="leading_"] [class*="button_"],
 [class*="base_"] > [class*="bar_"] [class*="trailing_"] [class*="button_"],
 [class*="base_"] > [class*="bar_"] [class*="trailing_"] [class*="clickable_"] {
@@ -1320,7 +1148,6 @@ body::after {
     transition: none;
 }
 
-/* Thin hairline under the frame's top bar to separate it from the panels */
 [class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"])::after {
     content: "";
     position: absolute;
@@ -1337,9 +1164,6 @@ body::after {
     letter-spacing: 0.01em;
 }
 
-/* ==================================================================
- *  10. FLOATING CHAT BAR
- * ================================================================== */
 [class*="chatContent_"] [class*="form_"] {
     padding-inline: 0 !important;
     margin-top: -16px;
@@ -1378,14 +1202,12 @@ body::after {
     border-radius: var(--gmd-chatbar-radius) !important;
 }
 
-/* The editor itself must keep its full width inside the bar */
 [class*="chatContent_"] [class*="form_"] [class*="textArea_"] {
     width: 100% !important;
     min-width: 0 !important;
     flex: 1 1 auto !important;
 }
 
-/* Reply / edit / upload stacked bars above the input */
 [class*="chatContent_"] [class*="form_"] [class*="stackedBars_"] {
     background: rgba(var(--gmd-tint-rgb), 0.04) !important;
     border-radius: var(--gmd-chatbar-radius) var(--gmd-chatbar-radius) 0 0 !important;
@@ -1411,9 +1233,6 @@ body::after {
     color: var(--gmd-text-muted) !important;
 }
 
-/* ==================================================================
- *  11. MESSAGES
- * ================================================================== */
 [class*="messageListItem_"] > [class*="message_"] {
     border-radius: 10px !important;
     transition: none;
@@ -1428,7 +1247,6 @@ body::after {
     background: rgba(var(--gmd-tint-rgb), 0.05) !important;
 }
 
-/* Mentions: warm frosted tint + glowing left rail */
 [class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
     background: rgba(255, 200, 120, 0.09) !important;
 }
@@ -1454,7 +1272,6 @@ body::after {
     box-shadow: 0 0 10px rgba(var(--gmd-accent-rgb), 0.6);
 }
 
-/* Avatars: subtle scale + glow */
 [class*="messageListItem_"] [class*="avatar_"],
 [class*="membersWrap_"] [class*="avatar_"],
 [class*="privateChannels_"] [class*="avatar_"],
@@ -1469,7 +1286,6 @@ body::after {
     filter: none;
 }
 
-/* Emoji pop */
 .emoji,
 [class*="emojiContainer_"] {
     transition: none;
@@ -1480,7 +1296,6 @@ body::after {
     transform: scale(1.08);
 }
 
-/* Hover action bar */
 [class*="messageListItem_"] [class*="buttons_"] > [class*="wrapper_"],
 [class*="messageListItem_"] [class*="buttonContainer_"] [class*="wrapper_"] {
     background: var(--gmd-popout-bg) !important;
@@ -1501,7 +1316,6 @@ body::after {
     transform: scale(1.06);
 }
 
-/* Embeds, code, quotes, reactions */
 [class*="embedFull_"] {
     background: var(--gmd-card-bg) !important;
     border: 1px solid var(--gmd-card-border) !important;
@@ -1560,7 +1374,6 @@ body::after {
     border-radius: 999px !important;
 }
 
-/* Date / new-messages divider */
 [class*="divider_"][class*="hasContent_"] > [class*="content_"] {
     background: rgba(var(--gmd-tint-rgb), 0.05) !important;
     border: 1px solid var(--gmd-border);
@@ -1574,7 +1387,6 @@ body::after {
     border-color: rgba(255, 107, 107, 0.4) !important;
 }
 
-/* "New messages" / "Jump to present" floating bars */
 [class*="newMessagesBar_"],
 [class*="jumpToPresentBar_"] {
     border-radius: 0 0 12px 12px !important;
@@ -1597,7 +1409,6 @@ body::after {
     border-top: 1px solid var(--gmd-popout-border) !important;
 }
 
-/* Spoilers, polls, attachments */
 [class*="spoilerContent_"],
 [class*="spoilerContainer_"] {
     border-radius: 8px !important;
@@ -1610,7 +1421,6 @@ body::after {
     overflow: hidden;
 }
 
-/* Text selection & caret */
 ::selection {
     background: rgba(var(--gmd-accent-rgb), 0.35);
 }
@@ -1619,10 +1429,6 @@ body::after {
     caret-color: var(--gmd-accent);
 }
 
-/* ==================================================================
- *  12. ISO-LAYERED POPOUTS, MENUS, TOOLTIPS, MODALS
- *  Native positioning is untouched: only paint is replaced.
- * ================================================================== */
 [class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
 [class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
 [class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
@@ -1645,7 +1451,6 @@ body::after {
     z-index: 9999 !important;
 }
 
-/* Context menus: tighter radius, glass rows */
 [class*="layerContainer_"] [class*="menu_"] {
     border-radius: 12px !important;
     padding: 2px !important;
@@ -1676,7 +1481,6 @@ body::after {
     border-bottom-color: var(--gmd-border) !important;
 }
 
-/* Tooltips */
 [class*="layerContainer_"] [class*="tooltip_"] {
     background: var(--gmd-popout-bg) !important;
     background-color: var(--gmd-popout-bg) !important;
@@ -1692,7 +1496,6 @@ body::after {
     border-top-color: var(--gmd-popout-bg-solid) !important;
 }
 
-/* Modal backdrop: dim + blur what's behind */
 [class*="layerContainer_"] > * > [class*="backdrop_"],
 [class*="layerContainer_"] > [class*="backdrop_"] {
     background-color: #000 !important;
@@ -1700,7 +1503,6 @@ body::after {
     backdrop-filter: none;
 }
 
-/* Modal internals: readable dark cards on top of translucent glass */
 [class*="layerContainer_"] [class*="focusLock_"] [class*="footer_"],
 [class*="layerContainer_"] [class*="focusLock_"] [class*="footerSeparator_"] {
     background: rgba(var(--gmd-tint-rgb), 0.03) !important;
@@ -1723,14 +1525,12 @@ body::after {
     border-color: var(--gmd-card-border) !important;
 }
 
-/* Nested containers inside modals must not double the glass */
 [class*="layerContainer_"] [class*="focusLock_"] > [class*="root_"] [class*="root_"],
 [class*="layerContainer_"] [class*="focusLock_"] > [class*="container_"] [class*="container_"] {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
 }
 
-/* Quick switcher (Ctrl+K) */
 [class*="quickswitcher_"] [class*="input_"] {
     background: var(--gmd-field-bg) !important;
     border: 1px solid var(--gmd-border) !important;
@@ -1744,11 +1544,6 @@ body::after {
     border-radius: 10px !important;
 }
 
-/* ==================================================================
- *  13. USER PROFILES (popout, modal, sidebar)
- *  Cards and fields get their own tint so text never bleeds into the
- *  messages behind them.
- * ================================================================== */
 .user-profile-popout,
 .user-profile-modal,
 .user-profile-modal-v2 {
@@ -1765,8 +1560,6 @@ body::after {
     background: transparent !important;
 }
 
-/* Nitro profile themes: keep the user's colours as a translucent tint over
-   the glass instead of an opaque dark gradient */
 .custom-user-profile-theme.user-profile-popout > [class*="inner_"],
 .custom-user-profile-theme.user-profile-modal-v2 > [class*="inner_"],
 .custom-user-profile-theme.user-profile-sidebar > [class*="inner_"] {
@@ -1783,8 +1576,6 @@ body::after {
     --profile-gradient-overlay-color: rgba(74, 30, 52, 0.054);
 }
 
-/* Full-profile modal: body, columns and scrollers stay see-through so the
-   frosted plates read as plates, not as boxes on black */
 .user-profile-modal-v2 [class*="body_"],
 .user-profile-modal-v2 [class*="scroller_"],
 .user-profile-modal-v2 [class*="content_"]:not([class*="section"] *),
@@ -1798,7 +1589,6 @@ body::after {
     background-color: transparent !important;
 }
 
-/* Custom-status speech bubble next to the avatar: frosted, not black */
 .user-profile-popout [class*="tooltip_"]:not([class*="Pointer"]),
 .user-profile-modal-v2 [class*="tooltip_"]:not([class*="Pointer"]),
 .user-profile-sidebar [class*="tooltip_"]:not([class*="Pointer"]) {
@@ -1815,10 +1605,6 @@ body::after {
     border-top-color: var(--gmd-popout-bg-solid) !important;
 }
 
-/* Discord draws the profile plates itself from --profile-gradient-section-box
-   and --user-profile-overlay-background (remapped above to the frosted card
-   tint), so no extra plates are added here. Only the pills and the note field
-   get their radius. */
 .user-profile-popout [class*="note_"] textarea,
 .user-profile-modal-v2 [class*="note_"] textarea {
     background: var(--gmd-field-bg) !important;
@@ -1846,7 +1632,6 @@ body::after {
     transform: scale(1.04);
 }
 
-/* Profile message input ("Message @user") */
 .user-profile-popout [class*="channelTextArea_"],
 .user-profile-modal-v2 [class*="channelTextArea_"] {
     background: var(--gmd-field-bg) !important;
@@ -1854,9 +1639,6 @@ body::after {
     border-radius: 10px !important;
 }
 
-/* ==================================================================
- *  14. EXPRESSION PICKER (emoji / gif / sticker / soundboard)
- * ================================================================== */
 [class*="drawerSizingWrapper_"] [class*="contentWrapper_"],
 [class*="layerContainer_"] [class*="contentWrapper_"][class*="08434"],
 [class*="layerContainer_"] [class*="emojiPicker_"]:not([class*="emojiPickerHasTabWrapper"] [class*="emojiPicker_"]) {
@@ -1923,9 +1705,6 @@ body::after {
     transform: scale(1.08);
 }
 
-/* ==================================================================
- *  15. SETTINGS LAYER (user / server settings)
- * ================================================================== */
 [class*="standardSidebarView_"],
 [class*="sidebarRegion_"],
 [class*="sidebarRegionScroller_"],
@@ -1973,7 +1752,6 @@ body::after {
     transform: scale(1.06);
 }
 
-/* Cards and boxes inside settings pages */
 [class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="card_"],
 [class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="cardPrimary_"],
 [class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="accountProfileCard_"],
@@ -1984,9 +1762,6 @@ body::after {
     border-radius: 12px !important;
 }
 
-/* ==================================================================
- *  16. SCROLLBARS (thin, translucent, macOS-like)
- * ================================================================== */
 #app-mount ::-webkit-scrollbar {
     width: 10px !important;
     height: 10px !important;
@@ -1998,7 +1773,6 @@ body::after {
     border: none !important;
 }
 
-/* macOS-style overlay behaviour: the thumb only appears while the scroller is hovered */
 #app-mount ::-webkit-scrollbar-thumb {
     background-color: rgba(var(--gmd-tint-rgb), 0) !important;
     background-clip: padding-box !important;
@@ -2016,9 +1790,6 @@ body::after {
     background-color: rgba(var(--gmd-tint-rgb), 0.26) !important;
 }
 
-/* ==================================================================
- *  17. CONTROLS, INPUTS, MISC SURFACES
- * ================================================================== */
 #app-mount input[class*="input_"],
 #app-mount [class*="inputDefault_"],
 #app-mount [class*="inputWrapper_"] input,
@@ -2056,13 +1827,11 @@ body::after {
     transform: translateY(0) scale(0.98);
 }
 
-/* Voice call surface inside chat panel */
 [class*="callContainer_"],
 [class*="callContainer_"] [class*="wrapper_"] {
     background: transparent !important;
 }
 
-/* Members list rows */
 [class*="membersWrap_"] [class*="layout_"] {
     border-radius: 9px !important;
     transition: none;
@@ -2073,21 +1842,16 @@ body::after {
     letter-spacing: 0.04em;
 }
 
-/* Notices (update available, etc.) */
 [class*="base_"] > [class*="content_"] > [class*="notice_"],
 [class*="notice_"][class*="colorDefault_"] {
     border-radius: 12px !important;
     margin: 4px var(--gmd-panel-gap) 0 !important;
 }
 
-/* Nitro / marketing gradients are left alone, but their cards get rounded */
 [class*="layerContainer_"] [class*="card_"] {
     border-radius: 12px !important;
 }
 
-/* ==================================================================
- *  18. MOTION & ACCESSIBILITY
- * ================================================================== */
 html.reduce-motion body::before,
 html.reduced-motion body::before {
     animation: none !important;
@@ -2108,7 +1872,6 @@ html.reduced-motion body::before {
     }
 }
 
-/* Firefox / non-webkit fallback for backdrop-filter */
 @supports not (backdrop-filter: blur(1px)) {
     [class*="sidebarList_"],
     [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
@@ -2126,25 +1889,14 @@ html.reduced-motion body::before {
     }
 }
 
-/* ==================================================================
- *  19. LIGHT-BUILD CORRECTIONS
- *  The body above is the shared one with its surface tints inverted to a
- *  dark film. These few surfaces are panels rather than tints, so they
- *  stay bright.
- * ================================================================== */
-
-/* Film grain: the shared noise is white, which is invisible on a light
-   frame. Light builds use a dark noise instead. */
 body::after {
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.29  0 0 0 0 0.12  0 0 0 0 0.20  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>") !important;
 }
 
-/* User panel: a white glass tile like the other panels */
 [class*="sidebar_"] [class*="panels_"] {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.66)) !important;
 }
 
-/* Home / Direct Messages tile */
 [class*="guilds_"] [class*="childWrapper_"] {
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72)) !important;
     border-color: rgba(74, 30, 52, 0.1) !important;
@@ -2157,17 +1909,14 @@ body::after {
     color: #ffffff !important;
 }
 
-/* The chat header sheen reads as a smudge on white glass */
 [class*="chat_"] > [class*="title_"] {
     background: transparent !important;
 }
 
-/* Traffic lights keep their bright top highlight on a light frame */
 [class*="winButton_"] {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 1px 2px rgba(74, 30, 52, 0.25) !important;
 }
 
-/* Code, embeds and quotes need a touch more contrast against white glass */
 [class*="markup_"] code,
 [class*="markup_"] pre,
 [class*="markup_"] code.inline,
@@ -2184,7 +1933,6 @@ body::after {
     background: rgba(255, 255, 255, 0.86) !important;
 }
 
-/* Chat input stays the brightest surface in the column */
 [class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:hover {
     background: rgba(255, 255, 255, 0.9) !important;
 }
@@ -2193,7 +1941,6 @@ body::after {
     background: rgba(255, 255, 255, 0.96) !important;
 }
 
-/* Mentions: warm amber, readable on white */
 [class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
     background: rgba(235, 150, 20, 0.12) !important;
 }
@@ -2207,13 +1954,11 @@ body::after {
     box-shadow: 0 0 10px rgba(224, 140, 20, 0.45) !important;
 }
 
-/* Unread divider */
 [class*="isUnread_"] > [class*="content_"] {
     color: #d13b3b !important;
     border-color: rgba(209, 59, 59, 0.35) !important;
 }
 
-/* Message hover: a soft dark film, not a white one */
 [class*="messageListItem_"] > [class*="message_"]:hover {
     background: rgba(74, 30, 52, 0.035) !important;
 }
@@ -2222,15 +1967,6 @@ body::after {
     background: rgba(74, 30, 52, 0.05) !important;
 }
 
-/* ==================================================================
- *  19. FLAT-BUILD CORRECTIONS
- *  The build step already stripped every backdrop-filter, transition,
- *  animation, blur filter and large shadow. What is left are the
- *  whole-page effects, removed outright.
- * ================================================================== */
-
-/* Ambient aurora and film grain: not rendered at all (no fixed full-screen
-   layer, no blur filter, no animation loop). */
 body::before,
 body::after {
     display: none !important;
@@ -2238,19 +1974,16 @@ body::after {
     animation: none !important;
 }
 
-/* The frame is a flat paint, so the app shell can stay fully opaque */
 html,
 body {
     background: var(--gmd-bg) !important;
     background-attachment: scroll !important;
 }
 
-/* No layer promotion anywhere: fewer composited layers, less VRAM */
 #app-mount * {
     will-change: auto !important;
 }
 
-/* Panels are opaque; drop the inner specular pass on the big ones */
 [class*="sidebarList_"],
 [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
 [class*="membersWrap_"],
@@ -2266,7 +1999,6 @@ body {
     background: var(--gmd-chatbar-bg) !important;
 }
 
-/* Popouts, menus, tooltips and pickers: opaque, hairline border */
 [class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
 [class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
 [class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
@@ -2279,14 +2011,11 @@ body {
     background-color: var(--gmd-popout-bg) !important;
 }
 
-/* Modal backdrop: a flat scrim instead of a blurred one */
 [class*="layerContainer_"] > * > [class*="backdrop_"],
 [class*="layerContainer_"] > [class*="backdrop_"] {
     background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
-/* Hover micro-motion stays instant; these two were the only effects that
-   forced a repaint of the element underneath */
 [class*="messageListItem_"] > [class*="message_"]:hover,
 [class*="embedFull_"]:hover {
     transform: none !important;
