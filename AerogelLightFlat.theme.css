@@ -1,0 +1,2255 @@
+/**
+ * @name Aerogel Light Flat
+ * @author b0nzi64
+ * @authorId 705825323446566933
+ * @version 1.1.0
+ * @description Aerogel Light with no blur, no animation and flat shadows. For weak GPUs, laptops and remote desktops.
+ * @website https://github.com/bonzi64/aerogel
+ * @source https://github.com/bonzi64/aerogel/raw/main/AerogelLightFlat.theme.css
+ */
+
+/* Aerogel Light Flat
+ * Selectors match on class fragments ([class*="sidebarList_"]) so they keep
+ * working when Discord rotates its class hashes. Layout containers are
+ * repainted, never repositioned. Every knob is in the :root block below.
+ */
+
+/* ==================================================================
+ *  1. THEME TOKENS
+ * ================================================================== */
+:root {
+    /* --- Frame background (soft matte daylight) --- */
+    --gmd-bg: linear-gradient(180deg, #f4f7fd 0%, #e4e8f2 100%);
+
+    /* --- Depth tint. On light glass, depth is a dark film, not a white one.
+       Every surface tint in this build is derived from it. --- */
+    --gmd-tint-rgb: 26, 29, 44;
+
+    /* --- Ambient aurora glow behind the glass (0 = off, 1 = on) --- */
+    --gmd-aurora: 0;
+    --gmd-aurora-a: rgba(120, 138, 255, 0.3);
+    --gmd-aurora-b: rgba(72, 200, 190, 0.22);
+    --gmd-aurora-c: rgba(196, 130, 255, 0.22);
+    --gmd-aurora-speed: 64s;
+
+    /* --- Matte film grain over the frame (0 = off) --- */
+    --gmd-grain: 0;
+
+    /* --- Accent (darkened so it stays readable on white) --- */
+    --gmd-accent: #4c5ae0;
+    --gmd-accent-rgb: 76, 90, 224;
+    --gmd-accent-hover: #5b68e8;
+    --gmd-accent-active: #3f4cc9;
+    --gmd-accent-text: #ffffff;
+
+    /* --- Floating glass panels (sidebar / chat / members) ---
+       White frosted film over the coloured frame, hairline in the tint
+       colour, bright specular highlight along the top edge. */
+    --gmd-panel-bg: #fafbff;
+    --gmd-panel-bg-flat: #fafbff;
+    --gmd-panel-nested-bg: #f2f5fc;
+    --gmd-panel-border: rgba(26, 29, 44, 0.1);
+    --gmd-panel-radius: 18px;
+    --gmd-panel-gap: 6px;
+    --gmd-panel-blur: 0px;
+    --gmd-panel-saturate: 100%;
+    --gmd-panel-shadow: inset 0 1px 0 #ffffff;
+    --gmd-panel-shadow-nested: inset 0 1px 0 #ffffff;
+
+    /* --- Popouts, pickers, menus, modals --- */
+    --gmd-popout-bg: #ffffff;
+    --gmd-popout-bg-solid: #ffffff;
+    --gmd-popout-border: rgba(26, 29, 44, 0.12);
+    --gmd-popout-radius: 16px;
+    --gmd-popout-blur: 0px;
+    --gmd-popout-shadow: 0 0 0 1px rgba(26, 29, 44, 0.14);
+
+    /* --- Cards / fields inside profiles, modals, embeds --- */
+    --gmd-card-bg: rgba(26, 29, 44, 0.045);
+    --gmd-card-bg-hover: rgba(26, 29, 44, 0.07);
+    --gmd-card-border: rgba(26, 29, 44, 0.08);
+    --gmd-field-bg: #ffffff;
+    --gmd-field-bg-hover: #f3f5fb;
+
+    /* --- Chat bar --- */
+    --gmd-chatbar-bg: #ffffff;
+    --gmd-chatbar-border: rgba(26, 29, 44, 0.12);
+    --gmd-chatbar-radius: 14px;
+
+    /* --- Surfaces --- */
+    --gmd-hover: rgba(26, 29, 44, 0.05);
+    --gmd-active: rgba(26, 29, 44, 0.08);
+    --gmd-selected: rgba(26, 29, 44, 0.09);
+    --gmd-border: rgba(26, 29, 44, 0.09);
+    --gmd-border-strong: rgba(26, 29, 44, 0.16);
+
+    /* --- Text --- */
+    --gmd-text: #2b2f3d;
+    --gmd-text-strong: #11141d;
+    --gmd-text-muted: #6d7284;
+    --gmd-text-subtle: #4b5062;
+
+    /* --- Auto-hiding server drawer (1 = on, 0 = classic fixed column) --- */
+    --gmd-guildbar-autohide: 0;
+    --gmd-guildbar-peek: 14px;      /* visible handle width when hidden */
+    --gmd-guildbar-speed: 0ms;    /* slide duration */
+    --gmd-guildbar-delay: 0ms;    /* grace period before it hides again */
+
+    /* --- Nameplate artwork in the user panel (1 = shown without its plate
+       gradient, 0 = hidden entirely) --- */
+    --gmd-nameplate: 0;
+
+    /* --- macOS traffic lights --- */
+    --gmd-mac-red: #ff5f56;
+    --gmd-mac-yellow: #ffbd2e;
+    --gmd-mac-green: #27c93f;
+
+    /* --- Motion --- */
+    --gmd-ease: linear;
+    --gmd-fast: 0ms;
+    --gmd-med: 0ms;
+
+    /* --- Typography --- */
+    --gmd-font: "gg sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --gmd-font-code: "gg mono", Consolas, "Courier New", monospace;
+}
+
+/* ==================================================================
+ *  2. DISCORD VARIABLE REMAP (applied to every colour theme)
+ * ================================================================== */
+.theme-dark,
+.theme-darker,
+.theme-midnight,
+.theme-light,
+.visual-refresh.theme-dark,
+.visual-refresh.theme-light {
+    color-scheme: light;
+
+    /* App frame */
+    --app-frame-background: transparent;
+    --app-frame-border: var(--gmd-border);
+    --background-base-lowest: #fbfcff;
+    --background-base-lower: #f7f9fe;
+    --background-base-low: #f2f5fc;
+    --background-surface-high: #ffffff;
+    --background-surface-higher: #ffffff;
+    --background-surface-highest: #ffffff;
+    --background-mod-faint: rgba(26, 29, 44, 0.03);
+    --background-mod-subtle: rgba(26, 29, 44, 0.05);
+    --background-mod-muted: rgba(26, 29, 44, 0.06);
+    --background-mod-normal: rgba(26, 29, 44, 0.08);
+    --background-mod-strong: rgba(26, 29, 44, 0.12);
+    --background-scrim: rgba(26, 29, 44, 0.35);
+    --background-scrim-lightbox: rgba(26, 29, 44, 0.6);
+    --chat-background-default: transparent;
+    --chat-background: transparent;
+    --custom-channel-members-bg: transparent;
+    --home-background: transparent;
+    --panel-bg: var(--gmd-card-bg);
+    --context-menu-backdrop-background: transparent;
+
+    /* Legacy variables (kept for Vencord / BetterDiscord plugin UIs) */
+    --background-primary: #fafbff;
+    --background-secondary: #f4f7fd;
+    --background-secondary-alt: #ffffff;
+    --background-tertiary: #eef2fa;
+    --background-accent: rgba(26, 29, 44, 0.08);
+    --background-floating: #ffffff;
+    --background-nested-floating: #ffffff;
+    --background-mobile-primary: rgba(255, 255, 255, 0.6);
+    --background-mobile-secondary: rgba(255, 255, 255, 0.5);
+    --background-modifier-hover: var(--gmd-hover);
+    --background-modifier-active: var(--gmd-active);
+    --background-modifier-selected: var(--gmd-selected);
+    --background-modifier-accent: rgba(26, 29, 44, 0.08);
+    --background-message-hover: rgba(26, 29, 44, 0.035);
+    --background-mentioned: rgba(235, 150, 20, 0.12);
+    --background-mentioned-hover: rgba(235, 150, 20, 0.18);
+    --channeltextarea-background: var(--gmd-chatbar-bg);
+    --deprecated-card-bg: var(--gmd-card-bg);
+    --deprecated-card-editable-bg: var(--gmd-card-bg);
+    --deprecated-store-bg: rgba(255, 255, 255, 0.6);
+    --deprecated-quickswitcher-input-background: var(--gmd-field-bg);
+    --deprecated-text-input-bg: var(--gmd-field-bg);
+    --deprecated-text-input-border: var(--gmd-border);
+    --deprecated-text-input-border-hover: var(--gmd-border-strong);
+    --activity-card-background: var(--gmd-card-bg);
+
+    /* Borders */
+    --border-faint: rgba(26, 29, 44, 0.04);
+    --border-muted: rgba(26, 29, 44, 0.06);
+    --border-subtle: var(--gmd-border);
+    --border-normal: rgba(26, 29, 44, 0.12);
+    --border-strong: rgba(26, 29, 44, 0.2);
+    --border-focus: var(--gmd-accent);
+    --focus-primary: var(--gmd-accent);
+
+    /* Interactive surfaces */
+    --interactive-background-default: transparent;
+    --interactive-background-hover: var(--gmd-hover);
+    --interactive-background-active: var(--gmd-active);
+    --interactive-background-selected: var(--gmd-selected);
+    --control-secondary-background-default: rgba(26, 29, 44, 0.06);
+    --control-secondary-background-hover: rgba(26, 29, 44, 0.1);
+    --control-secondary-background-active: rgba(26, 29, 44, 0.08);
+    --control-secondary-border-default: transparent;
+    --redesign-button-tertiary-background: rgba(26, 29, 44, 0.06);
+    --redesign-button-tertiary-pressed-background: rgba(26, 29, 44, 0.1);
+    --button-secondary-background: rgba(26, 29, 44, 0.07);
+    --button-secondary-background-hover: rgba(26, 29, 44, 0.11);
+    --button-secondary-background-active: rgba(26, 29, 44, 0.09);
+
+    /* Inputs */
+    --input-background-default: var(--gmd-field-bg);
+    --input-border-default: var(--gmd-border);
+    --input-border-hover: var(--gmd-border-strong);
+    --input-border-active: var(--gmd-accent);
+    --input-placeholder-text-default: var(--gmd-text-muted);
+    --input-text-default: var(--gmd-text);
+    --input-background: var(--gmd-field-bg);
+    --search-popout-option-fade: transparent;
+
+    /* Modals / cards */
+    --modal-background: var(--gmd-popout-bg);
+    --modal-footer-background: rgba(26, 29, 44, 0.035);
+    --card-background-default: var(--gmd-card-bg);
+    --card-border-default: var(--gmd-card-border);
+    --embed-background: rgba(255, 255, 255, 0.72);
+    --embed-background-alternate: rgba(255, 255, 255, 0.6);
+    --background-code: rgba(26, 29, 44, 0.05);
+    --spoiler-hidden-background: rgba(26, 29, 44, 0.14);
+    --spoiler-hidden-background-hover: rgba(26, 29, 44, 0.2);
+    --spoiler-revealed-background: rgba(26, 29, 44, 0.05);
+
+    /* Messages */
+    --message-background-hover: rgba(26, 29, 44, 0.035);
+    --message-mentioned-background-default: rgba(235, 150, 20, 0.12);
+    --message-mentioned-background-hover: rgba(235, 150, 20, 0.18);
+    --message-highlight-background-default: rgba(var(--gmd-accent-rgb), 0.12);
+    --message-highlight-background-hover: rgba(var(--gmd-accent-rgb), 0.18);
+    --message-automod-background-default: rgba(220, 60, 60, 0.1);
+    --message-automod-background-hover: rgba(220, 60, 60, 0.15);
+    --mention-background: rgba(var(--gmd-accent-rgb), 0.16);
+    --mention-foreground: #2f3bb5;
+    --reaction-background-default: rgba(26, 29, 44, 0.05);
+    --reaction-background-hover: rgba(26, 29, 44, 0.09);
+    --reaction-background-active: rgba(26, 29, 44, 0.07);
+    --reaction-border-default: transparent;
+    --reaction-border-hover: var(--gmd-border-strong);
+    --reaction-border-active: var(--gmd-border-strong);
+    --reaction-background-reacted-default: rgba(var(--gmd-accent-rgb), 0.14);
+    --reaction-background-reacted-hover: rgba(var(--gmd-accent-rgb), 0.2);
+    --reaction-border-reacted-default: rgba(var(--gmd-accent-rgb), 0.55);
+    --keyword-highlight-background: rgba(var(--gmd-accent-rgb), 0.2);
+
+    /* Brand / accent */
+    --brand-500: var(--gmd-accent);
+    --brand-560: var(--gmd-accent-hover);
+    --brand-600: var(--gmd-accent-active);
+    --brand-experiment: var(--gmd-accent);
+    --brand-experiment-560: var(--gmd-accent-hover);
+    --brand-experiment-600: var(--gmd-accent-active);
+    --background-brand: var(--gmd-accent);
+    --bg-brand: var(--gmd-accent);
+    --text-brand: var(--gmd-accent);
+    --text-link: #3644cf;
+    --icon-brand: var(--gmd-accent);
+    --control-brand-foreground: var(--gmd-accent);
+    --control-brand-foreground-new: var(--gmd-accent);
+    --button-filled-brand-background: var(--gmd-accent);
+    --button-filled-brand-background-hover: var(--gmd-accent-hover);
+    --button-filled-brand-background-active: var(--gmd-accent-active);
+    --button-filled-brand-text: var(--gmd-accent-text);
+    --button-outline-brand-border: rgba(var(--gmd-accent-rgb), 0.5);
+    --button-outline-brand-text: var(--gmd-accent);
+    --switch-background-selected-default: var(--gmd-accent);
+    --switch-background-selected-hover: var(--gmd-accent-hover);
+    --checkbox-background-selected-default: var(--gmd-accent);
+    --radio-background-selected-default: var(--gmd-accent);
+    --progressbar-indicator-background: var(--gmd-accent);
+    --progressbar-track-background: rgba(26, 29, 44, 0.1);
+    --interactive-accent-background-default: rgba(var(--gmd-accent-rgb), 0.12);
+    --interactive-accent-background-hover: rgba(var(--gmd-accent-rgb), 0.18);
+    --interactive-accent-background-active: rgba(var(--gmd-accent-rgb), 0.24);
+    --interactive-accent-background-selected: rgba(var(--gmd-accent-rgb), 0.2);
+
+    /* Text */
+    --text-default: var(--gmd-text);
+    --text-normal: var(--gmd-text);
+    --text-strong: var(--gmd-text-strong);
+    --header-primary: var(--gmd-text-strong);
+    --header-secondary: var(--gmd-text-subtle);
+    --text-muted: var(--gmd-text-muted);
+    --text-subtle: var(--gmd-text-subtle);
+    --channels-default: var(--gmd-text-subtle);
+    --channel-icon: var(--gmd-text-muted);
+    --interactive-normal: var(--gmd-text-subtle);
+    --interactive-hover: var(--gmd-text);
+    --interactive-active: var(--gmd-text-strong);
+    --interactive-muted: #a2a7b6;
+    --interactive-text-default: var(--gmd-text-subtle);
+    --interactive-text-hover: var(--gmd-text);
+    --interactive-text-active: var(--gmd-text-strong);
+    --icon-default: var(--gmd-text-subtle);
+    --icon-muted: var(--gmd-text-muted);
+    --icon-subtle: var(--gmd-text-subtle);
+    --icon-strong: var(--gmd-text-strong);
+    --white: #ffffff;
+    --black: #11141d;
+
+    /* Scrollbars */
+    --scrollbar-thin-thumb: rgba(26, 29, 44, 0.16);
+    --scrollbar-thin-track: transparent;
+    --scrollbar-auto-thumb: rgba(26, 29, 44, 0.18);
+    --scrollbar-auto-track: transparent;
+    --scrollbar-auto-scrollbar-color-thumb: rgba(26, 29, 44, 0.18);
+    --scrollbar-auto-scrollbar-color-track: transparent;
+
+    /* Shadows */
+    --shadow-low: 0 0 0 1px rgba(26, 29, 44, 0.1);
+    --shadow-medium: 0 0 0 1px rgba(26, 29, 44, 0.12);
+    --shadow-high: 0 0 0 1px rgba(26, 29, 44, 0.14);
+    --shadow-border: 0 0 0 1px var(--gmd-popout-border);
+    --shadow-ledge: none;
+    --elevation-low: 0 0 0 1px rgba(26, 29, 44, 0.1);
+    --elevation-medium: 0 0 0 1px rgba(26, 29, 44, 0.12);
+    --elevation-high: 0 0 0 1px rgba(26, 29, 44, 0.14);
+    --elevation-stroke: 0 0 0 1px var(--gmd-popout-border);
+    --legacy-elevation-low: 0 0 0 1px rgba(26, 29, 44, 0.1);
+    --legacy-elevation-high: 0 0 0 1px rgba(26, 29, 44, 0.14);
+    --legacy-elevation-border: 0 0 0 1px var(--gmd-popout-border);
+
+    /* Profiles */
+    --profile-gradient-section-box: var(--gmd-card-bg);
+    --profile-gradient-note-background: var(--gmd-card-bg);
+    --profile-gradient-role-pill-background: rgba(26, 29, 44, 0.06);
+    --profile-gradient-role-pill-border: var(--gmd-card-border);
+    --user-profile-overlay-background: var(--gmd-card-bg);
+    --user-profile-overlay-background-hover: var(--gmd-card-bg-hover);
+    --user-profile-toolbar-background: rgba(26, 29, 44, 0.05);
+    --user-profile-toolbar-border: var(--gmd-card-border);
+    --user-profile-border: var(--gmd-card-border);
+    --user-profile-note-background-focus: var(--gmd-field-bg-hover);
+    --user-profile-activity-toolbar-background: rgba(26, 29, 44, 0.05);
+    --profile-body-background-color: var(--gmd-card-bg);
+    --profile-body-background-hover: var(--gmd-card-bg-hover);
+    --profile-body-divider-color: var(--gmd-card-border);
+    --profile-message-input-background-color: var(--gmd-field-bg);
+    --profile-message-input-border-color: var(--gmd-card-border);
+
+    /* Fonts */
+    --font-primary: var(--gmd-font);
+    --font-display: var(--gmd-font);
+    --font-headline: var(--gmd-font);
+    --font-code: var(--gmd-font-code);
+}
+
+/* ==================================================================
+ *  3. BASE SHELLS: transparent. Paint only, no repositioning.
+ * ================================================================== */
+html,
+body {
+    background: var(--gmd-bg) !important;
+    background-attachment: fixed !important;
+    color: var(--gmd-text);
+}
+
+#app-mount,
+[class*="appMount_"],
+[class*="app_"],
+[class*="bg_"],
+[class*="layers_"]:not([class*="Player"]),
+[class*="layers_"] > [class*="layer_"][class*="baseLayer_"],
+[class*="page_"],
+[class*="sidebar_"]:has([class*="sidebarList_"]),
+[class*="guilds_"],
+[class*="tree_"],
+[class*="chatContent_"],
+[class*="container_c2b186"],
+[class*="privateChannels_"],
+[class*="privateChannels_"] [class*="scroller_"],
+[class*="sidebarList_"] > [class*="container_"],
+[class*="sidebarList_"] [class*="header_"],
+[class*="membersWrap_"] [class*="members_"],
+[class*="membersWrap_"] [class*="member_"],
+[class*="chat_"] > [class*="title_"],
+[class*="chat_"] > [class*="title_"] [class*="container_"] {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+#app-mount {
+    color: var(--gmd-text);
+}
+
+/* The 8px strip Discord paints at the bottom of the sidebar column */
+[class*="sidebar_"]:has([class*="sidebarList_"])::after {
+    display: none !important;
+}
+
+/* Settings / guild-settings layers must stay opaque (base layer sits below) */
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) {
+    background: var(--gmd-bg) !important;
+}
+
+/* Aurora: transform-only animation, between frame and app */
+body::before {
+    content: "";
+    position: fixed;
+    inset: -10vmax;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--gmd-aurora);
+    background:
+        radial-gradient(38% 42% at 18% 22%, var(--gmd-aurora-a) 0%, transparent 70%),
+        radial-gradient(34% 36% at 82% 18%, var(--gmd-aurora-c) 0%, transparent 70%),
+        radial-gradient(40% 40% at 70% 86%, var(--gmd-aurora-b) 0%, transparent 70%);
+    filter: none;
+    animation: none;
+}
+
+@keyframes gmd-aurora {
+    0%   { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate3d(4vw, -3vh, 0) rotate(6deg) scale(1.08); }
+    100% { transform: translate3d(-3vw, 4vh, 0) rotate(-5deg) scale(1.03); }
+}
+
+/* Film grain: static SVG noise over the aurora, under the app */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--gmd-grain);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+    background-size: 180px 180px;
+}
+
+/* ==================================================================
+ *  4. FLOATING GLASS PANELS
+ * ================================================================== */
+
+/* --- Channel list (grid area "channelsList") --- */
+[class*="sidebarList_"] {
+    margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) var(--gmd-panel-gap) !important;
+    border-radius: var(--gmd-panel-radius) !important;
+    border: 1px solid var(--gmd-panel-border) !important;
+    background: var(--gmd-panel-bg) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: var(--gmd-panel-shadow) !important;
+    overflow: hidden !important;
+}
+
+[class*="sidebar_"][data-collapsed="true"] [class*="sidebarList_"] {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/* --- Chat column (contains header, messages, input and members) ---
+   Matches the innermost "chat_" ancestor of the message area, whatever the
+   nesting depth, so DMs, guild channels, threads and forums all get the tile. */
+[class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])) {
+    margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
+    border-radius: var(--gmd-panel-radius) !important;
+    border: 1px solid var(--gmd-panel-border) !important;
+    background: var(--gmd-panel-bg) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: var(--gmd-panel-shadow) !important;
+    overflow: hidden !important;
+}
+
+/* When the channel list is collapsed the chat gets the full left margin back */
+[class*="sidebar_"][data-collapsed="true"] ~ [class*="page_"] [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
+[class*="sidebar_"][class*="hidden_"] ~ [class*="page_"] [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])) {
+    margin-left: var(--gmd-panel-gap) !important;
+}
+
+/* --- Member list: nested glass card inside the chat panel --- */
+[class*="chat_"] [class*="container_"]:has(> [class*="membersWrap_"]) {
+    background: transparent !important;
+    border: none !important;
+}
+
+[class*="membersWrap_"] {
+    margin: var(--gmd-panel-gap) var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    border-radius: calc(var(--gmd-panel-radius) - 4px) !important;
+    border: 1px solid var(--gmd-border) !important;
+    background: var(--gmd-panel-nested-bg) !important;
+    box-shadow: var(--gmd-panel-shadow-nested) !important;
+    overflow: hidden !important;
+}
+
+[class*="membersWrap_"] [class*="members_"] {
+    padding-top: 6px !important;
+}
+
+/* DM user-profile side card (same nested-glass treatment as the member list) */
+[class*="chat_"] .user-profile-sidebar,
+[class*="chat_"] .user-profile-sidebar-redesign {
+    margin: var(--gmd-panel-gap) var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
+    border-radius: calc(var(--gmd-panel-radius) - 4px) !important;
+    border: 1px solid var(--gmd-border) !important;
+    background: var(--gmd-panel-nested-bg) !important;
+    box-shadow: var(--gmd-panel-shadow-nested) !important;
+    overflow: hidden !important;
+}
+
+[class*="chat_"] .user-profile-sidebar > [class*="inner_"] {
+    background: transparent !important;
+    border-radius: 0 !important;
+}
+
+/* --- Thread / forum side panel and search results --- */
+[class*="chatLayerWrapper_"] > [class*="container_"],
+[class*="searchResultsWrap_"] {
+    margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
+    border-radius: var(--gmd-panel-radius) !important;
+    border: 1px solid var(--gmd-panel-border) !important;
+    background: var(--gmd-panel-bg) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: var(--gmd-panel-shadow) !important;
+    overflow: hidden !important;
+}
+
+/* --- Home / Friends / Shop pages (a page nested inside the grid page) --- */
+[class*="page_"] [class*="page_"] {
+    margin: 4px var(--gmd-panel-gap) var(--gmd-panel-gap) 0 !important;
+    border-radius: var(--gmd-panel-radius) !important;
+    border: 1px solid var(--gmd-panel-border) !important;
+    background: var(--gmd-panel-bg) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: var(--gmd-panel-shadow) !important;
+    overflow: hidden !important;
+}
+
+[class*="page_"] [class*="page_"] [class*="page_"] {
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+[class*="page_"] [class*="page_"] > [class*="header_"] {
+    background: transparent !important;
+    border-bottom: 1px solid var(--gmd-border) !important;
+}
+
+/* ==================================================================
+ *  5. GUILD LIST (frame level: icons float on the matte background)
+ * ================================================================== */
+[class*="guilds_"] [class*="guildSeparator_"] {
+    background-color: var(--gmd-border-strong) !important;
+}
+
+[class*="guilds_"] [class*="listItemWrapper_"],
+[class*="guilds_"] [class*="blobContainer_"] {
+    transition: none;
+}
+
+[class*="guilds_"] [class*="listItemWrapper_"]:hover,
+[class*="guilds_"] [class*="blobContainer_"]:hover {
+    transform: translateY(-1px) scale(1.06);
+}
+
+[class*="guilds_"] [class*="listItemWrapper_"]:active,
+[class*="guilds_"] [class*="blobContainer_"]:active {
+    transform: scale(0.97) !important;
+}
+
+[class*="guilds_"] [class*="circleIconButton_"] {
+    background-color: rgba(var(--gmd-tint-rgb), 0.06) !important;
+    border: 1px solid var(--gmd-border);
+    color: var(--gmd-text-subtle) !important;
+    transition: none;
+}
+
+[class*="guilds_"] [class*="circleIconButton_"]:hover,
+[class*="guilds_"] [class*="circleIconButton_"][class*="selected_"] {
+    background-color: rgba(var(--gmd-accent-rgb), 0.22) !important;
+    color: var(--gmd-accent) !important;
+    border-color: rgba(var(--gmd-accent-rgb), 0.45);
+}
+
+/* Home (Direct Messages) tile: frosted glass instead of a solid blurple square */
+[class*="guilds_"] [class*="childWrapper_"] {
+    background: linear-gradient(160deg, rgba(var(--gmd-tint-rgb), 0.13), rgba(var(--gmd-tint-rgb), 0.05)) !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(var(--gmd-tint-rgb), 0.16) !important;
+    border-radius: 14px !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.16) !important;
+    color: var(--gmd-text-strong) !important;
+    transition: none !important;
+}
+
+[class*="guilds_"] [class*="wrapper_"][class*="selected_"] [class*="childWrapper_"],
+[class*="guilds_"] [class*="wrapper_"]:hover [class*="childWrapper_"] {
+    background: linear-gradient(160deg, rgba(var(--gmd-accent-rgb), 0.55), rgba(var(--gmd-accent-rgb), 0.28)) !important;
+    border-color: rgba(var(--gmd-accent-rgb), 0.65) !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.24) !important;
+    color: #fff !important;
+}
+
+[class*="guilds_"] [class*="childWrapper_"] svg {
+    filter: none;
+}
+
+[class*="guilds_"] [class*="folderGroupBackground_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.05) !important;
+    border: 1px solid var(--gmd-border);
+    border-radius: 18px !important;
+}
+
+/* Selected / unread pill */
+[class*="guilds_"] [class*="pill_"] span,
+[class*="guilds_"] [class*="pill_"] > div {
+    background: var(--gmd-accent) !important;
+    border-radius: 0 6px 6px 0 !important;
+    box-shadow: none;
+}
+
+[class*="guilds_"] [class*="unreadMentionsBar_"] {
+    background: var(--gmd-accent) !important;
+    color: var(--gmd-accent-text) !important;
+    border-radius: 10px !important;
+    box-shadow: none;
+}
+
+/* ==================================================================
+ *  5b. AUTO-HIDING SERVER DRAWER
+ *  The column shrinks to a handle; the list slides over the channel list
+ *  on hover or keyboard focus. The hover target is the real <nav>, so no
+ *  JS and no extra elements are needed.
+ * ================================================================== */
+@container style(--gmd-guildbar-autohide: 1) {
+    /* The channel list is sized from this variable, so shrinking it here
+       gives the freed width to the channels. The nav restores the real
+       value for its own children (icons, folders, badges). */
+    [class*="sidebar_"]:has([class*="sidebarList_"]) {
+        --custom-guild-list-width: var(--gmd-guildbar-peek);
+    }
+
+    /* Discord clips this column with overflow:hidden AND a CSS mask (bottom
+       fade). Both would swallow the drawer, so they go. */
+    [class*="guilds_"],
+    [class*="sidebar_"] [class*="wrapper_"]:has(> [class*="guilds_"]) {
+        --custom-guild-list-width: calc(var(--guildbar-avatar-size, 40px) + var(--custom-guild-list-padding, 16px) * 2);
+        width: var(--gmd-guildbar-peek) !important;
+        min-width: var(--gmd-guildbar-peek) !important;
+        overflow: visible !important;
+        -webkit-mask: none !important;
+        mask: none !important;
+        background: transparent !important;
+        position: relative !important;
+        z-index: 60 !important;
+    }
+
+    /* Parked chrome: a frosted tab hugging the left edge, with a grip pill */
+    [class*="guilds_"]::before {
+        content: "";
+        position: absolute;
+        top: 4px;
+        bottom: var(--gmd-panel-gap);
+        inset-inline-start: 0;
+        width: var(--gmd-guildbar-peek);
+        border-radius: 0 12px 12px 0;
+        border: 1px solid var(--gmd-panel-border);
+        border-inline-start: none;
+        background: var(--gmd-panel-bg);
+        box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.1);
+        pointer-events: none;
+        z-index: 1;
+        transition: none;
+    }
+
+    [class*="guilds_"]::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 5px;
+        width: 3px;
+        height: 32px;
+        margin-top: -16px;
+        border-radius: 3px;
+        background: rgba(var(--gmd-tint-rgb), 0.34);
+        box-shadow: 0 0 10px rgba(var(--gmd-tint-rgb), 0.18);
+        pointer-events: none;
+        z-index: 2;
+        transition: none;
+    }
+
+    [class*="guilds_"]:hover::before,
+    [class*="guilds_"]:focus-within::before,
+    [class*="guilds_"]:hover::after,
+    [class*="guilds_"]:focus-within::after {
+        opacity: 0;
+        transition-delay: 0s;
+    }
+
+    /* The drawer is the list itself: the scroller when "guilds_" sits on the
+       tree (current DOM), or the tree when "guilds_" sits on the nav. Never
+       the absolutely positioned unread-mention indicators. Fully hidden while
+       parked (visibility), so nothing can peek through the handle. */
+    [class*="guilds_"] > [class*="scroller_"],
+    [class*="guilds_"] > [class*="tree_"] {
+        box-sizing: border-box;
+        width: var(--custom-guild-list-width) !important;
+        height: calc(100% - 10px) !important;
+        max-height: none !important;
+        flex: none !important;
+        margin: 4px 0 var(--gmd-panel-gap) var(--gmd-panel-gap) !important;
+        padding-top: 8px !important;
+        border-radius: var(--gmd-panel-radius);
+        border: 1px solid var(--gmd-panel-border);
+        background: var(--gmd-panel-bg) !important;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+        box-shadow: var(--gmd-panel-shadow);
+        position: relative;
+        z-index: 3;
+        /* Parked: fully clipped away (also removes it from hit-testing), so
+           only the 14px nav strip can start the hover. No transform and no
+           visibility toggles touch Discord's scroller. */
+        clip-path: inset(0 100% 0 0 round var(--gmd-panel-radius));
+        transition: none;
+    }
+
+    /* Discord's own scroller inside the drawer keeps scrolling; it must not
+       show the theme's 10px scrollbar track inside a 72px column */
+    [class*="guilds_"] [class*="scroller_"] {
+        scrollbar-width: none !important;
+    }
+
+    [class*="guilds_"] [class*="scroller_"]::-webkit-scrollbar,
+    [class*="guilds_"] > [class*="tree_"]::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    [class*="guilds_"]:hover > [class*="scroller_"],
+    [class*="guilds_"]:hover > [class*="tree_"],
+    [class*="guilds_"]:focus-within > [class*="scroller_"],
+    [class*="guilds_"]:focus-within > [class*="tree_"] {
+        clip-path: inset(0 0 0 0 round var(--gmd-panel-radius));
+        box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.12);
+        transition-delay: 0s, 0s;
+    }
+
+    /* Contents fade in slightly after the glass reveals */
+    [class*="guilds_"] > [class*="tree_"] > *,
+    [class*="guilds_"] > [class*="scroller_"] > * {
+        opacity: 0;
+        transition: none;
+    }
+
+    [class*="guilds_"]:hover > [class*="tree_"] > *,
+    [class*="guilds_"]:hover > [class*="scroller_"] > *,
+    [class*="guilds_"]:focus-within > [class*="tree_"] > *,
+    [class*="guilds_"]:focus-within > [class*="scroller_"] > * {
+        opacity: 1;
+        transition-delay: 80ms;
+    }
+
+    /* Unread-mention arrows outside the tree follow the drawer */
+    [class*="guilds_"] > :not([class*="scroller_"]):not([class*="tree_"]) {
+        opacity: 0;
+        pointer-events: none;
+        transition: none;
+    }
+
+    [class*="guilds_"]:hover > :not([class*="scroller_"]):not([class*="tree_"]),
+    [class*="guilds_"]:focus-within > :not([class*="scroller_"]):not([class*="tree_"]) {
+        opacity: 1;
+        pointer-events: auto;
+        transition-delay: 0s;
+    }
+
+    [class*="guilds_"] [class*="unreadMentionsIndicatorTop_"],
+    [class*="guilds_"] [class*="unreadMentionsIndicatorBottom_"] {
+        width: var(--custom-guild-list-width) !important;
+        inset-inline-start: var(--gmd-panel-gap) !important;
+    }
+
+    /* The sidebar's own collapsed states follow the new column width, and
+       must not clip the drawer when it slides out over the chat */
+    [class*="sidebar_"][data-collapsed="true"] {
+        width: calc(var(--gmd-guildbar-peek) + 4px) !important;
+        overflow: visible !important;
+    }
+}
+
+/* ==================================================================
+ *  6. CHANNEL LIST / DM LIST
+ * ================================================================== */
+[class*="sidebarList_"] [class*="header_"] {
+    border-bottom: 1px solid var(--gmd-border) !important;
+}
+
+[class*="sidebarList_"] [class*="searchBar_"] {
+    border-bottom: 1px solid var(--gmd-border) !important;
+}
+
+[class*="sidebarList_"] [class*="searchBar_"] [class*="searchBarComponent_"] {
+    background: var(--gmd-field-bg) !important;
+    border: 1px solid var(--gmd-border) !important;
+    border-radius: 10px !important;
+    transition: none;
+}
+
+[class*="sidebarList_"] [class*="searchBar_"] [class*="searchBarComponent_"]:hover {
+    border-color: var(--gmd-border-strong) !important;
+    background: var(--gmd-field-bg-hover) !important;
+}
+
+/* Text channels */
+[class*="sidebarList_"] [class*="link_"] {
+    border-radius: 9px !important;
+    transition: none;
+}
+
+[class*="sidebarList_"] [class*="wrapper_"]:hover > [class*="link_"],
+[class*="sidebarList_"] [class*="containerDefault_"]:hover [class*="link_"] {
+    background-color: var(--gmd-hover) !important;
+}
+
+[class*="sidebarList_"] [class*="modeSelected_"] > [class*="link_"],
+[class*="sidebarList_"] [class*="modeSelected_"] [class*="link_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.14) !important;
+    box-shadow: inset 2px 0 0 var(--gmd-accent);
+    color: var(--gmd-text-strong) !important;
+}
+
+[class*="sidebarList_"] [class*="modeSelected_"] [class*="name_"],
+[class*="sidebarList_"] [class*="modeSelected_"] [class*="icon_"] {
+    color: var(--gmd-text-strong) !important;
+}
+
+[class*="sidebarList_"] [class*="modeUnreadImportant_"] [class*="name_"] {
+    color: var(--gmd-text-strong) !important;
+    font-weight: 600;
+}
+
+[class*="sidebarList_"] [class*="unread_"] {
+    background: var(--gmd-accent) !important;
+    box-shadow: 0 0 8px rgba(var(--gmd-accent-rgb), 0.6);
+}
+
+/* DM rows */
+[class*="sidebarList_"] [class*="interactive_"] {
+    border-radius: 9px !important;
+    transition: none;
+}
+
+[class*="sidebarList_"] [class*="interactive_"][class*="selected_"],
+[class*="sidebarList_"] [class*="interactiveSelected_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.14) !important;
+    box-shadow: inset 2px 0 0 var(--gmd-accent);
+}
+
+[class*="sidebarList_"] [class*="unreadPill_"] {
+    background-color: var(--gmd-accent) !important;
+    box-shadow: 0 0 8px rgba(var(--gmd-accent-rgb), 0.6);
+}
+
+[class*="sidebarList_"] [class*="sectionDivider_"] {
+    background-color: var(--gmd-border) !important;
+}
+
+/* Guild banner header */
+[class*="sidebarList_"] [class*="animatedContainer_"] {
+    border-radius: 12px !important;
+}
+
+/* ==================================================================
+ *  7. USER PANEL (bottom-left) & VOICE PANEL
+ * ================================================================== */
+/* Discord overlays the user panel on the bottom of the sidebar, i.e. on top
+   of the channel-list tile. Two glass edges 2px apart read as a doubled
+   frame, so the tile is shortened to end above the panel and the panel is
+   aligned with the tile's left edge (after the guild column). */
+[class*="sidebarList_"] {
+    margin-bottom: calc(var(--custom-app-panels-height, 58px) + var(--gmd-panel-gap) * 2) !important;
+}
+
+[class*="sidebarList_"] [class*="scroller_"] {
+    margin-bottom: 0 !important;
+}
+
+[class*="sidebar_"]:has([class*="sidebarList_"]) > [class*="guilds_"],
+[class*="sidebar_"]:has([class*="sidebarList_"]) > [class*="wrapper_"]:has(> [class*="guilds_"]),
+[class*="sidebar_"] [class*="guilds_"] {
+    margin-bottom: 0 !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] {
+    /* Discord paints the mic/headset/settings plates with these when a
+       nameplate is active; keep them frosted instead of black */
+    --custom-nameplate-neutral: rgba(var(--gmd-tint-rgb), 0.08);
+    --custom-nameplate-neutral-hovered: rgba(var(--gmd-tint-rgb), 0.14);
+    --custom-panels-spacing: var(--gmd-panel-gap);
+    bottom: var(--gmd-panel-gap) !important;
+    inset-inline-start: calc(var(--custom-guild-list-width) + var(--gmd-panel-gap)) !important;
+    width: calc(100% - var(--custom-guild-list-width) - var(--gmd-panel-gap) * 2) !important;
+    background: linear-gradient(180deg, rgba(var(--gmd-tint-rgb), 0.085), rgba(var(--gmd-tint-rgb), 0.04)) !important;
+    border: 1px solid var(--gmd-panel-border) !important;
+    border-radius: var(--gmd-panel-radius) !important;
+    box-shadow: var(--gmd-panel-shadow) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/* With the channel list collapsed the panel would have no room; hide it */
+[class*="sidebar_"][data-collapsed="true"] [class*="panels_"] {
+    display: none !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="container_"] {
+    background: transparent !important;
+}
+
+/* One frame only: every wrapper inside the panel drops its own border,
+   outline, shadow and fill. background-image is left alone so nameplate
+   artwork still renders; buttons keep their tiles. */
+[class*="sidebar_"] [class*="panels_"] > *,
+[class*="sidebar_"] [class*="panels_"] > * > *,
+[class*="sidebar_"] [class*="panels_"] > * > * > :not(button):not([class*="button_"]):not([class*="avatar"]):not(img):not(video):not(svg),
+[class*="sidebar_"] [class*="panels_"] [class*="plateMuted"],
+[class*="sidebar_"] [class*="panels_"] [class*="plated_"] {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="plateMuted"],
+[class*="sidebar_"] [class*="panels_"] [class*="plated_"],
+[class*="sidebar_"] [class*="panels_"] [class*="plated_"]:hover {
+    background: transparent !important;
+}
+
+/* Keep a soft hover on the name/avatar area so it still feels clickable */
+[class*="sidebar_"] [class*="panels_"] [class*="accountPopoutButtonWrapper_"]:hover {
+    background-color: rgba(var(--gmd-tint-rgb), 0.06) !important;
+    border-radius: 9px !important;
+}
+
+/* --- Control buttons row: mic + chevron, headset + chevron, settings ---
+   Every node in the row is zeroed first (that is what kills the black
+   nameplate plates), then one tile is painted per control. Split buttons
+   share a tile, divided by a hairline. */
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"],
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] *:not(svg):not(path):not(circle):not(rect) {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="audioButtonParent_"],
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > button,
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="button_"] {
+    background: linear-gradient(180deg, rgba(var(--gmd-tint-rgb), 0.085), rgba(var(--gmd-tint-rgb), 0.05)) !important;
+    border: 1px solid rgba(var(--gmd-tint-rgb), 0.1) !important;
+    border-radius: 10px !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.08) !important;
+    overflow: hidden;
+    transition: none;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="audioButtonParent_"]:hover,
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > button:hover,
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="button_"]:hover {
+    background: linear-gradient(180deg, rgba(var(--gmd-tint-rgb), 0.14), rgba(var(--gmd-tint-rgb), 0.09)) !important;
+    border-color: rgba(var(--gmd-tint-rgb), 0.16) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="audioButtonParent_"] > * {
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="audioButtonParent_"] > *:hover {
+    background-color: rgba(var(--gmd-tint-rgb), 0.08) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"] {
+    border-inline-start: 1px solid rgba(var(--gmd-tint-rgb), 0.1) !important;
+    width: 16px !important;
+}
+
+/* Muted / deafened: warm red tint on the whole tile instead of Discord's plate */
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="audioButtonParent_"]:has([class*="redGlow_"]),
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] > [class*="redGlow_"] {
+    background: linear-gradient(180deg, rgba(255, 96, 96, 0.22), rgba(255, 96, 96, 0.14)) !important;
+    border-color: rgba(255, 96, 96, 0.4) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="redGlow_"] svg,
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="redIcon_"] {
+    color: #ff7a7a !important;
+}
+
+/* --- Nameplate (0 = hidden, 1 = artwork only) ---
+   Discord renders it as <div aria-hidden="true" style="background: linear-
+   gradient(...)"> inside the account container. That inline gradient is the
+   second frame you see; it is removed in both modes. */
+[class*="sidebar_"] [class*="panels_"] [class*="container_"] div[aria-hidden="true"][style*="background"],
+[class*="sidebar_"] [class*="panels_"] [class*="plated_"] div[aria-hidden="true"][style*="background"] {
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    border-radius: 12px !important;
+}
+
+/* Device-picker chevrons: never a plate of their own */
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"],
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"] *,
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [style*="background"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"] {
+    color: var(--gmd-text-muted) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="buttonChevron_"]:hover {
+    color: var(--gmd-text-strong) !important;
+}
+
+@container style(--gmd-nameplate: 0) {
+    [class*="sidebar_"] [class*="panels_"] [class*="container_"] div[aria-hidden="true"][style*="background"],
+    [class*="sidebar_"] [class*="panels_"] [class*="plated_"] div[aria-hidden="true"][style*="background"] {
+        display: none !important;
+    }
+
+    /* Match the asset only. It lives under /collectibles/nameplates/ as
+   <video><source> or <img>. The account container carries
+   --custom-nameplate in its inline style, so no [style*=...] selectors
+   here: they would hide the whole panel. */
+    [class*="sidebar_"] [class*="panels_"] img[src*="nameplate"],
+    [class*="sidebar_"] [class*="panels_"] video[src*="nameplate"],
+    [class*="sidebar_"] [class*="panels_"] video:has(> source[src*="nameplate"]),
+    [class*="sidebar_"] [class*="panels_"] picture:has(> source[srcset*="nameplate"]),
+    [class*="sidebar_"] [class*="panels_"] [class*="container_"] > video,
+    [class*="sidebar_"] [class*="panels_"] [class*="container_"] > picture,
+    [class*="sidebar_"] [class*="panels_"] [class*="plated_"] > video,
+    [class*="sidebar_"] [class*="panels_"] [class*="plated_"] > picture,
+    [class*="sidebar_"] [class*="panels_"] > video,
+    [class*="sidebar_"] [class*="panels_"] > picture,
+    [class*="sidebar_"] [class*="panels_"] > img:not([class*="avatar"]) {
+        display: none !important;
+    }
+
+    [class*="sidebar_"] [class*="panels_"] [class*="container_"],
+    [class*="sidebar_"] [class*="panels_"] [class*="plated_"] {
+        background-image: none !important;
+    }
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="button_"],
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] button {
+    background-color: rgba(var(--gmd-tint-rgb), 0.05) !important;
+    border-radius: 9px !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] [class*="button_"]:hover,
+[class*="sidebar_"] [class*="panels_"] [class*="buttons_"] button:hover {
+    background-color: rgba(var(--gmd-tint-rgb), 0.12) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="avatar_"] {
+    transition: none;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="avatar_"]:hover {
+    transform: scale(1.08);
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="button_"] {
+    border-radius: 8px !important;
+    transition: none;
+}
+
+[class*="sidebar_"] [class*="panels_"] [class*="activityPanel_"] {
+    border-bottom: 1px solid var(--gmd-border) !important;
+}
+
+/* ==================================================================
+ *  8. CHAT HEADER
+ * ================================================================== */
+[class*="chat_"] > [class*="title_"] {
+    padding-top: 4px !important;
+    background: linear-gradient(180deg, rgba(var(--gmd-tint-rgb), 0.035), rgba(var(--gmd-tint-rgb), 0)) !important;
+}
+
+[class*="chat_"] > [class*="title_"] [class*="title_"],
+[class*="chat_"] > [class*="title_"] h1,
+[class*="chat_"] > [class*="title_"] h2 {
+    letter-spacing: -0.01em;
+    font-weight: 600;
+}
+
+[class*="chat_"] > [class*="title_"] > [class*="container_"] {
+    --__header-bar-background: transparent;
+    border-bottom: 1px solid var(--gmd-border) !important;
+}
+
+[class*="chat_"] > [class*="title_"] [class*="children_"]::after {
+    display: none !important;
+}
+
+[class*="chat_"] > [class*="title_"] [class*="searchBar_"] {
+    background: var(--gmd-field-bg) !important;
+    border: 1px solid var(--gmd-border) !important;
+    border-radius: 10px !important;
+    transition: none;
+}
+
+[class*="chat_"] > [class*="title_"] [class*="searchBar_"]:focus-within {
+    border-color: rgba(var(--gmd-accent-rgb), 0.6) !important;
+    box-shadow: 0 0 0 3px rgba(var(--gmd-accent-rgb), 0.15);
+}
+
+[class*="chat_"] > [class*="title_"] [class*="iconWrapper_"],
+[class*="chat_"] > [class*="title_"] [class*="clickable_"] {
+    border-radius: 8px;
+    transition: none;
+}
+
+/* ==================================================================
+ *  9. TITLE BAR: macOS TRAFFIC LIGHTS
+ *  Discord's own window buttons are repainted as dots, so close, minimise
+ *  and zoom keep working. They stay top-right where Windows puts them, and
+ *  reveal their glyphs when the group is hovered.
+ * ================================================================== */
+
+/* Current Discord: <div class="bar_xxx"> inside the base grid. The window
+   buttons stay where Windows users expect them (top-right); only the paint
+   changes. */
+[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) {
+    background: transparent !important;
+    border: none !important;
+}
+
+[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) [class*="winButtons_"] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    height: var(--custom-app-top-bar-height, 32px) !important;
+    padding-inline: 10px 16px !important;
+    -webkit-app-region: no-drag;
+}
+
+[class*="base_"] > [class*="bar_"] [class*="winButtonsWithDivider_"]::before {
+    display: none !important;
+}
+
+/* Legacy title bar (typeWindows) - same treatment for older layouts */
+[class*="typeWindows_"] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    padding-inline-end: 16px !important;
+    gap: 8px !important;
+    background: transparent !important;
+}
+
+[class*="typeWindows_"] [class*="wordmark_"] {
+    position: absolute;
+    inset-inline-start: 12px;
+    pointer-events: none;
+}
+
+[class*="typeWindows_"] [class*="winButton_"] {
+    position: relative !important;
+    top: auto !important;
+    -webkit-app-region: no-drag;
+}
+
+/* The dots themselves */
+[class*="winButton_"] {
+    width: 12px !important;
+    height: 12px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background-color: var(--gmd-mac-yellow) !important;
+    border: 1px solid rgba(26, 29, 44, 0.126) !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.28), 0 1px 2px rgba(26, 29, 44, 0.158) !important;
+    color: transparent !important;
+    cursor: pointer !important;
+    overflow: hidden !important;
+    position: relative;
+    flex: 0 0 auto !important;
+    transition: none;
+}
+
+[class*="winButton_"] svg,
+[class*="winButton_"] img,
+[class*="winButton_"] > * {
+    display: none !important;
+}
+
+/* Glyph layer (drawn as inline SVG, shows on group hover) */
+[class*="winButton_"]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 8px 8px;
+    opacity: 0;
+    transition: none;
+}
+
+[class*="winButtons_"]:hover [class*="winButton_"]::before,
+[class*="typeWindows_"]:hover [class*="winButton_"]::before {
+    opacity: 1;
+}
+
+[class*="winButton_"]:hover {
+    filter: none;
+    transform: scale(1.1);
+}
+
+[class*="winButton_"]:active {
+    filter: brightness(0.82) !important;
+    transform: scale(0.94);
+}
+
+/* Order (left to right): minimise (yellow) -> zoom (green) -> close (red)
+   so the close dot sits in the corner, where Windows muscle memory expects it. */
+[class*="winButton_"][class*="winButtonClose"] {
+    background-color: var(--gmd-mac-red) !important;
+}
+
+[class*="winButton_"][class*="winButtonClose"]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 2l6 6M8 2l-6 6' stroke='%234d0000' stroke-width='1.6' stroke-linecap='round'/></svg>");
+}
+
+[class*="winButton_"][class*="winButtonMinMax"] {
+    background-color: var(--gmd-mac-yellow) !important;
+}
+
+[class*="winButton_"][class*="winButtonMinMax"]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 5h6' stroke='%23995700' stroke-width='1.6' stroke-linecap='round'/></svg>");
+}
+
+[class*="winButton_"][class*="winButtonMinMax"] ~ [class*="winButton_"][class*="winButtonMinMax"] {
+    background-color: var(--gmd-mac-green) !important;
+}
+
+[class*="winButton_"][class*="winButtonMinMax"] ~ [class*="winButton_"][class*="winButtonMinMax"]::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 2v6M2 5h6' stroke='%23006500' stroke-width='1.6' stroke-linecap='round'/></svg>");
+}
+
+/* Top-bar icon buttons (inbox, help, back/forward) */
+[class*="base_"] > [class*="bar_"] [class*="leading_"] [class*="button_"],
+[class*="base_"] > [class*="bar_"] [class*="trailing_"] [class*="button_"],
+[class*="base_"] > [class*="bar_"] [class*="trailing_"] [class*="clickable_"] {
+    border-radius: 8px !important;
+    transition: none;
+}
+
+/* Thin hairline under the frame's top bar to separate it from the panels */
+[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"])::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--gmd-tint-rgb), 0.07) 20%, rgba(var(--gmd-tint-rgb), 0.07) 80%, transparent);
+    pointer-events: none;
+}
+
+[class*="base_"] > [class*="bar_"] [class*="title_"] {
+    color: var(--gmd-text-muted);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* ==================================================================
+ *  10. FLOATING CHAT BAR
+ * ================================================================== */
+[class*="chatContent_"] [class*="form_"] {
+    padding-inline: 0 !important;
+    margin-top: -16px;
+    background: transparent !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"] {
+    margin: 10px 14px !important;
+    width: calc(100% - 28px) !important;
+    min-width: 0 !important;
+    flex: 1 1 auto;
+    box-sizing: border-box !important;
+    border-radius: var(--gmd-chatbar-radius) !important;
+    border: 1px solid var(--gmd-chatbar-border) !important;
+    background: var(--gmd-chatbar-bg) !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.04) !important;
+    transition: none;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:hover {
+    border-color: rgba(var(--gmd-tint-rgb), 0.16) !important;
+    background: rgba(var(--gmd-tint-rgb), 0.055) !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:focus-within {
+    border-color: rgba(var(--gmd-accent-rgb), 0.55) !important;
+    background: rgba(var(--gmd-tint-rgb), 0.06) !important;
+    box-shadow: 0 0 0 3px rgba(var(--gmd-accent-rgb), 0.14) !important;
+    transform: translateY(-1px);
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="scrollableContainer_"],
+[class*="chatContent_"] [class*="form_"] [class*="themedBackground_"],
+[class*="chatContent_"] [class*="form_"] [class*="inner_"] {
+    background: transparent !important;
+    border-radius: var(--gmd-chatbar-radius) !important;
+}
+
+/* The editor itself must keep its full width inside the bar */
+[class*="chatContent_"] [class*="form_"] [class*="textArea_"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+}
+
+/* Reply / edit / upload stacked bars above the input */
+[class*="chatContent_"] [class*="form_"] [class*="stackedBars_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.04) !important;
+    border-radius: var(--gmd-chatbar-radius) var(--gmd-chatbar-radius) 0 0 !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelAttachmentArea_"],
+[class*="chatContent_"] [class*="form_"] [class*="typing_"] {
+    background: transparent !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="attachButton"],
+[class*="chatContent_"] [class*="form_"] [class*="buttons_"] [class*="button_"] {
+    transition: none;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="attachButton"]:hover,
+[class*="chatContent_"] [class*="form_"] [class*="buttons_"] [class*="button_"]:hover {
+    transform: scale(1.08);
+    color: var(--gmd-text-strong) !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="textArea_"]::placeholder {
+    color: var(--gmd-text-muted) !important;
+}
+
+/* ==================================================================
+ *  11. MESSAGES
+ * ================================================================== */
+[class*="messageListItem_"] > [class*="message_"] {
+    border-radius: 10px !important;
+    transition: none;
+}
+
+[class*="messageListItem_"] > [class*="message_"]:hover {
+    background: rgba(var(--gmd-tint-rgb), 0.035) !important;
+    transform: translateY(-1px);
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="selected_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.05) !important;
+}
+
+/* Mentions: warm frosted tint + glowing left rail */
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
+    background: rgba(255, 200, 120, 0.09) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]:hover {
+    background: rgba(255, 200, 120, 0.13) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]::before {
+    background: #ffbd2e !important;
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 10px rgba(255, 189, 46, 0.6);
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="replying_"],
+[class*="messageListItem_"] > [class*="message_"][class*="highlighted_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.1) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="replying_"]::before,
+[class*="messageListItem_"] > [class*="message_"][class*="highlighted_"]::before {
+    background: var(--gmd-accent) !important;
+    box-shadow: 0 0 10px rgba(var(--gmd-accent-rgb), 0.6);
+}
+
+/* Avatars: subtle scale + glow */
+[class*="messageListItem_"] [class*="avatar_"],
+[class*="membersWrap_"] [class*="avatar_"],
+[class*="privateChannels_"] [class*="avatar_"],
+[class*="layerContainer_"] [class*="avatar_"] {
+    transition: none;
+}
+
+[class*="messageListItem_"] [class*="avatar_"]:hover,
+[class*="membersWrap_"] [class*="layout_"]:hover [class*="avatar_"],
+[class*="privateChannels_"] [class*="interactive_"]:hover [class*="avatar_"] {
+    transform: scale(1.08);
+    filter: none;
+}
+
+/* Emoji pop */
+.emoji,
+[class*="emojiContainer_"] {
+    transition: none;
+}
+
+.emoji:hover,
+[class*="emojiContainer_"]:hover {
+    transform: scale(1.08);
+}
+
+/* Hover action bar */
+[class*="messageListItem_"] [class*="buttons_"] > [class*="wrapper_"],
+[class*="messageListItem_"] [class*="buttonContainer_"] [class*="wrapper_"] {
+    background: var(--gmd-popout-bg) !important;
+    border: 1px solid var(--gmd-popout-border) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    overflow: hidden;
+}
+
+[class*="messageListItem_"] [class*="buttons_"] [class*="button_"] {
+    transition: none;
+}
+
+[class*="messageListItem_"] [class*="buttons_"] [class*="button_"]:hover {
+    background: rgba(var(--gmd-tint-rgb), 0.08) !important;
+    transform: scale(1.06);
+}
+
+/* Embeds, code, quotes, reactions */
+[class*="embedFull_"] {
+    background: var(--gmd-card-bg) !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    border-inline-start: 3px solid rgba(var(--gmd-accent-rgb), 0.8) !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.06);
+    transition: none;
+}
+
+[class*="embedFull_"]:hover {
+    transform: translateY(-1px);
+    background: var(--gmd-card-bg-hover) !important;
+    box-shadow: inset 0 1px 0 rgba(var(--gmd-tint-rgb), 0.08);
+}
+
+[class*="markup_"] code,
+[class*="markup_"] pre,
+[class*="markup_"] pre code,
+[class*="markup_"] code.inline,
+[class*="inlineCode_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.05) !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    border-radius: 8px !important;
+    font-family: var(--gmd-font-code) !important;
+}
+
+[class*="markup_"] pre code {
+    border: none !important;
+    background: transparent !important;
+}
+
+[class*="blockquoteDivider_"] {
+    background-color: rgba(var(--gmd-accent-rgb), 0.55) !important;
+    border-radius: 4px !important;
+}
+
+[class*="reaction_"] {
+    border-radius: 999px !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    background: rgba(var(--gmd-tint-rgb), 0.05) !important;
+    transition: none !important;
+}
+
+[class*="reaction_"]:hover {
+    background: rgba(var(--gmd-tint-rgb), 0.09) !important;
+    border-color: var(--gmd-border-strong) !important;
+    transform: translateY(-1px) scale(1.04);
+}
+
+[class*="reaction_"][class*="reactionMe_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.18) !important;
+    border-color: rgba(var(--gmd-accent-rgb), 0.6) !important;
+}
+
+[class*="reactionBtn_"] {
+    border-radius: 999px !important;
+}
+
+/* Date / new-messages divider */
+[class*="divider_"][class*="hasContent_"] > [class*="content_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.05) !important;
+    border: 1px solid var(--gmd-border);
+    border-radius: 999px !important;
+    padding: 3px 10px !important;
+    color: var(--gmd-text-muted) !important;
+}
+
+[class*="isUnread_"] > [class*="content_"] {
+    color: #ff6b6b !important;
+    border-color: rgba(255, 107, 107, 0.4) !important;
+}
+
+/* "New messages" / "Jump to present" floating bars */
+[class*="newMessagesBar_"],
+[class*="jumpToPresentBar_"] {
+    border-radius: 0 0 12px 12px !important;
+    border: 1px solid var(--gmd-popout-border) !important;
+    border-top: none !important;
+    background: var(--gmd-popout-bg) !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none !important;
+    color: var(--gmd-text) !important;
+}
+
+[class*="newMessagesBar_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.85) !important;
+    color: var(--gmd-accent-text) !important;
+}
+
+[class*="jumpToPresentBar_"] {
+    border-radius: 12px !important;
+    border-top: 1px solid var(--gmd-popout-border) !important;
+}
+
+/* Spoilers, polls, attachments */
+[class*="spoilerContent_"],
+[class*="spoilerContainer_"] {
+    border-radius: 8px !important;
+}
+
+[class*="messageListItem_"] [class*="imageWrapper_"],
+[class*="messageListItem_"] [class*="mosaicItemMediaMosaic_"],
+[class*="messageListItem_"] [class*="visualMediaItemContainer_"] {
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+/* Text selection & caret */
+::selection {
+    background: rgba(var(--gmd-accent-rgb), 0.35);
+}
+
+[class*="textArea_"] {
+    caret-color: var(--gmd-accent);
+}
+
+/* ==================================================================
+ *  12. ISO-LAYERED POPOUTS, MENUS, TOOLTIPS, MODALS
+ *  Native positioning is untouched: only paint is replaced.
+ * ================================================================== */
+[class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="layer_"][class*="95d7b"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="root_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="container_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="modal_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="quickswitcher_"],
+[class*="chatContent_"] [class*="autocomplete_"],
+.user-profile-popout,
+.user-profile-modal,
+.user-profile-modal-v2 {
+    background: var(--gmd-popout-bg) !important;
+    background-color: var(--gmd-popout-bg) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border: 1px solid var(--gmd-popout-border) !important;
+    border-radius: var(--gmd-popout-radius) !important;
+    box-shadow: var(--gmd-popout-shadow) !important;
+    z-index: 9999 !important;
+}
+
+/* Context menus: tighter radius, glass rows */
+[class*="layerContainer_"] [class*="menu_"] {
+    border-radius: 12px !important;
+    padding: 2px !important;
+}
+
+[class*="layerContainer_"] [class*="menu_"] [class*="scroller_"] {
+    background: transparent !important;
+}
+
+[class*="layerContainer_"] [class*="menu_"] [class*="item_"] {
+    border-radius: 8px !important;
+    margin: 1px 0 !important;
+    transition: none;
+}
+
+[class*="layerContainer_"] [class*="menu_"] [class*="item_"][class*="focused_"],
+[class*="layerContainer_"] [class*="menu_"] [class*="colorDefault_"][class*="focused_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.2) !important;
+    color: var(--gmd-text-strong) !important;
+}
+
+[class*="layerContainer_"] [class*="menu_"] [class*="colorDanger_"][class*="focused_"] {
+    background: rgba(255, 90, 90, 0.18) !important;
+    color: #ff7b7b !important;
+}
+
+[class*="layerContainer_"] [class*="menu_"] [class*="separator_"] {
+    border-bottom-color: var(--gmd-border) !important;
+}
+
+/* Tooltips */
+[class*="layerContainer_"] [class*="tooltip_"] {
+    background: var(--gmd-popout-bg) !important;
+    background-color: var(--gmd-popout-bg) !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 1px solid var(--gmd-popout-border) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    color: var(--gmd-text) !important;
+}
+
+[class*="layerContainer_"] [class*="tooltipPointer_"] {
+    border-top-color: var(--gmd-popout-bg-solid) !important;
+}
+
+/* Modal backdrop: dim + blur what's behind */
+[class*="layerContainer_"] > * > [class*="backdrop_"],
+[class*="layerContainer_"] > [class*="backdrop_"] {
+    background-color: #000 !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* Modal internals: readable dark cards on top of translucent glass */
+[class*="layerContainer_"] [class*="focusLock_"] [class*="footer_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="footerSeparator_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.03) !important;
+    box-shadow: none !important;
+}
+
+[class*="layerContainer_"] [class*="focusLock_"] [class*="header_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="separator_"] {
+    box-shadow: none !important;
+}
+
+[class*="layerContainer_"] [class*="focusLock_"] [class*="card_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="cardPrimary_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="container_"][class*="card"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="inputWrapper_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="inputDefault_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="select_"],
+[class*="layerContainer_"] [class*="focusLock_"] [class*="scroller_"][class*="9ac28"] {
+    background: var(--gmd-card-bg) !important;
+    border-color: var(--gmd-card-border) !important;
+}
+
+/* Nested containers inside modals must not double the glass */
+[class*="layerContainer_"] [class*="focusLock_"] > [class*="root_"] [class*="root_"],
+[class*="layerContainer_"] [class*="focusLock_"] > [class*="container_"] [class*="container_"] {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* Quick switcher (Ctrl+K) */
+[class*="quickswitcher_"] [class*="input_"] {
+    background: var(--gmd-field-bg) !important;
+    border: 1px solid var(--gmd-border) !important;
+    border-radius: 12px !important;
+    color: var(--gmd-text-strong) !important;
+}
+
+[class*="quickswitcher_"] [class*="result_"][class*="selected_"],
+[class*="quickswitcher_"] [class*="selected_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.16) !important;
+    border-radius: 10px !important;
+}
+
+/* ==================================================================
+ *  13. USER PROFILES (popout, modal, sidebar)
+ *  Cards and fields get their own tint so text never bleeds into the
+ *  messages behind them.
+ * ================================================================== */
+.user-profile-popout,
+.user-profile-modal,
+.user-profile-modal-v2 {
+    --profile-gradient-section-box: var(--gmd-card-bg);
+    --profile-gradient-note-background: var(--gmd-card-bg);
+    --profile-body-background-color: var(--gmd-card-bg);
+    --user-profile-overlay-background: var(--gmd-card-bg);
+    overflow: hidden;
+}
+
+.user-profile-popout > [class*="inner_"],
+.user-profile-modal > [class*="inner_"],
+.user-profile-modal-v2 > [class*="inner_"] {
+    background: transparent !important;
+}
+
+/* Nitro profile themes: keep the user's colours as a translucent tint over
+   the glass instead of an opaque dark gradient */
+.custom-user-profile-theme.user-profile-popout > [class*="inner_"],
+.custom-user-profile-theme.user-profile-modal-v2 > [class*="inner_"],
+.custom-user-profile-theme.user-profile-sidebar > [class*="inner_"] {
+    background: linear-gradient(
+        color-mix(in oklab, var(--profile-gradient-primary-color) 42%, transparent),
+        color-mix(in oklab, var(--profile-gradient-secondary-color) 30%, transparent)
+    ) !important;
+}
+
+.custom-user-profile-theme.user-profile-popout,
+.custom-user-profile-theme.user-profile-modal-v2,
+.custom-user-profile-theme.user-profile-sidebar {
+    --profile-gradient-modal-background-color: var(--gmd-popout-bg-solid);
+    --profile-gradient-overlay-color: rgba(26, 29, 44, 0.054);
+}
+
+/* Full-profile modal: body, columns and scrollers stay see-through so the
+   frosted plates read as plates, not as boxes on black */
+.user-profile-modal-v2 [class*="body_"],
+.user-profile-modal-v2 [class*="scroller_"],
+.user-profile-modal-v2 [class*="content_"]:not([class*="section"] *),
+.user-profile-modal-v2 [class*="column_"],
+.user-profile-modal-v2 [class*="main_"],
+.user-profile-modal-v2 [class*="tabContent_"],
+.user-profile-modal-v2 [class*="profileCard_"],
+.user-profile-popout [class*="body_"],
+.user-profile-popout [class*="scroller_"] {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Custom-status speech bubble next to the avatar: frosted, not black */
+.user-profile-popout [class*="tooltip_"]:not([class*="Pointer"]),
+.user-profile-modal-v2 [class*="tooltip_"]:not([class*="Pointer"]),
+.user-profile-sidebar [class*="tooltip_"]:not([class*="Pointer"]) {
+    background: var(--gmd-card-bg-hover) !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    color: var(--gmd-text) !important;
+}
+
+.user-profile-popout [class*="tooltipPointer_"],
+.user-profile-modal-v2 [class*="tooltipPointer_"],
+.user-profile-sidebar [class*="tooltipPointer_"] {
+    border-top-color: var(--gmd-popout-bg-solid) !important;
+}
+
+/* Discord draws the profile plates itself from --profile-gradient-section-box
+   and --user-profile-overlay-background (remapped above to the frosted card
+   tint), so no extra plates are added here. Only the pills and the note field
+   get their radius. */
+.user-profile-popout [class*="note_"] textarea,
+.user-profile-modal-v2 [class*="note_"] textarea {
+    background: var(--gmd-field-bg) !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    border-radius: 10px !important;
+}
+
+.user-profile-popout [class*="rolePill_"],
+.user-profile-modal-v2 [class*="rolePill_"] {
+    border-radius: 999px !important;
+}
+
+.user-profile-popout [class*="banner_"],
+.user-profile-modal-v2 [class*="banner_"] {
+    border-radius: calc(var(--gmd-popout-radius) - 2px) calc(var(--gmd-popout-radius) - 2px) 0 0 !important;
+}
+
+.user-profile-popout [class*="avatar_"],
+.user-profile-modal-v2 [class*="avatar_"] {
+    transition: none;
+}
+
+.user-profile-popout [class*="avatar_"]:hover,
+.user-profile-modal-v2 [class*="avatar_"]:hover {
+    transform: scale(1.04);
+}
+
+/* Profile message input ("Message @user") */
+.user-profile-popout [class*="channelTextArea_"],
+.user-profile-modal-v2 [class*="channelTextArea_"] {
+    background: var(--gmd-field-bg) !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    border-radius: 10px !important;
+}
+
+/* ==================================================================
+ *  14. EXPRESSION PICKER (emoji / gif / sticker / soundboard)
+ * ================================================================== */
+[class*="drawerSizingWrapper_"] [class*="contentWrapper_"],
+[class*="layerContainer_"] [class*="contentWrapper_"][class*="08434"],
+[class*="layerContainer_"] [class*="emojiPicker_"]:not([class*="emojiPickerHasTabWrapper"] [class*="emojiPicker_"]) {
+    background: var(--gmd-popout-bg) !important;
+    background-color: var(--gmd-popout-bg) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    border: 1px solid var(--gmd-popout-border) !important;
+    border-radius: var(--gmd-popout-radius) !important;
+    box-shadow: var(--gmd-popout-shadow) !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="emojiPicker_"],
+[class*="drawerSizingWrapper_"] [class*="header_"],
+[class*="drawerSizingWrapper_"] [class*="categoryList_"],
+[class*="drawerSizingWrapper_"] [class*="picker_"],
+[class*="drawerSizingWrapper_"] [class*="wrapper_"],
+[class*="drawerSizingWrapper_"] [class*="inspector_"],
+[class*="drawerSizingWrapper_"] [class*="navList_"],
+[class*="drawerSizingWrapper_"] [class*="listWrapper_"],
+[class*="drawerSizingWrapper_"] [class*="categorySection_"],
+[class*="drawerSizingWrapper_"] [class*="container_"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="header_"] {
+    border-bottom: 1px solid var(--gmd-border) !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="navButton_"] {
+    border-radius: 8px !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="navButtonActive_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.2) !important;
+    color: var(--gmd-text-strong) !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="searchBar_"],
+[class*="drawerSizingWrapper_"] [class*="inputWrapper_"],
+[class*="drawerSizingWrapper_"] [class*="input_"] {
+    background: var(--gmd-field-bg) !important;
+    border-radius: 10px !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="categoryItem"] [class*="selected_"],
+[class*="drawerSizingWrapper_"] [class*="categoryItem"][class*="selected_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.2) !important;
+    border-radius: 8px !important;
+}
+
+[class*="drawerSizingWrapper_"] [class*="emojiItem_"],
+[class*="drawerSizingWrapper_"] [class*="stickerInspected_"],
+[class*="drawerSizingWrapper_"] [class*="result_"] {
+    border-radius: 10px !important;
+    transition: none;
+}
+
+[class*="drawerSizingWrapper_"] [class*="emojiItem_"]:hover,
+[class*="drawerSizingWrapper_"] [class*="stickerInspected_"] {
+    background: rgba(var(--gmd-tint-rgb), 0.08) !important;
+    transform: scale(1.08);
+}
+
+/* ==================================================================
+ *  15. SETTINGS LAYER (user / server settings)
+ * ================================================================== */
+[class*="standardSidebarView_"],
+[class*="sidebarRegion_"],
+[class*="sidebarRegionScroller_"],
+[class*="contentRegion_"],
+[class*="contentRegionScroller_"],
+[class*="contentColumn_"],
+[class*="containerSidenav_"],
+[class*="contentPanel_"],
+[class*="sideNavContent_"] {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="sidebarRegion_"] {
+    border-right: 1px solid var(--gmd-border);
+}
+
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="containerSidenav_"] {
+    border-top: 1px solid var(--gmd-border) !important;
+}
+
+[class*="sidebarRegion_"] [class*="item_"][class*="selected_"],
+[class*="containerSidenav_"] [class*="item_"][class*="selected_"],
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="side_"] [class*="selected_"] {
+    background: rgba(var(--gmd-accent-rgb), 0.16) !important;
+    color: var(--gmd-text-strong) !important;
+    border-radius: 8px !important;
+}
+
+[class*="sidebarRegion_"] [class*="item_"],
+[class*="containerSidenav_"] [class*="item_"],
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="side_"] [class*="item_"] {
+    border-radius: 8px !important;
+    transition: none;
+}
+
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="closeButton_"] {
+    border-radius: 50% !important;
+    border: 1px solid var(--gmd-border) !important;
+    transition: none;
+}
+
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="closeButton_"]:hover {
+    background: rgba(var(--gmd-tint-rgb), 0.08) !important;
+    transform: scale(1.06);
+}
+
+/* Cards and boxes inside settings pages */
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="card_"],
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="cardPrimary_"],
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="accountProfileCard_"],
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="userSettingsSecurity_"] [class*="container_"],
+[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="storyContent_"] {
+    background: var(--gmd-card-bg) !important;
+    border: 1px solid var(--gmd-card-border) !important;
+    border-radius: 12px !important;
+}
+
+/* ==================================================================
+ *  16. SCROLLBARS (thin, translucent, macOS-like)
+ * ================================================================== */
+#app-mount ::-webkit-scrollbar {
+    width: 10px !important;
+    height: 10px !important;
+}
+
+#app-mount ::-webkit-scrollbar-track,
+#app-mount ::-webkit-scrollbar-corner {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* macOS-style overlay behaviour: the thumb only appears while the scroller is hovered */
+#app-mount ::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--gmd-tint-rgb), 0) !important;
+    background-clip: padding-box !important;
+    border: 3px solid transparent !important;
+    border-radius: 999px !important;
+    min-height: 40px;
+}
+
+#app-mount :hover::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--gmd-tint-rgb), 0.14) !important;
+}
+
+#app-mount ::-webkit-scrollbar-thumb:hover,
+#app-mount ::-webkit-scrollbar-thumb:active {
+    background-color: rgba(var(--gmd-tint-rgb), 0.26) !important;
+}
+
+/* ==================================================================
+ *  17. CONTROLS, INPUTS, MISC SURFACES
+ * ================================================================== */
+#app-mount input[class*="input_"],
+#app-mount [class*="inputDefault_"],
+#app-mount [class*="inputWrapper_"] input,
+#app-mount textarea[class*="input_"] {
+    border-radius: 10px !important;
+    transition: none;
+}
+
+#app-mount input[class*="input_"]:focus,
+#app-mount [class*="inputDefault_"]:focus,
+#app-mount [class*="inputWrapper_"] input:focus {
+    box-shadow: 0 0 0 3px rgba(var(--gmd-accent-rgb), 0.15);
+}
+
+#app-mount [class*="lookFilled_"][class*="colorBrand_"],
+#app-mount button[class*="button_"][class*="colorBrand_"] {
+    color: var(--gmd-accent-text) !important;
+    box-shadow: none;
+}
+
+#app-mount [class*="lookFilled_"],
+#app-mount [class*="lookOutlined_"],
+#app-mount [class*="lookInverted_"] {
+    border-radius: 10px !important;
+    transition: none !important;
+}
+
+#app-mount [class*="lookFilled_"]:hover,
+#app-mount [class*="lookOutlined_"]:hover {
+    transform: translateY(-1px);
+}
+
+#app-mount [class*="lookFilled_"]:active,
+#app-mount [class*="lookOutlined_"]:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Voice call surface inside chat panel */
+[class*="callContainer_"],
+[class*="callContainer_"] [class*="wrapper_"] {
+    background: transparent !important;
+}
+
+/* Members list rows */
+[class*="membersWrap_"] [class*="layout_"] {
+    border-radius: 9px !important;
+    transition: none;
+}
+
+[class*="membersWrap_"] [class*="membersGroup_"] {
+    color: var(--gmd-text-muted) !important;
+    letter-spacing: 0.04em;
+}
+
+/* Notices (update available, etc.) */
+[class*="base_"] > [class*="content_"] > [class*="notice_"],
+[class*="notice_"][class*="colorDefault_"] {
+    border-radius: 12px !important;
+    margin: 4px var(--gmd-panel-gap) 0 !important;
+}
+
+/* Nitro / marketing gradients are left alone, but their cards get rounded */
+[class*="layerContainer_"] [class*="card_"] {
+    border-radius: 12px !important;
+}
+
+/* ==================================================================
+ *  18. MOTION & ACCESSIBILITY
+ * ================================================================== */
+html.reduce-motion body::before,
+html.reduced-motion body::before {
+    animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        animation: none !important;
+    }
+
+    [class*="messageListItem_"] > [class*="message_"]:hover,
+    [class*="guilds_"] [class*="listItemWrapper_"]:hover,
+    [class*="guilds_"] [class*="blobContainer_"]:hover,
+    .emoji:hover,
+    [class*="avatar_"]:hover,
+    [class*="winButton_"]:hover {
+        transform: none !important;
+    }
+}
+
+/* Firefox / non-webkit fallback for backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+    [class*="sidebarList_"],
+    [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
+    [class*="membersWrap_"],
+    [class*="page_"] [class*="page_"] {
+        background: rgba(22, 24, 34, 0.94) !important;
+    }
+
+    [class*="layerContainer_"] [class*="popout_"],
+    [class*="layerContainer_"] [class*="menu_"],
+    [class*="layerContainer_"] [class*="tooltip_"],
+    [class*="layerContainer_"] [class*="focusLock_"] > [class*="root_"],
+    [class*="drawerSizingWrapper_"] [class*="contentWrapper_"] {
+        background: rgba(18, 19, 26, 0.98) !important;
+    }
+}
+
+/* ==================================================================
+ *  19. LIGHT-BUILD CORRECTIONS
+ *  The body above is the shared one with its surface tints inverted to a
+ *  dark film. These few surfaces are panels rather than tints, so they
+ *  stay bright.
+ * ================================================================== */
+
+/* Film grain: the shared noise is white, which is invisible on a light
+   frame. Light builds use a dark noise instead. */
+body::after {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.09  0 0 0 0 0.14  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>") !important;
+}
+
+/* User panel: a white glass tile like the other panels */
+[class*="sidebar_"] [class*="panels_"] {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.66)) !important;
+}
+
+/* Home / Direct Messages tile */
+[class*="guilds_"] [class*="childWrapper_"] {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72)) !important;
+    border-color: rgba(26, 29, 44, 0.1) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    color: var(--gmd-accent) !important;
+}
+
+[class*="guilds_"] [class*="wrapper_"][class*="selected_"] [class*="childWrapper_"],
+[class*="guilds_"] [class*="wrapper_"]:hover [class*="childWrapper_"] {
+    color: #ffffff !important;
+}
+
+/* The chat header sheen reads as a smudge on white glass */
+[class*="chat_"] > [class*="title_"] {
+    background: transparent !important;
+}
+
+/* Traffic lights keep their bright top highlight on a light frame */
+[class*="winButton_"] {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 1px 2px rgba(26, 29, 44, 0.25) !important;
+}
+
+/* Code, embeds and quotes need a touch more contrast against white glass */
+[class*="markup_"] code,
+[class*="markup_"] pre,
+[class*="markup_"] code.inline,
+[class*="inlineCode_"] {
+    background: rgba(26, 29, 44, 0.05) !important;
+    border-color: rgba(26, 29, 44, 0.09) !important;
+}
+
+[class*="embedFull_"] {
+    background: rgba(255, 255, 255, 0.72) !important;
+}
+
+[class*="embedFull_"]:hover {
+    background: rgba(255, 255, 255, 0.86) !important;
+}
+
+/* Chat input stays the brightest surface in the column */
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:focus-within {
+    background: rgba(255, 255, 255, 0.96) !important;
+}
+
+/* Mentions: warm amber, readable on white */
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
+    background: rgba(235, 150, 20, 0.12) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]:hover {
+    background: rgba(235, 150, 20, 0.18) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]::before {
+    background: #e08c14 !important;
+    box-shadow: 0 0 10px rgba(224, 140, 20, 0.45) !important;
+}
+
+/* Unread divider */
+[class*="isUnread_"] > [class*="content_"] {
+    color: #d13b3b !important;
+    border-color: rgba(209, 59, 59, 0.35) !important;
+}
+
+/* Message hover: a soft dark film, not a white one */
+[class*="messageListItem_"] > [class*="message_"]:hover {
+    background: rgba(26, 29, 44, 0.035) !important;
+}
+
+[class*="messageListItem_"] > [class*="message_"][class*="selected_"] {
+    background: rgba(26, 29, 44, 0.05) !important;
+}
+
+/* ==================================================================
+ *  19. FLAT-BUILD CORRECTIONS
+ *  The build step already stripped every backdrop-filter, transition,
+ *  animation, blur filter and large shadow. What is left are the
+ *  whole-page effects, removed outright.
+ * ================================================================== */
+
+/* Ambient aurora and film grain: not rendered at all (no fixed full-screen
+   layer, no blur filter, no animation loop). */
+body::before,
+body::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
+}
+
+/* The frame is a flat paint, so the app shell can stay fully opaque */
+html,
+body {
+    background: var(--gmd-bg) !important;
+    background-attachment: scroll !important;
+}
+
+/* No layer promotion anywhere: fewer composited layers, less VRAM */
+#app-mount * {
+    will-change: auto !important;
+}
+
+/* Panels are opaque; drop the inner specular pass on the big ones */
+[class*="sidebarList_"],
+[class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
+[class*="membersWrap_"],
+[class*="page_"] [class*="page_"] {
+    background: var(--gmd-panel-bg) !important;
+}
+
+[class*="sidebar_"] [class*="panels_"] {
+    background: var(--gmd-panel-nested-bg) !important;
+}
+
+[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"] {
+    background: var(--gmd-chatbar-bg) !important;
+}
+
+/* Popouts, menus, tooltips and pickers: opaque, hairline border */
+[class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
+[class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
+[class*="layerContainer_"] [class*="tooltip_"],
+[class*="drawerSizingWrapper_"] [class*="contentWrapper_"],
+.user-profile-popout,
+.user-profile-modal,
+.user-profile-modal-v2 {
+    background: var(--gmd-popout-bg) !important;
+    background-color: var(--gmd-popout-bg) !important;
+}
+
+/* Modal backdrop: a flat scrim instead of a blurred one */
+[class*="layerContainer_"] > * > [class*="backdrop_"],
+[class*="layerContainer_"] > [class*="backdrop_"] {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Hover micro-motion stays instant; these two were the only effects that
+   forced a repaint of the element underneath */
+[class*="messageListItem_"] > [class*="message_"]:hover,
+[class*="embedFull_"]:hover {
+    transform: none !important;
+}
