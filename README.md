@@ -4,9 +4,9 @@ Aerogel is the lightest solid ever made. It is almost entirely air, it scatters 
 
 This is a Discord theme built on that idea. The app becomes a deep matte frame, and everything you actually read sits on a floating pane of frosted glass above it: the channel list, the chat, the member list and the user panel are separate tiles with their own hairline and their own shadow, not one flat wall of grey.
 
-Five builds ship from one shared rule set, so they all behave the same and break the same way when Discord changes something.
+Seven builds ship from one shared rule set, so they all behave the same and break the same way when Discord changes something.
 
-**[Open the live preview](https://bonzi64.github.io/aerogel/)** to switch between all five builds and try the sliding server rail before you install anything. The preview page wears whichever build you select, so it is the theme rendering itself.
+**[Open the live preview](https://bonzi64.github.io/aerogel/)** to switch between all seven builds and try the sliding server rail before you install anything. The preview page wears whichever build you select, so it is the theme rendering itself.
 
 ## Builds
 
@@ -15,8 +15,10 @@ Five builds ship from one shared rule set, so they all behave the same and break
 | `AerogelDark.theme.css` | The reference build. Matte black frame, frosted panels, slow aurora behind the glass. | Default choice. |
 | `AerogelLight.theme.css` | The same layout with the material inverted: white glass over a soft daylight frame, depth from dark ink instead of white film. | You work in a bright room. |
 | `AerogelViolet.theme.css` | Matte black with an amethyst cast. Violet accents, violet sheen on every pane. Built for 505h. | You want the purple one. |
+| `AerogelLightPink.theme.css` | Daylight with a blush cast: white glass over a soft pink frame, rose accents and plum shading instead of navy. | You want the pink one. |
 | `AerogelDarkFlat.theme.css` | Dark with no blur, no animation, no soft shadows and opaque panels. | Weak GPU, old laptop, remote desktop, battery. |
 | `AerogelLightFlat.theme.css` | The same treatment applied to the light build. | Bright room and a weak GPU. |
+| `AerogelLightPinkFlat.theme.css` | The same treatment applied to the pink build. | Pink and a weak GPU. |
 
 The two Flat builds are called Flat rather than Lite so that "Light" and "Lite" never appear in the same sentence. They are not a reduced feature set: the layout, the drawer and the controls are identical, they just stop paying for effects.
 
@@ -121,19 +123,20 @@ Two structural facts the theme depends on, in case they change:
 
 ## Building from source
 
-The five files are generated, not maintained by hand. The rules live once and every build is a token set plus mechanical passes.
+The seven files are generated, not maintained by hand. The rules live once and every build is a token set plus mechanical passes.
 
 ```
 src/
   tokens-dark.css        palette and Discord variable remap for the dark build
   tokens-light.css       same, inverted for daylight
   tokens-violet.css      same, amethyst
+  tokens-pink.css        same, blush daylight with a plum ink
   rules-1-frame.css      shells, panels, server rail, channel list, user panel
   rules-2-chat.css       title bar, chat bar, messages
   rules-3-overlays.css   popouts, profiles, pickers, settings, scrollbars
   patch-light.css        surfaces that must stay bright on a light frame
   patch-flat.css         whole-page effects removed for the Flat builds
-  build.js               applies the passes and writes the five theme files
+  build.js               applies the passes and writes the seven theme files
 ```
 
 ```sh
@@ -146,7 +149,8 @@ npm run build
 
 The passes are:
 
-- **Tint.** Every literal white film in the rules is routed through `--gmd-tint-rgb`, so a build can decide whether depth is white, dark ink or amethyst.
+- **Tint.** Every literal white film in the rules is routed through `--gmd-tint-rgb`, so a build can decide whether depth is white, dark ink, amethyst or plum.
+- **Reink.** `patch-light.css` is written in the light build's navy. A light variant with a different ink, such as the pink one, re-tints it, film-grain matrix included.
 - **Soften.** Hard black shadows become soft ink shadows on the light builds.
 - **Flat.** Zeroes every `backdrop-filter`, transition, animation and blur filter, and drops any shadow with a blur radius worth painting while keeping the hairline insets.
 
