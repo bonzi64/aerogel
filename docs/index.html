@@ -123,6 +123,52 @@
     --lift-2: inset 0 1px 0 #fff;
     --banner: #dfe5f2;
 }
+[data-build="pink"] {
+    --frame: radial-gradient(circle at 50% -10%, #fff6fa 0%, #fbe7f0 48%, #f3d6e3 100%);
+    --solid: #fbe7f0;
+    --glass: linear-gradient(160deg, rgba(255,250,252,.8) 0%, rgba(255,250,252,.64) 45%, rgba(255,250,252,.74) 100%);
+    --nested: linear-gradient(180deg, rgba(255,250,252,.64), rgba(255,250,252,.48));
+    --tint: 74,30,52;
+    --line: rgba(74,30,52,.1);
+    --line-soft: rgba(74,30,52,.07);
+    --accent: #d6337a;
+    --accent-rgb: 214,51,122;
+    --ink: #3f2c36;
+    --ink-hi: #1f1219;
+    --ink-2: #614a55;
+    --ink-3: #8a7079;
+    --blur: 26px;
+    --aurora: .75;
+    --a1: rgba(255,133,189,.32); --a2: rgba(255,176,208,.24); --a3: rgba(206,128,255,.2);
+    --grain: .05;
+    --r: 18px;
+    --lift: 0 14px 40px rgba(74,30,52,.1), inset 0 1px 0 rgba(255,255,255,.9);
+    --lift-2: 0 8px 24px rgba(74,30,52,.07), inset 0 1px 0 rgba(255,255,255,.8);
+    --banner: linear-gradient(150deg, #f0c2d6, #f9e2ec);
+}
+[data-build="pink-flat"] {
+    --frame: linear-gradient(180deg, #fdf2f7 0%, #f5dfe9 100%);
+    --solid: #fdf2f7;
+    --glass: #fffafc;
+    --nested: #fdf3f7;
+    --tint: 74,30,52;
+    --line: rgba(74,30,52,.1);
+    --line-soft: rgba(74,30,52,.07);
+    --accent: #d6337a;
+    --accent-rgb: 214,51,122;
+    --ink: #3f2c36;
+    --ink-hi: #1f1219;
+    --ink-2: #614a55;
+    --ink-3: #8a7079;
+    --blur: 0px;
+    --aurora: 0;
+    --a1: transparent; --a2: transparent; --a3: transparent;
+    --grain: 0;
+    --r: 16px;
+    --lift: inset 0 1px 0 #fff;
+    --lift-2: inset 0 1px 0 #fff;
+    --banner: #f7dfe9;
+}
 
 * { box-sizing: border-box; }
 
@@ -234,6 +280,8 @@ svg { display: block; }
 .s3 { background: #150c22; } .s3::after { background: #a855f7; }
 .s4 { background: #181a23; } .s4::after { background: #6f7fd8; }
 .s5 { background: #fafbff; } .s5::after { background: #4c5ae0; }
+.s6 { background: #fbe7f0; } .s6::after { background: #d6337a; }
+.s7 { background: #fffafc; } .s7::after { background: #d6337a; }
 
 /* ---------- window ---------- */
 
@@ -648,8 +696,10 @@ footer a:hover { color: var(--accent); }
     <button class="pick" type="button" data-set="dark" aria-pressed="true"><i class="s1"></i>Dark</button>
     <button class="pick" type="button" data-set="light" aria-pressed="false"><i class="s2"></i>Light</button>
     <button class="pick" type="button" data-set="violet" aria-pressed="false"><i class="s3"></i>Violet</button>
+    <button class="pick" type="button" data-set="pink" aria-pressed="false"><i class="s6"></i>Light Pink</button>
     <button class="pick" type="button" data-set="dark-flat" aria-pressed="false"><i class="s4"></i>Dark Flat</button>
     <button class="pick" type="button" data-set="light-flat" aria-pressed="false"><i class="s5"></i>Light Flat</button>
+    <button class="pick" type="button" data-set="pink-flat" aria-pressed="false"><i class="s7"></i>Light Pink Flat</button>
 </div>
 
 <div class="win">
@@ -877,8 +927,10 @@ footer a:hover { color: var(--accent); }
             <div class="file"><span class="fn">AerogelDark.theme.css</span><span class="fd">The reference build. Matte black, frosted panels, slow aurora.</span></div>
             <div class="file"><span class="fn">AerogelLight.theme.css</span><span class="fd">Material inverted: white glass, depth from dark ink instead of white film.</span></div>
             <div class="file"><span class="fn">AerogelViolet.theme.css</span><span class="fd">Matte black with an amethyst cast. Built for 505h.</span></div>
+            <div class="file"><span class="fn">AerogelLightPink.theme.css</span><span class="fd">Blush frame, white glass, rose accents and plum shading.</span></div>
             <div class="file"><span class="fn">AerogelDarkFlat.theme.css</span><span class="fd">No blur, no animation, opaque panels. For weak GPUs and remote desktops.</span></div>
             <div class="file"><span class="fn">AerogelLightFlat.theme.css</span><span class="fd">The same treatment on the light build.</span></div>
+            <div class="file"><span class="fn">AerogelLightPinkFlat.theme.css</span><span class="fd">The same treatment on the pink build.</span></div>
         </div>
     </div>
 
