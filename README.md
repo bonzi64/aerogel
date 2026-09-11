@@ -14,7 +14,7 @@ Seven builds ship from one shared rule set, so they all behave the same and brea
 | --- | --- | --- |
 | `AerogelDark.theme.css` | The reference build. Matte black frame, frosted panels, slow aurora behind the glass. | Default choice. |
 | `AerogelLight.theme.css` | The same layout with the material inverted: white glass over a soft daylight frame, depth from dark ink instead of white film. | You work in a bright room. |
-| `AerogelViolet.theme.css` | Matte black with an amethyst cast. Violet accents, violet sheen on every pane. Built for 505h. | You want the purple one. |
+| `AerogelViolet.theme.css` | Matte black with an amethyst cast. Violet accents, violet sheen on every pane. | You want the purple one. |
 | `AerogelLightPink.theme.css` | Daylight with a blush cast: white glass over a soft pink frame, rose accents and plum shading instead of navy. | You want the pink one. |
 | `AerogelDarkFlat.theme.css` | Dark with no blur, no animation, no soft shadows and opaque panels. | Weak GPU, old laptop, remote desktop, battery. |
 | `AerogelLightFlat.theme.css` | The same treatment applied to the light build. | Bright room and a weak GPU. |
