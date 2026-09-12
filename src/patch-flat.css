@@ -1,9 +1,11 @@
-
 /* ==================================================================
  *  19. FLAT-BUILD CORRECTIONS
- *  The build step already stripped every backdrop-filter, transition,
- *  animation, blur filter and large shadow. What is left are the
- *  whole-page effects, removed outright.
+ *  The build already strips every backdrop-filter, transition, animation,
+ *  blur filter and large shadow, and the flat token set already swaps the
+ *  value behind every var() the rules paint with. So the only corrections
+ *  left are the whole-page effects and the two places that paint a literal.
+ *  Anything else here would restate a declaration the rules already make -
+ *  a rule that changes nothing but still costs a match.
  * ================================================================== */
 
 /* Ambient aurora and film grain: not rendered at all (no fixed full-screen
@@ -22,38 +24,16 @@ body {
     background-attachment: scroll !important;
 }
 
-/* No layer promotion anywhere: fewer composited layers, less VRAM */
-#app-mount * {
-    will-change: auto !important;
-}
-
-/* Panels are opaque; drop the inner specular pass on the big ones */
-[class*="sidebarList_"],
-[class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
-[class*="membersWrap_"],
-[class*="page_"] [class*="page_"] {
+/* The member list is the one panel painted from the nested token; on a flat
+   build it takes the same face as the panels around it. */
+[class*="membersWrap_"] {
     background: var(--gmd-panel-bg) !important;
 }
 
-[class*="sidebar_"] [class*="panels_"] {
+/* The user panel paints a literal specular gradient, so it needs replacing
+   rather than re-tokenising. */
+[class*="panels_"] {
     background: var(--gmd-panel-nested-bg) !important;
-}
-
-[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"] {
-    background: var(--gmd-chatbar-bg) !important;
-}
-
-/* Popouts, menus, tooltips and pickers: opaque, hairline border */
-[class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
-[class*="layerContainer_"] [class*="tooltip_"],
-[class*="drawerSizingWrapper_"] [class*="contentWrapper_"],
-.user-profile-popout,
-.user-profile-modal,
-.user-profile-modal-v2 {
-    background: var(--gmd-popout-bg) !important;
-    background-color: var(--gmd-popout-bg) !important;
 }
 
 /* Modal backdrop: a flat scrim instead of a blurred one */

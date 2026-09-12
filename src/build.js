@@ -1,20 +1,14 @@
-/* Builds every Aerogel variant from one shared rule body.
- *
- * part2 + part3 + part4 hold the rules and are never edited per variant:
- * that body is what was verified against the live Discord bundle, so all
- * five files keep identical selectors. A variant is a token head plus
- * mechanical passes plus, where needed, a correction tail.
- *
- *   node build-variants.js
- */
-
 const fs = require("fs");
 const path = require("path");
 const csstree = require("css-tree");
+const { lint } = require("./lint.js");
+const { resolveFragments } = require("./resolve.js");
 
 const SRC = __dirname;
 const OUT = path.resolve(SRC, "..");
 const VERSION = "1.1.0";
+
+const RESOLVE_MAX = Number(process.env.RESOLVE_MAX || 140);
 const REPO = "https://github.com/bonzi64/aerogel";
 const AUTHOR = "b0nzi64";
 const AUTHOR_ID = "705825323446566933";
@@ -23,7 +17,16 @@ const read = (f) => fs.readFileSync(path.join(SRC, f), "utf8");
 const body = ["rules-1-frame.css", "rules-2-chat.css", "rules-3-overlays.css"].map(read).join("");
 const r3 = (n) => Math.round(n * 1000) / 1000;
 
-/* ---------- helpers ---------- */
+function bareify(css) {
+    const end = css.indexOf("*/") + 2;
+    return css.slice(0, end) + "\n\n" + css.slice(end)
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/[ \t]+$/gm, "")
+        .replace(/\{\n{2,}/g, "{\n")
+        .replace(/\n{2,}(\s*\})/g, "\n$1")
+        .replace(/\n{3,}/g, "\n\n")
+        .replace(/^\s+/, "");
+}
 
 function meta(name, file, description) {
     return `/**
@@ -34,12 +37,6 @@ function meta(name, file, description) {
  * @description ${description}
  * @website ${REPO}
  * @source ${REPO}/raw/main/${file}
- */
-
-/* ${name}
- * Selectors match on class fragments ([class*="sidebarList_"]) so they keep
- * working when Discord rotates its class hashes. Layout containers are
- * repainted, never repositioned. Every knob is in the :root block below.
  */
 
 `;
@@ -56,7 +53,6 @@ function setTokens(css, table) {
     return css;
 }
 
-/* split a shadow list on top-level commas (rgba() stays intact) */
 function splitTop(value) {
     const out = [];
     let depth = 0, cur = "";
@@ -70,8 +66,6 @@ function splitTop(value) {
     return out;
 }
 
-/* at-rule preludes are not declarations: "@supports not
-   (backdrop-filter: blur(1px))" must survive the passes untouched */
 function protectAtRules(css, store) {
     return css.replace(/@[\w-]+[^{;]*[{;]/g, (m) => {
         store.push(m);
@@ -83,20 +77,25 @@ function restoreAtRules(css, store) {
     return css.replace(/@__AT(\d+)__ \{/g, (m, i) => store[+i]);
 }
 
-/* ---------- passes ---------- */
-
-/* route every literal white film through --gmd-tint-rgb, so a variant can
-   decide whether depth is white, dark ink or amethyst */
 const tint = (css) =>
     css.replace(/rgba\(\s*255\s*,\s*255\s*,\s*255\s*,\s*([0-9.]+)\s*\)/g,
         (m, a) => `rgba(var(--gmd-tint-rgb), ${parseFloat(a) === 0 ? 0 : r3(parseFloat(a))})`);
 
-/* hard black shadows become soft ink shadows on a light frame */
-const softenShadows = (css) =>
-    css.replace(/rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*([0-9.]+)\s*\)/g,
-        (m, a) => `rgba(26, 29, 44, ${r3(parseFloat(a) * 0.45)})`);
+const INK_LIGHT = "26, 29, 44";
+const INK_PINK = "74, 30, 52";
 
-/* strip everything a weak GPU pays for */
+const softenShadows = (css, ink = INK_LIGHT) =>
+    css.replace(/rgba\(\s*0\s*,\s*0\s*,\s*0\s*,\s*([0-9.]+)\s*\)/g,
+        (m, a) => `rgba(${ink}, ${r3(parseFloat(a) * 0.45)})`);
+
+function reink(css, ink) {
+    const [r, g, b] = ink.split(",").map((n) => (parseFloat(n) / 255).toFixed(2));
+    return css
+        .replace(/26,\s*29,\s*44/g, ink)
+        .replace(/values='0 0 0 0 [\d.]+\s+0 0 0 0 [\d.]+\s+0 0 0 0 [\d.]+/,
+            `values='0 0 0 0 ${r}  0 0 0 0 ${g}  0 0 0 0 ${b}`);
+}
+
 function flatPass(css) {
     const imp = (v) => (/!important/.test(v) ? " !important" : "");
     const atRules = [];
@@ -124,8 +123,6 @@ function flatPass(css) {
 
     return restoreAtRules(css, atRules);
 }
-
-/* ---------- flat token sets ---------- */
 
 const FLAT_COMMON = {
     "--gmd-aurora": "0",
@@ -209,14 +206,47 @@ const FLAT_LIGHT = {
     "--legacy-elevation-high": "0 0 0 1px rgba(26, 29, 44, 0.14)",
 };
 
-/* a flat build has no webfont to wait for */
-const dropWebfont = (css) => css.replace(/@import url\("https:\/\/fonts[^)]+\);\s*/g, "");
+const FLAT_PINK = {
+    ...FLAT_COMMON,
+    "--gmd-bg": "linear-gradient(180deg, #fdf2f7 0%, #f5dfe9 100%)",
+    "--gmd-panel-bg": "#fffafc",
+    "--gmd-panel-bg-flat": "#fffafc",
+    "--gmd-panel-nested-bg": "#fdf3f7",
+    "--gmd-panel-shadow": "inset 0 1px 0 #ffffff",
+    "--gmd-panel-shadow-nested": "inset 0 1px 0 #ffffff",
+    "--gmd-popout-bg": "#ffffff",
+    "--gmd-popout-bg-solid": "#ffffff",
+    "--gmd-popout-shadow": "0 0 0 1px rgba(74, 30, 52, 0.14)",
+    "--gmd-chatbar-bg": "#ffffff",
+    "--gmd-field-bg": "#ffffff",
+    "--gmd-field-bg-hover": "#fdf3f7",
+    "--background-base-lowest": "#fffbfd",
+    "--background-base-lower": "#fdf7fa",
+    "--background-base-low": "#fbf1f6",
+    "--background-surface-high": "#ffffff",
+    "--background-surface-higher": "#ffffff",
+    "--background-floating": "#ffffff",
+    "--background-nested-floating": "#ffffff",
+    "--background-primary": "#fffafc",
+    "--background-secondary": "#fdf2f7",
+    "--background-secondary-alt": "#ffffff",
+    "--background-tertiary": "#f9eaf1",
+    "--shadow-low": "0 0 0 1px rgba(74, 30, 52, 0.1)",
+    "--shadow-medium": "0 0 0 1px rgba(74, 30, 52, 0.12)",
+    "--shadow-high": "0 0 0 1px rgba(74, 30, 52, 0.14)",
+    "--elevation-low": "0 0 0 1px rgba(74, 30, 52, 0.1)",
+    "--elevation-medium": "0 0 0 1px rgba(74, 30, 52, 0.12)",
+    "--elevation-high": "0 0 0 1px rgba(74, 30, 52, 0.14)",
+    "--legacy-elevation-low": "0 0 0 1px rgba(74, 30, 52, 0.1)",
+    "--legacy-elevation-high": "0 0 0 1px rgba(74, 30, 52, 0.14)",
+};
 
-/* ---------- variants ---------- */
+const dropWebfont = (css) => css.replace(/@import url\("https:\/\/fonts[^)]+\);\s*/g, "");
 
 const headDark = () => read("tokens-dark.css");
 const headLight = () => read("tokens-light.css");
 const headViolet = () => read("tokens-violet.css");
+const headPink = () => read("tokens-pink.css");
 
 const variants = [
     {
@@ -238,6 +268,12 @@ const variants = [
         build: () => headViolet() + tint(body),
     },
     {
+        file: "AerogelLightPink.theme.css",
+        name: "Aerogel Light Pink",
+        description: "Blush Aerogel: white frosted panels over a soft pink frame, rose accents and plum shading.",
+        build: () => headPink() + softenShadows(tint(body), INK_PINK) + reink(read("patch-light.css"), INK_PINK),
+    },
+    {
         file: "AerogelDarkFlat.theme.css",
         name: "Aerogel Dark Flat",
         description: "Aerogel Dark with no blur, no animation and flat shadows. For weak GPUs, laptops and remote desktops.",
@@ -250,9 +286,15 @@ const variants = [
         build: () => dropWebfont(setTokens(headLight(), FLAT_LIGHT)) +
             flatPass(softenShadows(tint(body)) + read("patch-light.css")) + read("patch-flat.css"),
     },
+    {
+        file: "AerogelLightPinkFlat.theme.css",
+        name: "Aerogel Light Pink Flat",
+        description: "Aerogel Light Pink with no blur, no animation and flat shadows. For weak GPUs, laptops and remote desktops.",
+        build: () => dropWebfont(setTokens(headPink(), FLAT_PINK)) +
+            flatPass(softenShadows(tint(body), INK_PINK) + reink(read("patch-light.css"), INK_PINK)) +
+            read("patch-flat.css"),
+    },
 ];
-
-/* ---------- run ---------- */
 
 function countLive(css, prop) {
     const re = new RegExp(`(?:^|[;{\\s])${prop}\\s*:\\s*([^;}]+)`, "g");
@@ -266,7 +308,11 @@ function countLive(css, prop) {
 let failed = false;
 
 for (const v of variants) {
-    const css = meta(v.name, v.file, v.description) + v.build();
+    let css = meta(v.name, v.file, v.description) + v.build();
+    css = bareify(css);
+
+    const res = resolveFragments(css, RESOLVE_MAX);
+    css = res.css;
 
     const errors = [];
     const ast = csstree.parse(css, { positions: true, onParseError: (e) => errors.push(`${e.message} @ ${e.line}:${e.column}`) });
@@ -276,14 +322,22 @@ for (const v of variants) {
     if (errors.length) failed = true;
     fs.writeFileSync(path.join(OUT, v.file), css, "utf8");
 
+    const budget = lint(css, v.file);
+    if (!budget.ok) failed = true;
+
     console.log(
         `${v.file.padEnd(28)} rules ${String(rules).padEnd(5)} ` +
         `blur ${String(countLive(css, "backdrop-filter")).padEnd(3)} ` +
         `anim ${String(countLive(css, "animation")).padEnd(3)} ` +
         `trans ${String(countLive(css, "transition")).padEnd(3)} ` +
+        `wild ${budget.mean.toFixed(2)} ` +
+        `klas ${String(res.written).padEnd(5)}` +
         `${(Buffer.byteLength(css, "utf8") / 1024).toFixed(1)}KB` +
         (errors.length ? `  PARSE ERRORS: ${errors.slice(0, 3).join("; ")}` : "")
     );
+
+    for (const p of [...new Set(budget.problems)].slice(0, 5)) console.log(`    ! ${p}`);
 }
 
-console.log(failed ? "\nBUILD FAILED" : "\nall variants parsed clean");
+console.log(failed ? "\nBUILD FAILED" : "\nall variants parsed clean and within the selector budget");
+process.exitCode = failed ? 1 : 0;

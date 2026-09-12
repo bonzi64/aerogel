@@ -1,16 +1,16 @@
-
 /* ==================================================================
  *  12. ISO-LAYERED POPOUTS, MENUS, TOOLTIPS, MODALS
  *  Native positioning is untouched: only paint is replaced.
  * ================================================================== */
+
 [class*="layerContainer_"]:not([class*="Player"]) [class*="popout_"],
 [class*="layerContainer_"]:not([class*="Player"]) [class*="menu_"],
 [class*="layerContainer_"]:not([class*="Player"]) [class*="autocomplete_"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="layer_"][class*="95d7b"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="root_"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="container_"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="modal_"],
-[class*="layerContainer_"]:not([class*="Player"]) [class*="focusLock_"] > [class*="quickswitcher_"],
+[class*="layerContainer_"]:not([class*="Player"]) > [class*="layer_"],
+[class*="focusLock_"] > [class*="root_"],
+[class*="focusLock_"] > [class*="container_"],
+[class*="focusLock_"] > [class*="modal_"],
+[class*="focusLock_"] > [class*="quickswitcher_"],
 [class*="chatContent_"] [class*="autocomplete_"],
 .user-profile-popout,
 .user-profile-modal,
@@ -26,91 +26,84 @@
 }
 
 /* Context menus: tighter radius, glass rows */
-[class*="layerContainer_"] [class*="menu_"] {
-    border-radius: 12px !important;
-    padding: 2px !important;
+
+[class*="layerContainer_"] {
+    & [class*="menu_"] {
+        & {
+            border-radius: 12px !important;
+            padding: 2px !important;
+        }
+
+        & [class*="scroller_"] {
+            background: transparent !important;
+        }
+
+        & [class*="item_"] {
+            border-radius: 8px !important;
+            margin: 1px 0 !important;
+            transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease);
+        }
+
+        & :is([class*="item_"][class*="focused_"],[class*="colorDefault_"][class*="focused_"]) {
+            background: rgba(var(--gmd-accent-rgb), 0.2) !important;
+            color: var(--gmd-text-strong) !important;
+        }
+
+        & [class*="colorDanger_"][class*="focused_"] {
+            background: rgba(255, 90, 90, 0.18) !important;
+            color: #ff7b7b !important;
+        }
+
+        & [class*="separator_"] {
+            border-bottom-color: var(--gmd-border) !important;
+        }
+    }
+
+    & [class*="tooltip_"] {
+        background: var(--gmd-popout-bg) !important;
+        background-color: var(--gmd-popout-bg) !important;
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--gmd-popout-border) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+        color: var(--gmd-text) !important;
+    }
+
+    & [class*="tooltipPointer_"] {
+        border-top-color: var(--gmd-popout-bg-solid) !important;
+    }
+
+    & > :is(*>[class*="backdrop_"],[class*="backdrop_"]) {
+        background-color: #000 !important;
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
 }
 
-[class*="layerContainer_"] [class*="menu_"] [class*="scroller_"] {
-    background: transparent !important;
-}
+[class*="focusLock_"] {
+    & :is([class*="footer_"],[class*="footerSeparator_"]) {
+        background: rgba(255, 255, 255, 0.03) !important;
+        box-shadow: none !important;
+    }
 
-[class*="layerContainer_"] [class*="menu_"] [class*="item_"] {
-    border-radius: 8px !important;
-    margin: 1px 0 !important;
-    transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease);
-}
+    & :is([class*="header_"],[class*="separator_"]) {
+        box-shadow: none !important;
+    }
 
-[class*="layerContainer_"] [class*="menu_"] [class*="item_"][class*="focused_"],
-[class*="layerContainer_"] [class*="menu_"] [class*="colorDefault_"][class*="focused_"] {
-    background: rgba(var(--gmd-accent-rgb), 0.2) !important;
-    color: var(--gmd-text-strong) !important;
-}
+    & :is([class*="card_"],[class*="cardPrimary_"],[class*="inputWrapper_"],[class*="inputDefault_"],[class*="select_"],[class*="avatars_"]) {
+        background: var(--gmd-card-bg) !important;
+        border-color: var(--gmd-card-border) !important;
+    }
 
-[class*="layerContainer_"] [class*="menu_"] [class*="colorDanger_"][class*="focused_"] {
-    background: rgba(255, 90, 90, 0.18) !important;
-    color: #ff7b7b !important;
-}
-
-[class*="layerContainer_"] [class*="menu_"] [class*="separator_"] {
-    border-bottom-color: var(--gmd-border) !important;
-}
-
-/* Tooltips */
-[class*="layerContainer_"] [class*="tooltip_"] {
-    background: var(--gmd-popout-bg) !important;
-    background-color: var(--gmd-popout-bg) !important;
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--gmd-popout-border) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
-    color: var(--gmd-text) !important;
-}
-
-[class*="layerContainer_"] [class*="tooltipPointer_"] {
-    border-top-color: var(--gmd-popout-bg-solid) !important;
-}
-
-/* Modal backdrop: dim + blur what's behind */
-[class*="layerContainer_"] > * > [class*="backdrop_"],
-[class*="layerContainer_"] > [class*="backdrop_"] {
-    background-color: #000 !important;
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-}
-
-/* Modal internals: readable dark cards on top of translucent glass */
-[class*="layerContainer_"] [class*="focusLock_"] [class*="footer_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="footerSeparator_"] {
-    background: rgba(255, 255, 255, 0.03) !important;
-    box-shadow: none !important;
-}
-
-[class*="layerContainer_"] [class*="focusLock_"] [class*="header_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="separator_"] {
-    box-shadow: none !important;
-}
-
-[class*="layerContainer_"] [class*="focusLock_"] [class*="card_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="cardPrimary_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="container_"][class*="card"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="inputWrapper_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="inputDefault_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="select_"],
-[class*="layerContainer_"] [class*="focusLock_"] [class*="scroller_"][class*="9ac28"] {
-    background: var(--gmd-card-bg) !important;
-    border-color: var(--gmd-card-border) !important;
-}
-
-/* Nested containers inside modals must not double the glass */
-[class*="layerContainer_"] [class*="focusLock_"] > [class*="root_"] [class*="root_"],
-[class*="layerContainer_"] [class*="focusLock_"] > [class*="container_"] [class*="container_"] {
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    & > :is([class*="root_"] [class*="root_"],[class*="container_"] [class*="container_"]) {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
 }
 
 /* Quick switcher (Ctrl+K) */
+
 [class*="quickswitcher_"] [class*="input_"] {
     background: var(--gmd-field-bg) !important;
     border: 1px solid var(--gmd-border) !important;
@@ -129,6 +122,7 @@
  *  Cards and fields get their own tint so text never bleeds into the
  *  messages behind them.
  * ================================================================== */
+
 .user-profile-popout,
 .user-profile-modal,
 .user-profile-modal-v2 {
@@ -139,14 +133,13 @@
     overflow: hidden;
 }
 
-.user-profile-popout > [class*="inner_"],
-.user-profile-modal > [class*="inner_"],
-.user-profile-modal-v2 > [class*="inner_"] {
+:is(.user-profile-popout, .user-profile-modal, .user-profile-modal-v2) > [class*="inner_"] {
     background: transparent !important;
 }
 
 /* Nitro profile themes: keep the user's colours as a translucent tint over
    the glass instead of an opaque dark gradient */
+
 .custom-user-profile-theme.user-profile-popout > [class*="inner_"],
 .custom-user-profile-theme.user-profile-modal-v2 > [class*="inner_"],
 .custom-user-profile-theme.user-profile-sidebar > [class*="inner_"] {
@@ -165,9 +158,10 @@
 
 /* Full-profile modal: body, columns and scrollers stay see-through so the
    frosted plates read as plates, not as boxes on black */
+
 .user-profile-modal-v2 [class*="body_"],
 .user-profile-modal-v2 [class*="scroller_"],
-.user-profile-modal-v2 [class*="content_"]:not([class*="section"] *),
+.user-profile-modal-v2 [class*="content_"]:not([class*="section_"] *),
 .user-profile-modal-v2 [class*="column_"],
 .user-profile-modal-v2 [class*="main_"],
 .user-profile-modal-v2 [class*="tabContent_"],
@@ -179,6 +173,7 @@
 }
 
 /* Custom-status speech bubble next to the avatar: frosted, not black */
+
 .user-profile-popout [class*="tooltip_"]:not([class*="Pointer"]),
 .user-profile-modal-v2 [class*="tooltip_"]:not([class*="Pointer"]),
 .user-profile-sidebar [class*="tooltip_"]:not([class*="Pointer"]) {
@@ -189,9 +184,7 @@
     color: var(--gmd-text) !important;
 }
 
-.user-profile-popout [class*="tooltipPointer_"],
-.user-profile-modal-v2 [class*="tooltipPointer_"],
-.user-profile-sidebar [class*="tooltipPointer_"] {
+:is(.user-profile-popout, .user-profile-modal-v2, .user-profile-sidebar) [class*="tooltipPointer_"] {
     border-top-color: var(--gmd-popout-bg-solid) !important;
 }
 
@@ -199,6 +192,7 @@
    and --user-profile-overlay-background (remapped above to the frosted card
    tint), so no extra plates are added here. Only the pills and the note field
    get their radius. */
+
 .user-profile-popout [class*="note_"] textarea,
 .user-profile-modal-v2 [class*="note_"] textarea {
     background: var(--gmd-field-bg) !important;
@@ -206,29 +200,25 @@
     border-radius: 10px !important;
 }
 
-.user-profile-popout [class*="rolePill_"],
-.user-profile-modal-v2 [class*="rolePill_"] {
+:is(.user-profile-popout, .user-profile-modal-v2) [class*="rolePill_"] {
     border-radius: 999px !important;
 }
 
-.user-profile-popout [class*="banner_"],
-.user-profile-modal-v2 [class*="banner_"] {
+:is(.user-profile-popout, .user-profile-modal-v2) [class*="banner_"] {
     border-radius: calc(var(--gmd-popout-radius) - 2px) calc(var(--gmd-popout-radius) - 2px) 0 0 !important;
 }
 
-.user-profile-popout [class*="avatar_"],
-.user-profile-modal-v2 [class*="avatar_"] {
+:is(.user-profile-popout, .user-profile-modal-v2) [class*="avatar_"] {
     transition: transform var(--gmd-med) var(--gmd-ease);
 }
 
-.user-profile-popout [class*="avatar_"]:hover,
-.user-profile-modal-v2 [class*="avatar_"]:hover {
+:is(.user-profile-popout, .user-profile-modal-v2) [class*="avatar_"]:hover {
     transform: scale(1.04);
 }
 
 /* Profile message input ("Message @user") */
-.user-profile-popout [class*="channelTextArea_"],
-.user-profile-modal-v2 [class*="channelTextArea_"] {
+
+:is(.user-profile-popout, .user-profile-modal-v2) [class*="channelTextArea_"] {
     background: var(--gmd-field-bg) !important;
     border: 1px solid var(--gmd-card-border) !important;
     border-radius: 10px !important;
@@ -237,9 +227,9 @@
 /* ==================================================================
  *  14. EXPRESSION PICKER (emoji / gif / sticker / soundboard)
  * ================================================================== */
+
 [class*="drawerSizingWrapper_"] [class*="contentWrapper_"],
-[class*="layerContainer_"] [class*="contentWrapper_"][class*="08434"],
-[class*="layerContainer_"] [class*="emojiPicker_"]:not([class*="emojiPickerHasTabWrapper"] [class*="emojiPicker_"]) {
+[class*="emojiPicker_"]:not([class*="emojiPickerHasTabWrapper"] [class*="emojiPicker_"]) {
     background: var(--gmd-popout-bg) !important;
     background-color: var(--gmd-popout-bg) !important;
     -webkit-backdrop-filter: blur(var(--gmd-popout-blur)) !important;
@@ -249,116 +239,101 @@
     box-shadow: var(--gmd-popout-shadow) !important;
 }
 
-[class*="drawerSizingWrapper_"] [class*="emojiPicker_"],
-[class*="drawerSizingWrapper_"] [class*="header_"],
-[class*="drawerSizingWrapper_"] [class*="categoryList_"],
-[class*="drawerSizingWrapper_"] [class*="picker_"],
-[class*="drawerSizingWrapper_"] [class*="wrapper_"],
-[class*="drawerSizingWrapper_"] [class*="inspector_"],
-[class*="drawerSizingWrapper_"] [class*="navList_"],
-[class*="drawerSizingWrapper_"] [class*="listWrapper_"],
-[class*="drawerSizingWrapper_"] [class*="categorySection_"],
-[class*="drawerSizingWrapper_"] [class*="container_"] {
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-}
+[class*="drawerSizingWrapper_"] {
+    & :is([class*="emojiPicker_"],[class*="header_"],[class*="categoryList_"],[class*="picker_"],[class*="wrapper_"],[class*="inspector_"],[class*="navList_"],[class*="listWrapper_"],[class*="categorySection_"],[class*="container_"]) {
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
 
-[class*="drawerSizingWrapper_"] [class*="header_"] {
-    border-bottom: 1px solid var(--gmd-border) !important;
-}
+    & [class*="header_"] {
+        border-bottom: 1px solid var(--gmd-border) !important;
+    }
 
-[class*="drawerSizingWrapper_"] [class*="navButton_"] {
-    border-radius: 8px !important;
-}
+    & [class*="navButton_"] {
+        border-radius: 8px !important;
+    }
 
-[class*="drawerSizingWrapper_"] [class*="navButtonActive_"] {
-    background: rgba(var(--gmd-accent-rgb), 0.2) !important;
-    color: var(--gmd-text-strong) !important;
-}
+    & [class*="navButtonActive_"] {
+        background: rgba(var(--gmd-accent-rgb), 0.2) !important;
+        color: var(--gmd-text-strong) !important;
+    }
 
-[class*="drawerSizingWrapper_"] [class*="searchBar_"],
-[class*="drawerSizingWrapper_"] [class*="inputWrapper_"],
-[class*="drawerSizingWrapper_"] [class*="input_"] {
-    background: var(--gmd-field-bg) !important;
-    border-radius: 10px !important;
-}
+    & :is([class*="searchBar_"],[class*="inputWrapper_"],[class*="input_"]) {
+        background: var(--gmd-field-bg) !important;
+        border-radius: 10px !important;
+    }
 
-[class*="drawerSizingWrapper_"] [class*="categoryItem"] [class*="selected_"],
-[class*="drawerSizingWrapper_"] [class*="categoryItem"][class*="selected_"] {
-    background: rgba(var(--gmd-accent-rgb), 0.2) !important;
-    border-radius: 8px !important;
-}
+    & :is([class*="categoryItem"] [class*="selected_"],[class*="categoryItem"][class*="selected_"]) {
+        background: rgba(var(--gmd-accent-rgb), 0.2) !important;
+        border-radius: 8px !important;
+    }
 
-[class*="drawerSizingWrapper_"] [class*="emojiItem_"],
-[class*="drawerSizingWrapper_"] [class*="stickerInspected_"],
-[class*="drawerSizingWrapper_"] [class*="result_"] {
-    border-radius: 10px !important;
-    transition: transform var(--gmd-fast) var(--gmd-ease), background-color var(--gmd-fast) var(--gmd-ease);
-}
+    & :is([class*="emojiItem_"],[class*="stickerInspected_"],[class*="result_"]) {
+        border-radius: 10px !important;
+        transition: transform var(--gmd-fast) var(--gmd-ease), background-color var(--gmd-fast) var(--gmd-ease);
+    }
 
-[class*="drawerSizingWrapper_"] [class*="emojiItem_"]:hover,
-[class*="drawerSizingWrapper_"] [class*="stickerInspected_"] {
-    background: rgba(255, 255, 255, 0.08) !important;
-    transform: scale(1.08);
+    & [class*="emojiItem_"]:hover,
+    & [class*="stickerInspected_"] {
+        background: rgba(255, 255, 255, 0.08) !important;
+        transform: scale(1.08);
+    }
 }
 
 /* ==================================================================
  *  15. SETTINGS LAYER (user / server settings)
+ *  Every rule anchors on a class that is unique in Discord's bundle,
+ *  so none of them has to repeat the layers > layer chain.
  * ================================================================== */
-[class*="standardSidebarView_"],
-[class*="sidebarRegion_"],
-[class*="sidebarRegionScroller_"],
-[class*="contentRegion_"],
-[class*="contentRegionScroller_"],
-[class*="contentColumn_"],
+
 [class*="containerSidenav_"],
 [class*="contentPanel_"],
-[class*="sideNavContent_"] {
+[class*="sideNavContent_"],
+[class*="userSettingsContentPanel_"] {
     background: transparent !important;
     background-color: transparent !important;
 }
 
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="sidebarRegion_"] {
-    border-right: 1px solid var(--gmd-border);
-}
-
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="containerSidenav_"] {
+[class*="containerSidenav_"] {
     border-top: 1px solid var(--gmd-border) !important;
 }
 
-[class*="sidebarRegion_"] [class*="item_"][class*="selected_"],
+/* Tab rows: the sidenav list and the settings tab-bar column */
+
+[class*="containerSidenav_"] [class*="item_"],
+[class*="side_"] [class*="item_"] {
+    border-radius: 8px !important;
+    transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease);
+}
+
 [class*="containerSidenav_"] [class*="item_"][class*="selected_"],
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="side_"] [class*="selected_"] {
+[class*="side_"] [class*="selected_"] {
     background: rgba(var(--gmd-accent-rgb), 0.16) !important;
     color: var(--gmd-text-strong) !important;
     border-radius: 8px !important;
 }
 
-[class*="sidebarRegion_"] [class*="item_"],
-[class*="containerSidenav_"] [class*="item_"],
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="side_"] [class*="item_"] {
-    border-radius: 8px !important;
-    transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease);
-}
+/* The close button is the one component here with no unique class of its
+   own (52 components ship a "closeButton_"), so it keeps a layer scope. */
 
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="closeButton_"] {
+[class*="layers_"] > [class*="layer_"]:not([class*="baseLayer_"]) [class*="closeButton_"] {
     border-radius: 50% !important;
     border: 1px solid var(--gmd-border) !important;
     transition: background-color var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease);
 }
 
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="closeButton_"]:hover {
+[class*="layers_"] > [class*="layer_"]:not([class*="baseLayer_"]) [class*="closeButton_"]:hover {
     background: rgba(255, 255, 255, 0.08) !important;
     transform: scale(1.06);
 }
 
 /* Cards and boxes inside settings pages */
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="card_"],
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="cardPrimary_"],
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="accountProfileCard_"],
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="userSettingsSecurity_"] [class*="container_"],
-[class*="layers_"]:not([class*="Player"]) > [class*="layer_"]:not([class*="baseLayer_"]):not([class*="Player"]) [class*="storyContent_"] {
+
+[class*="contentPanel_"] [class*="card_"],
+[class*="userSettingsContentPanel_"] [class*="card_"],
+[class*="cardPrimary_"],
+[class*="storyContent_"] {
     background: var(--gmd-card-bg) !important;
     border: 1px solid var(--gmd-card-border) !important;
     border-radius: 12px !important;
@@ -367,6 +342,7 @@
 /* ==================================================================
  *  16. SCROLLBARS (thin, translucent, macOS-like)
  * ================================================================== */
+
 #app-mount ::-webkit-scrollbar {
     width: 10px !important;
     height: 10px !important;
@@ -379,6 +355,7 @@
 }
 
 /* macOS-style overlay behaviour: the thumb only appears while the scroller is hovered */
+
 #app-mount ::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0) !important;
     background-clip: padding-box !important;
@@ -399,6 +376,7 @@
 /* ==================================================================
  *  17. CONTROLS, INPUTS, MISC SURFACES
  * ================================================================== */
+
 #app-mount input[class*="input_"],
 #app-mount [class*="inputDefault_"],
 #app-mount [class*="inputWrapper_"] input,
@@ -420,8 +398,7 @@
 }
 
 #app-mount [class*="lookFilled_"],
-#app-mount [class*="lookOutlined_"],
-#app-mount [class*="lookInverted_"] {
+#app-mount [class*="lookOutlined_"] {
     border-radius: 10px !important;
     transition: background-color var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease), box-shadow var(--gmd-fast) var(--gmd-ease) !important;
 }
@@ -437,12 +414,14 @@
 }
 
 /* Voice call surface inside chat panel */
+
 [class*="callContainer_"],
 [class*="callContainer_"] [class*="wrapper_"] {
     background: transparent !important;
 }
 
 /* Members list rows */
+
 [class*="membersWrap_"] [class*="layout_"] {
     border-radius: 9px !important;
     transition: background-color var(--gmd-fast) var(--gmd-ease);
@@ -454,6 +433,7 @@
 }
 
 /* Notices (update available, etc.) */
+
 [class*="base_"] > [class*="content_"] > [class*="notice_"],
 [class*="notice_"][class*="colorDefault_"] {
     border-radius: 12px !important;
@@ -461,6 +441,7 @@
 }
 
 /* Nitro / marketing gradients are left alone, but their cards get rounded */
+
 [class*="layerContainer_"] [class*="card_"] {
     border-radius: 12px !important;
 }
@@ -468,6 +449,7 @@
 /* ==================================================================
  *  18. MOTION & ACCESSIBILITY
  * ================================================================== */
+
 html.reduce-motion body::before,
 html.reduced-motion body::before {
     animation: none !important;
@@ -479,16 +461,18 @@ html.reduced-motion body::before {
     }
 
     [class*="messageListItem_"] > [class*="message_"]:hover,
-    [class*="guilds_"] [class*="listItemWrapper_"]:hover,
-    [class*="guilds_"] [class*="blobContainer_"]:hover,
+    [class*="listItemWrapper_"]:hover,
+    [class*="blobContainer_"]:hover,
     .emoji:hover,
-    [class*="avatar_"]:hover,
+    #app-mount [class*="avatar_"]:hover,
     [class*="winButton_"]:hover {
         transform: none !important;
     }
+
 }
 
 /* Firefox / non-webkit fallback for backdrop-filter */
+
 @supports not (backdrop-filter: blur(1px)) {
     [class*="sidebarList_"],
     [class*="chat_"]:has([class*="chatContent_"]):not(:has([class*="chat_"] [class*="chatContent_"])),
@@ -500,8 +484,9 @@ html.reduced-motion body::before {
     [class*="layerContainer_"] [class*="popout_"],
     [class*="layerContainer_"] [class*="menu_"],
     [class*="layerContainer_"] [class*="tooltip_"],
-    [class*="layerContainer_"] [class*="focusLock_"] > [class*="root_"],
+    [class*="focusLock_"] > [class*="root_"],
     [class*="drawerSizingWrapper_"] [class*="contentWrapper_"] {
         background: rgba(18, 19, 26, 0.98) !important;
     }
+
 }

@@ -1,4 +1,3 @@
-
 /* ==================================================================
  *  9. TITLE BAR: macOS TRAFFIC LIGHTS
  *  Discord's own window buttons are repainted as dots, so close, minimise
@@ -9,12 +8,13 @@
 /* Current Discord: <div class="bar_xxx"> inside the base grid. The window
    buttons stay where Windows users expect them (top-right); only the paint
    changes. */
+
 [class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) {
     background: transparent !important;
     border: none !important;
 }
 
-[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) [class*="winButtons_"] {
+[class*="winButtons_"] {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
@@ -24,69 +24,94 @@
     -webkit-app-region: no-drag;
 }
 
-[class*="base_"] > [class*="bar_"] [class*="winButtonsWithDivider_"]::before {
+[class*="base_"] {
+    & > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) {
+        pointer-events: none;
+    }
+
+    & > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"]) > * {
+        pointer-events: auto;
+    }
+}
+
+[class*="typeWindows_"] {
+    & {
+        pointer-events: none;
+    }
+
+    & > * {
+        pointer-events: auto;
+    }
+}
+
+[class*="winButtonsWithDivider_"]::before {
     display: none !important;
 }
 
 /* Legacy title bar (typeWindows) - same treatment for older layouts */
+
 [class*="typeWindows_"] {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-end !important;
-    padding-inline-end: 16px !important;
-    gap: 8px !important;
-    background: transparent !important;
-}
+    & {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        padding-inline-end: 16px !important;
+        gap: 8px !important;
+        background: transparent !important;
+    }
 
-[class*="typeWindows_"] [class*="wordmark_"] {
-    position: absolute;
-    inset-inline-start: 12px;
-    pointer-events: none;
-}
+    & [class*="wordmark_"] {
+        position: absolute;
+        inset-inline-start: 12px;
+        pointer-events: none;
+    }
 
-[class*="typeWindows_"] [class*="winButton_"] {
-    position: relative !important;
-    top: auto !important;
-    -webkit-app-region: no-drag;
+    & [class*="winButton_"] {
+        position: relative !important;
+        top: auto !important;
+        -webkit-app-region: no-drag;
+    }
 }
 
 /* The dots themselves */
+
 [class*="winButton_"] {
-    width: 12px !important;
-    height: 12px !important;
-    min-width: 0 !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border-radius: 50% !important;
-    background-color: var(--gmd-mac-yellow) !important;
-    border: 1px solid rgba(0, 0, 0, 0.28) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.35) !important;
-    color: transparent !important;
-    cursor: pointer !important;
-    overflow: hidden !important;
-    position: relative;
-    flex: 0 0 auto !important;
-    transition: filter var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease);
-}
+    & {
+        width: 12px !important;
+        height: 12px !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        background-color: var(--gmd-mac-yellow) !important;
+        border: 1px solid rgba(0, 0, 0, 0.28) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 1px 2px rgba(0, 0, 0, 0.35) !important;
+        color: transparent !important;
+        cursor: pointer !important;
+        overflow: hidden !important;
+        position: relative;
+        flex: 0 0 auto !important;
+        transition: filter var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease);
+    }
 
-[class*="winButton_"] svg,
-[class*="winButton_"] img,
-[class*="winButton_"] > * {
-    display: none !important;
-}
+    & svg,
+    & img,
+    & > * {
+        display: none !important;
+    }
 
-/* Glyph layer (drawn as inline SVG, shows on group hover) */
-[class*="winButton_"]::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 8px 8px;
-    opacity: 0;
-    transition: opacity var(--gmd-fast) var(--gmd-ease);
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 8px 8px;
+        opacity: 0;
+        transition: opacity var(--gmd-fast) var(--gmd-ease);
+    }
 }
 
 [class*="winButtons_"]:hover [class*="winButton_"]::before,
@@ -94,185 +119,189 @@
     opacity: 1;
 }
 
-[class*="winButton_"]:hover {
-    filter: brightness(1.12) saturate(1.1);
-    transform: scale(1.1);
-}
+[class*="winButton_"] {
+    &:hover {
+        filter: brightness(1.12) saturate(1.1);
+        transform: scale(1.1);
+    }
 
-[class*="winButton_"]:active {
-    filter: brightness(0.82) !important;
-    transform: scale(0.94);
-}
+    &:active {
+        filter: brightness(0.82) !important;
+        transform: scale(0.94);
+    }
 
-/* Order (left to right): minimise (yellow) -> zoom (green) -> close (red)
-   so the close dot sits in the corner, where Windows muscle memory expects it. */
-[class*="winButton_"][class*="winButtonClose"] {
-    background-color: var(--gmd-mac-red) !important;
-}
+    &[class*="winButtonClose"] {
+        background-color: var(--gmd-mac-red) !important;
+    }
 
-[class*="winButton_"][class*="winButtonClose"]::before {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 2l6 6M8 2l-6 6' stroke='%234d0000' stroke-width='1.6' stroke-linecap='round'/></svg>");
-}
+    &[class*="winButtonClose"]::before {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 2l6 6M8 2l-6 6' stroke='%234d0000' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    }
 
-[class*="winButton_"][class*="winButtonMinMax"] {
-    background-color: var(--gmd-mac-yellow) !important;
-}
+    &[class*="winButtonMinMax"] {
+        background-color: var(--gmd-mac-yellow) !important;
+    }
 
-[class*="winButton_"][class*="winButtonMinMax"]::before {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 5h6' stroke='%23995700' stroke-width='1.6' stroke-linecap='round'/></svg>");
-}
+    &[class*="winButtonMinMax"]::before {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M2 5h6' stroke='%23995700' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    }
 
-[class*="winButton_"][class*="winButtonMinMax"] ~ [class*="winButton_"][class*="winButtonMinMax"] {
-    background-color: var(--gmd-mac-green) !important;
-}
+    &[class*="winButtonMinMax"] ~ [class*="winButton_"][class*="winButtonMinMax"] {
+        background-color: var(--gmd-mac-green) !important;
+    }
 
-[class*="winButton_"][class*="winButtonMinMax"] ~ [class*="winButton_"][class*="winButtonMinMax"]::before {
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 2v6M2 5h6' stroke='%23006500' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    &[class*="winButtonMinMax"] ~ [class*="winButton_"][class*="winButtonMinMax"]::before {
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 2v6M2 5h6' stroke='%23006500' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    }
 }
 
 /* Top-bar icon buttons (inbox, help, back/forward) */
-[class*="base_"] > [class*="bar_"] [class*="leading_"] [class*="button_"],
-[class*="base_"] > [class*="bar_"] [class*="trailing_"] [class*="button_"],
-[class*="base_"] > [class*="bar_"] [class*="trailing_"] [class*="clickable_"] {
-    border-radius: 8px !important;
-    transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease);
-}
 
-/* Thin hairline under the frame's top bar to separate it from the panels */
-[class*="base_"] > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"])::after {
-    content: "";
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07) 20%, rgba(255, 255, 255, 0.07) 80%, transparent);
-    pointer-events: none;
-}
+[class*="base_"] {
+    & > [class*="bar_"] [class*="leading_"] [class*="button_"],
+    & > [class*="bar_"] [class*="trailing_"] [class*="button_"],
+    & > [class*="bar_"] [class*="trailing_"] [class*="clickable_"] {
+        border-radius: 8px !important;
+        transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease);
+    }
 
-[class*="base_"] > [class*="bar_"] [class*="title_"] {
-    color: var(--gmd-text-muted);
-    font-weight: 600;
-    letter-spacing: 0.01em;
+    & > [class*="bar_"]:not([class*="sidebar_"]):not([class*="toolbar_"])::after {
+        content: "";
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07) 20%, rgba(255, 255, 255, 0.07) 80%, transparent);
+        pointer-events: none;
+    }
+
+    & > [class*="bar_"] [class*="title_"] {
+        color: var(--gmd-text-muted);
+        font-weight: 600;
+        letter-spacing: 0.01em;
+    }
 }
 
 /* ==================================================================
  *  10. FLOATING CHAT BAR
  * ================================================================== */
-[class*="chatContent_"] [class*="form_"] {
-    padding-inline: 0 !important;
-    margin-top: -16px;
-    background: transparent !important;
-}
 
-[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"] {
-    margin: 10px 14px !important;
-    width: calc(100% - 28px) !important;
-    min-width: 0 !important;
-    flex: 1 1 auto;
-    box-sizing: border-box !important;
-    border-radius: var(--gmd-chatbar-radius) !important;
-    border: 1px solid var(--gmd-chatbar-border) !important;
-    background: var(--gmd-chatbar-bg) !important;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
-    transition: border-color var(--gmd-med) var(--gmd-ease), background var(--gmd-med) var(--gmd-ease), box-shadow var(--gmd-med) var(--gmd-ease), transform var(--gmd-med) var(--gmd-ease);
-}
+[class*="chatContent_"] {
+    & [class*="form_"] {
+        & {
+            padding-inline: 0 !important;
+            margin-top: -16px;
+            background: transparent !important;
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:hover {
-    border-color: rgba(255, 255, 255, 0.16) !important;
-    background: rgba(255, 255, 255, 0.055) !important;
-}
+        & [class*="channelTextArea_"] {
+            margin: 10px 14px !important;
+            width: calc(100% - 28px) !important;
+            min-width: 0 !important;
+            flex: 1 1 auto;
+            box-sizing: border-box !important;
+            border-radius: var(--gmd-chatbar-radius) !important;
+            border: 1px solid var(--gmd-chatbar-border) !important;
+            background: var(--gmd-chatbar-bg) !important;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+            transition: border-color var(--gmd-med) var(--gmd-ease), background var(--gmd-med) var(--gmd-ease), box-shadow var(--gmd-med) var(--gmd-ease), transform var(--gmd-med) var(--gmd-ease);
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:focus-within {
-    border-color: rgba(var(--gmd-accent-rgb), 0.55) !important;
-    background: rgba(255, 255, 255, 0.06) !important;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(var(--gmd-accent-rgb), 0.14) !important;
-    transform: translateY(-1px);
-}
+        & [class*="channelTextArea_"]:hover {
+            border-color: rgba(255, 255, 255, 0.16) !important;
+            background: rgba(255, 255, 255, 0.055) !important;
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="scrollableContainer_"],
-[class*="chatContent_"] [class*="form_"] [class*="themedBackground_"],
-[class*="chatContent_"] [class*="form_"] [class*="inner_"] {
-    background: transparent !important;
-    border-radius: var(--gmd-chatbar-radius) !important;
-}
+        & [class*="channelTextArea_"]:focus-within {
+            border-color: rgba(var(--gmd-accent-rgb), 0.55) !important;
+            background: rgba(255, 255, 255, 0.06) !important;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(var(--gmd-accent-rgb), 0.14) !important;
+            transform: translateY(-1px);
+        }
 
-/* The editor itself must keep its full width inside the bar */
-[class*="chatContent_"] [class*="form_"] [class*="textArea_"] {
-    width: 100% !important;
-    min-width: 0 !important;
-    flex: 1 1 auto !important;
-}
+        & :is([class*="scrollableContainer_"],[class*="themedBackground_"],[class*="inner_"]) {
+            background: transparent !important;
+            border-radius: var(--gmd-chatbar-radius) !important;
+        }
 
-/* Reply / edit / upload stacked bars above the input */
-[class*="chatContent_"] [class*="form_"] [class*="stackedBars_"] {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border-radius: var(--gmd-chatbar-radius) var(--gmd-chatbar-radius) 0 0 !important;
-}
+        & [class*="textArea_"] {
+            width: 100% !important;
+            min-width: 0 !important;
+            flex: 1 1 auto !important;
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="channelAttachmentArea_"],
-[class*="chatContent_"] [class*="form_"] [class*="typing_"] {
-    background: transparent !important;
-}
+        & [class*="stackedBars_"] {
+            background: rgba(255, 255, 255, 0.04) !important;
+            border-radius: var(--gmd-chatbar-radius) var(--gmd-chatbar-radius) 0 0 !important;
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="attachButton"],
-[class*="chatContent_"] [class*="form_"] [class*="buttons_"] [class*="button_"] {
-    transition: transform var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease), background-color var(--gmd-fast) var(--gmd-ease);
-}
+        & :is([class*="channelAttachmentArea_"],[class*="typing_"]) {
+            background: transparent !important;
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="attachButton"]:hover,
-[class*="chatContent_"] [class*="form_"] [class*="buttons_"] [class*="button_"]:hover {
-    transform: scale(1.08);
-    color: var(--gmd-text-strong) !important;
-}
+        & [class*="attachButton"],
+        & [class*="buttons_"] [class*="button_"] {
+            transition: transform var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease), background-color var(--gmd-fast) var(--gmd-ease);
+        }
 
-[class*="chatContent_"] [class*="form_"] [class*="textArea_"]::placeholder {
-    color: var(--gmd-text-muted) !important;
+        & [class*="attachButton"]:hover,
+        & [class*="buttons_"] [class*="button_"]:hover {
+            transform: scale(1.08);
+            color: var(--gmd-text-strong) !important;
+        }
+
+        & [class*="textArea_"]::placeholder {
+            color: var(--gmd-text-muted) !important;
+        }
+    }
 }
 
 /* ==================================================================
  *  11. MESSAGES
  * ================================================================== */
-[class*="messageListItem_"] > [class*="message_"] {
-    border-radius: 10px !important;
-    transition: background-color var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease), box-shadow var(--gmd-fast) var(--gmd-ease);
-}
 
-[class*="messageListItem_"] > [class*="message_"]:hover {
-    background: rgba(255, 255, 255, 0.035) !important;
-    transform: translateY(-1px);
-}
+[class*="messageListItem_"] {
+    & > [class*="message_"] {
+        border-radius: 10px !important;
+        transition: background-color var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease), box-shadow var(--gmd-fast) var(--gmd-ease);
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="selected_"] {
-    background: rgba(255, 255, 255, 0.05) !important;
-}
+    & > [class*="message_"]:hover {
+        background: rgba(255, 255, 255, 0.035) !important;
+        transform: translateY(-1px);
+    }
 
-/* Mentions: warm frosted tint + glowing left rail */
-[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
-    background: rgba(255, 200, 120, 0.09) !important;
-}
+    & > [class*="message_"][class*="selected_"] {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]:hover {
-    background: rgba(255, 200, 120, 0.13) !important;
-}
+    & > [class*="message_"][class*="mentioned_"] {
+        background: rgba(255, 200, 120, 0.09) !important;
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]::before {
-    background: #ffbd2e !important;
-    border-radius: 0 2px 2px 0;
-    box-shadow: 0 0 10px rgba(255, 189, 46, 0.6);
-}
+    & > [class*="message_"][class*="mentioned_"]:hover {
+        background: rgba(255, 200, 120, 0.13) !important;
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="replying_"],
-[class*="messageListItem_"] > [class*="message_"][class*="highlighted_"] {
-    background: rgba(var(--gmd-accent-rgb), 0.1) !important;
-}
+    & > [class*="message_"][class*="mentioned_"]::before {
+        background: #ffbd2e !important;
+        border-radius: 0 2px 2px 0;
+        box-shadow: 0 0 10px rgba(255, 189, 46, 0.6);
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="replying_"]::before,
-[class*="messageListItem_"] > [class*="message_"][class*="highlighted_"]::before {
-    background: var(--gmd-accent) !important;
-    box-shadow: 0 0 10px rgba(var(--gmd-accent-rgb), 0.6);
+    & > :is([class*="message_"][class*="replying_"],[class*="message_"][class*="highlighted_"]) {
+        background: rgba(var(--gmd-accent-rgb), 0.1) !important;
+    }
+
+    & > [class*="message_"][class*="replying_"]::before,
+    & > [class*="message_"][class*="highlighted_"]::before {
+        background: var(--gmd-accent) !important;
+        box-shadow: 0 0 10px rgba(var(--gmd-accent-rgb), 0.6);
+    }
 }
 
 /* Avatars: subtle scale + glow */
+
 [class*="messageListItem_"] [class*="avatar_"],
 [class*="membersWrap_"] [class*="avatar_"],
 [class*="privateChannels_"] [class*="avatar_"],
@@ -288,6 +317,7 @@
 }
 
 /* Emoji pop */
+
 .emoji,
 [class*="emojiContainer_"] {
     transition: transform var(--gmd-med) var(--gmd-ease);
@@ -299,27 +329,33 @@
 }
 
 /* Hover action bar */
-[class*="messageListItem_"] [class*="buttons_"] > [class*="wrapper_"],
-[class*="messageListItem_"] [class*="buttonContainer_"] [class*="wrapper_"] {
-    background: var(--gmd-popout-bg) !important;
-    border: 1px solid var(--gmd-popout-border) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    overflow: hidden;
-}
 
-[class*="messageListItem_"] [class*="buttons_"] [class*="button_"] {
-    transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease);
-}
+[class*="messageListItem_"] {
+    & [class*="buttons_"] > [class*="wrapper_"],
+    & [class*="buttonContainer_"] [class*="wrapper_"] {
+        background: var(--gmd-popout-bg) !important;
+        border: 1px solid var(--gmd-popout-border) !important;
+        border-radius: 10px !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+        overflow: hidden;
+    }
 
-[class*="messageListItem_"] [class*="buttons_"] [class*="button_"]:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    transform: scale(1.06);
+    & [class*="buttons_"] {
+        & [class*="button_"] {
+            transition: background-color var(--gmd-fast) var(--gmd-ease), color var(--gmd-fast) var(--gmd-ease), transform var(--gmd-fast) var(--gmd-ease);
+        }
+
+        & [class*="button_"]:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            transform: scale(1.06);
+        }
+    }
 }
 
 /* Embeds, code, quotes, reactions */
+
 [class*="embedFull_"] {
     background: var(--gmd-card-bg) !important;
     border: 1px solid var(--gmd-card-border) !important;
@@ -379,6 +415,7 @@
 }
 
 /* Date / new-messages divider */
+
 [class*="divider_"][class*="hasContent_"] > [class*="content_"] {
     background: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid var(--gmd-border);
@@ -393,6 +430,7 @@
 }
 
 /* "New messages" / "Jump to present" floating bars */
+
 [class*="newMessagesBar_"],
 [class*="jumpToPresentBar_"] {
     border-radius: 0 0 12px 12px !important;
@@ -416,19 +454,19 @@
 }
 
 /* Spoilers, polls, attachments */
+
 [class*="spoilerContent_"],
 [class*="spoilerContainer_"] {
     border-radius: 8px !important;
 }
 
-[class*="messageListItem_"] [class*="imageWrapper_"],
-[class*="messageListItem_"] [class*="mosaicItemMediaMosaic_"],
-[class*="messageListItem_"] [class*="visualMediaItemContainer_"] {
+[class*="messageListItem_"] :is([class*="imageWrapper_"], [class*="mosaicItemMediaMosaic_"], [class*="visualMediaItemContainer_"]) {
     border-radius: 12px !important;
     overflow: hidden;
 }
 
 /* Text selection & caret */
+
 ::selection {
     background: rgba(var(--gmd-accent-rgb), 0.35);
 }

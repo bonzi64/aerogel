@@ -13,20 +13,19 @@ body::after {
 }
 
 /* User panel: a white glass tile like the other panels */
-[class*="sidebar_"] [class*="panels_"] {
+[class*="panels_"] {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.66)) !important;
 }
 
 /* Home / Direct Messages tile */
-[class*="guilds_"] [class*="childWrapper_"] {
+[class*="childWrapper_"] {
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72)) !important;
     border-color: rgba(26, 29, 44, 0.1) !important;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 12px rgba(26, 29, 44, 0.1) !important;
     color: var(--gmd-accent) !important;
 }
 
-[class*="guilds_"] [class*="wrapper_"][class*="selected_"] [class*="childWrapper_"],
-[class*="guilds_"] [class*="wrapper_"]:hover [class*="childWrapper_"] {
+[class*="guilds_"] :is([class*="wrapper_"][class*="selected_"] [class*="childWrapper_"], [class*="wrapper_"]:hover [class*="childWrapper_"]) {
     color: #ffffff !important;
 }
 
@@ -58,26 +57,30 @@ body::after {
 }
 
 /* Chat input stays the brightest surface in the column */
-[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:hover {
-    background: rgba(255, 255, 255, 0.9) !important;
-}
+[class*="chatContent_"] {
+    & [class*="form_"] [class*="channelTextArea_"]:hover {
+        background: rgba(255, 255, 255, 0.9) !important;
+    }
 
-[class*="chatContent_"] [class*="form_"] [class*="channelTextArea_"]:focus-within {
-    background: rgba(255, 255, 255, 0.96) !important;
+    & [class*="form_"] [class*="channelTextArea_"]:focus-within {
+        background: rgba(255, 255, 255, 0.96) !important;
+    }
 }
 
 /* Mentions: warm amber, readable on white */
-[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"] {
-    background: rgba(235, 150, 20, 0.12) !important;
-}
+[class*="messageListItem_"] {
+    & > [class*="message_"][class*="mentioned_"] {
+        background: rgba(235, 150, 20, 0.12) !important;
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]:hover {
-    background: rgba(235, 150, 20, 0.18) !important;
-}
+    & > [class*="message_"][class*="mentioned_"]:hover {
+        background: rgba(235, 150, 20, 0.18) !important;
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="mentioned_"]::before {
-    background: #e08c14 !important;
-    box-shadow: 0 0 10px rgba(224, 140, 20, 0.45) !important;
+    & > [class*="message_"][class*="mentioned_"]::before {
+        background: #e08c14 !important;
+        box-shadow: 0 0 10px rgba(224, 140, 20, 0.45) !important;
+    }
 }
 
 /* Unread divider */
@@ -87,10 +90,12 @@ body::after {
 }
 
 /* Message hover: a soft dark film, not a white one */
-[class*="messageListItem_"] > [class*="message_"]:hover {
-    background: rgba(26, 29, 44, 0.035) !important;
-}
+[class*="messageListItem_"] {
+    & > [class*="message_"]:hover {
+        background: rgba(26, 29, 44, 0.035) !important;
+    }
 
-[class*="messageListItem_"] > [class*="message_"][class*="selected_"] {
-    background: rgba(26, 29, 44, 0.05) !important;
+    & > [class*="message_"][class*="selected_"] {
+        background: rgba(26, 29, 44, 0.05) !important;
+    }
 }
