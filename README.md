@@ -14,7 +14,7 @@ Seven builds ship from one shared rule set, so they all behave the same and brea
 | --- | --- | --- |
 | `AerogelDark.theme.css` | The reference build. Matte black frame, frosted panels, slow aurora behind the glass. | Default choice. |
 | `AerogelLight.theme.css` | The same layout with the material inverted: white glass over a soft daylight frame, depth from dark ink instead of white film. | You work in a bright room. |
-| `AerogelViolet.theme.css` | Matte black with an amethyst cast. Violet accents, violet sheen on every pane. | You want the purple one. |
+| `AerogelViolet.theme.css` | Matte black with an amethyst cast. Violet accents, violet sheen on every pane. Built for 505h. | You want the purple one. |
 | `AerogelLightPink.theme.css` | Daylight with a blush cast: white glass over a soft pink frame, rose accents and plum shading instead of navy. | You want the pink one. |
 | `AerogelDarkFlat.theme.css` | Dark with no blur, no animation, no soft shadows and opaque panels. | Weak GPU, old laptop, remote desktop, battery. |
 | `AerogelLightFlat.theme.css` | The same treatment applied to the light build. | Bright room and a weak GPU. |
@@ -108,13 +108,80 @@ Use a wallpaper as the frame:
 
 ## Surviving Discord updates
 
-Discord ships class names with a hash on the end, such as `sidebarList__5e434`, and rotates those hashes without warning. Aerogel never matches a full hashed name. Every selector matches the stable fragment instead:
+Discord ships class names with a hash on the end, such as `sidebarList__5e434`, and rotates those hashes without warning. The sources never mention a hash — they are written against the stable fragment:
 
 ```css
 [class*="sidebarList_"] { ... }
 ```
 
-That survives both hash styles Discord currently emits (`name_abc123` and `name__ab123`). When Discord renames the component itself rather than the hash, one section of the theme goes plain while everything else keeps working. If that happens, open DevTools, find the new fragment and replace the old one in `src/`.
+The **built** files do name the hash, because `[class*="sidebarList_"]` and `.sidebarList__5e434` select the same elements and the second is far cheaper. `resolve.js` does that substitution at build time, writing each fragment out as the classes it actually matches:
+
+```css
+[class*="sidebarList_"]  ->  .sidebarList__5e434
+[class*="panels_"]       ->  :is(.panels__5e434, .panels_b292bc)
+```
+
+An attribute selector, a class, and `:is()` over classes all weigh `(0,1,0)`, so nothing in the cascade moves.
+
+A fragment ending in `_` is read as a **component name**, not a substring: `form_` means the class called `form`, not every class with "form" in it. Reading it as a substring is what used to make the theme paint voice-message waveforms (`waveform_`), loading spinners (`inner_` → `loadingSpinner_`) and the video player (`layer_` → `clipsPlayer_`). A fragment written without the trailing `_`, such as `categoryItem`, is still a substring, because that is how it was meant.
+
+A fragment naming more classes than `RESOLVE_MAX` (140) stays a fragment. One does: `container_`, which 338 separate Discord modules each define. In any given rule it is one of them, but only the running client knows which — `node probe.js` writes a console snippet that asks it.
+
+**The trade this makes.** Naming hashes is what every approved theme does, and it is why they score near zero on wildcards — but it is also why they rot. Of the classes ClearVision and Azurite currently name, **41% and 45% no longer exist in Discord at all**: those rules stopped doing anything and nobody noticed. Aerogel is exposed to the same rot, with one difference — the hashes live only in build output, so recovering is:
+
+```sh
+npm run classes && npm run build
+```
+
+Nothing is edited by hand. The linter also fails the build on any fragment that matches nothing, so a component Discord *renames* is reported rather than silently dropped.
+
+### Selector budget
+
+A partial match is not free. The browser tests it against every element it
+considers, and a fragment that is too short quietly matches components the
+theme never meant to touch — `[class*="form_"]` also catches `waveform_`,
+`[class*="layer_"]` also catches `clipsPlayer_`. BetterDiscord's
+[performance guide](https://docs.betterdiscord.app/themes/concepts/performance)
+asks for exact matches over wildcards for exactly this reason.
+
+So every fragment here is checked against the real class list before it is
+used, and the build refuses to finish if the file drifts:
+
+```sh
+npm run classes      # refresh src/discord-classes.txt from Discord's CSS
+node classes.js form_            # what that fragment really matches
+node classes.js --module 37e49   # every class from one Discord source file
+```
+
+`discord-classes.txt` holds every hashed class name Discord ships (~12k).
+Classes sharing a hash come from one source file, so `--module` is the fastest
+way to find a precise neighbour when a fragment turns out to be too broad.
+
+The rules the build enforces:
+
+- a fragment matching many components needs a narrow one scoping it;
+- no selector keyed on a module hash — those break on Discord's next build;
+- no fragment that matches nothing (a dead rule is a rule that stopped working);
+- no `*` descendant unless its anchor names exactly one class;
+- no rule that restates what an earlier rule with the same selector already set;
+- a ceiling on partial matches for the whole file, measured after nesting is
+  expanded. The ceiling is on the **total**, not the average: merging two
+  selectors into one lowers the count and the divisor together, so an average
+  can be improved by consolidation alone.
+
+Repeated scopes are written with CSS nesting, so the anchor appears once:
+
+```css
+[class*="panels_"] {
+    & [class*="buttons_"] { ... }
+    & [class*="avatar_"]  { ... }
+}
+```
+
+This is presentation, not a shortcut — the browser matches the same selectors
+either way, and the budget above is measured on the expanded form. Nesting
+needs Chrome 112, below what the theme already requires for `@container
+style()` (Chrome 111).
 
 Two structural facts the theme depends on, in case they change:
 
@@ -137,7 +204,30 @@ src/
   patch-light.css        surfaces that must stay bright on a light frame
   patch-flat.css         whole-page effects removed for the Flat builds
   build.js               applies the passes and writes the seven theme files
+  resolve.js             writes each fragment out as the classes it matches
+  lint.js                selector budget; the build fails if a file exceeds it
+  flatten.js             expands nesting, so rules are judged as a browser sees them
+  classes.js             query the class list by fragment or by module hash
+  fetch-classes.js       rebuild discord-classes.txt from Discord's stylesheets
+  discord-classes.txt    every hashed class Discord ships, used to check fragments
 ```
+
+Five more are one-shot cleanup tools rather than part of the build. They
+print what they would change and only touch files when passed `--apply`:
+
+```
+  where.js               where the wildcards sit - as scope, or as target
+  probe.js               writes a DevTools snippet that asks the live client
+                         which class a fragment means in a given rule
+  redundant.js           ancestors made pointless by a unique fragment downstream
+  factor.js              selectors in one rule that share a prefix, folded into :is()
+  factor-tail.js         ... and the mirror, for a shared trailing run
+  noop.js                rules that restate what an identical selector already set
+  nest.js / unnest.js    fold a repeated scope into nesting, and back out again
+```
+
+`unnest.js` matters more than it looks: selector work has to happen on whole
+selectors, so the loop is unnest → edit → nest.
 
 ```sh
 cd src
@@ -154,7 +244,7 @@ The passes are:
 - **Soften.** Hard black shadows become soft ink shadows on the light builds.
 - **Flat.** Zeroes every `backdrop-filter`, transition, animation and blur filter, and drops any shadow with a blur radius worth painting while keeping the hairline insets.
 
-The script parses each output with `css-tree` and refuses to report success if anything fails to parse.
+The script parses each output with `css-tree` and refuses to report success if anything fails to parse or if a file breaks the selector budget. `npm run lint` runs that check on its own and prints what tripped it.
 
 ## Known limits
 
@@ -162,10 +252,6 @@ The script parses each output with `css-tree` and refuses to report success if a
 - Plugins that restyle the same regions, particularly the server rail or the user panel, can conflict with the drawer.
 - The theme forces its own palette regardless of the light or dark setting in Discord. That is deliberate: pick the build, not the setting.
 - Animated nameplates are video. The Flat builds hide them to save a decode loop; set `--gmd-nameplate: 1` if you want them back.
-
-## Support my work!
-
-You can support my work here: https://tipply.pl/@bonzi64
 
 ## Licence
 
